@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:faces="jakarta.faces"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:pt="jakarta.faces.passthrough"
+      xmlns:cc="jakarta.faces.composite"
+      xmlns:c="jakarta.tags.core"
+      xmlns:fn="jakarta.tags.functions"
+      xmlns:p="http://primefaces.org/ui">
+<p:menubar>
+  <f:facet name="start">
+    <h:outputLink value="/conexify/u/home" styleClass="w-3rem flex gap-3">
+      <h:graphicImage library="img" name="favicon.png" styleClass="w-3rem" />
+      <h:outputText value="#{msg['name_enterprise']}"
+                    styleClass="font-bold text-primary text-2xl pacifico-regular h-full text-center" />
+    </h:outputLink>
+  </f:facet>
+
+  <f:facet name="end">
+    <div class="flex items-center gap-1 sm:gap-1 md:gap-3 lg:gap-3 xl:gap-3">
+
+      <p:linkButton outcome="/u/request-friend" icon="bi bi-person-fill-add" style="margin-right:20px;"
+                    title="Notificaciones"
+                    styleClass="block sm:block md:hidden lg:hidden xl:hidden ui-button-outlined" />
+
+      <p:commandButton id="requestPeoplePanel" icon="bi bi-person-fill-add"
+                       styleClass="p-link text-xl font-bold cursor-pointer ui-button-outlined hidden sm:hidden md:block lg:block xl:block"
+                       type="button" />
+
+      <p:overlayPanel for="requestPeoplePanel" widgetVar="requestPanel" dynamic="true">
+        <div class="text-lg font-bold mb-3 text-primary">
+          #{msg['label_amount_request_people']}: #{requestsPeople.requests.size()}
+        </div>
+        <ul class="list-none p-2" style="width: 300px;">
+          <ui:repeat value="#{requestsPeople.requests}" var="requestPeople">
+            <li class="border-b pb-2 mb-2">
+              <!-- Nombre de la persona que hizo la solicitud -->
+              <div class="font-bold text-lg">
+                #{requestPeople.fullName}
+              </div>
+
+              <!-- Amigos mutuos -->
+              <div class="text-sm text-gray-600 mt-1">
+                #{msg['label_mutual_friends']}: #{requestPeople.mutualFriends.size()}
+              </div>
+
+              <!-- Botones para aceptar o rechazar la solicitud -->
+              <div class="mt-2 flex gap-2">
+                <p:commandButton
+                  value="#{msg['button_accept']}"
+                  icon="pi pi-check"
+                  action="#{requestsPeople.acceptRequest(requestPeople)}"
+                  update=":requestPeoplePanel" />
+
+                <p:commandButton
+                  value="#{msg['button_reject']}"
+                  icon="pi pi-times"
+                  styleClass="ui-button-danger"
+                  action="#{requestsPeople.rejectRequest(requestPeople)}"
+                  update=":requestPeoplePanel" />
+              </div>
+            </li>
+          </ui:repeat>
+        </ul>
+      </p:overlayPanel>
+
+      <p:linkButton outcome="/notification" icon="bi bi-bell-fill" style="margin-right:20px;" title="Notificaciones"
+                    styleClass="block sm:block md:hidden lg:hidden xl:hidden ui-button-outlined" />
+
+      <p:commandButton id="notificationPanel" icon="bi bi-bell-fill"
+                       styleClass="p-link text-xl font-bold cursor-pointer ui-button-outlined hidden sm:hidden md:block lg:block xl:block"
+                       type="button" />
+
+      <p:overlayPanel for="notificationPanel" widgetVar="notifyPanel" dynamic="true">
+        <ul class="list-none p-2" style="width: 300px;">
+          <ui:repeat value="#{notification.notifications}" var="notif">
+            <li class="border-b pb-2 mb-2">
+              <h:outputLink value="#{notif.link}" styleClass="flex justify-content-start items-center gap-2">
+                <i class="bi bi-#{notif.icon} text-2xl text-#{notif.color}" />
+                <div>
+                  <small class="block text-gray-500">#{notif.sender}</small>
+                  <h:outputText value="#{notif.message}" styleClass="font-bold text-gray-800" />
+                </div>
+              </h:outputLink>
+            </li>
+          </ui:repeat>
+        </ul>
+      </p:overlayPanel>
+
+      <!-- Avatar -->
+      <p:avatar label="Juan Romero" dynamicColor="true"
+                styleClass="select-none cursor-pointer" size="large" />
+    </div>
+  </f:facet>
+</p:menubar>
+</html>

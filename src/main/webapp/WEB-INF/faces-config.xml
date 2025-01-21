@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="4.0" xmlns="https://jakarta.ee/xml/ns/jakartaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                                  https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_4_0.xsd" >
+  <application>
+    <locale-config>
+      <default-locale>es</default-locale>
+      <supported-locale>es</supported-locale>
+      <supported-locale>en</supported-locale>
+    </locale-config>
+    <resource-bundle>
+      <base-name>I18n.messages</base-name>
+      <var>msg</var>
+    </resource-bundle>
+  </application>
+  
+  <navigation-rule>
+    <from-view-id>*</from-view-id>
+    <navigation-case>
+      <from-outcome>/notification</from-outcome>
+      <to-view-id>/private/notification.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>/u/request-friend</from-outcome>
+      <to-view-id>/private/user/request-people.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>/login</from-outcome>
+      <to-view-id>/public/index.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+</faces-config>

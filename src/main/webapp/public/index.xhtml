@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:faces="jakarta.faces"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:pt="jakarta.faces.passthrough"
+      xmlns:cc="jakarta.faces.composite"
+      xmlns:c="jakarta.tags.core"
+      xmlns:fn="jakarta.tags.functions"
+      xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html" locale="#{region.locale}">
+  <h:head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <h:outputStylesheet library="css" name="style.css"/>
+    <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css"/>
+    <h:outputStylesheet library="css" name="font.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+    <link rel="shortcut icon" href="#{resource['img/favicon.png']}" type="image/png"/>
+    <title>conexify :: <h:outputText value="#{msg['title_page_login']}"/></title>
+  </h:head>
+  <h:body styleClass="w-full h-screen">
+    <div class="w-full h-full flex justify-content-center align-items-center">
+      <div
+        class="w-full h-full bg-primary hidden sm:hidden md:hidden lg:flex xl:flex flex-column justify-content-center align-items-center gap-2">
+        <h:graphicImage library="img" name="person_computer.svg" styleClass="w-24rem" />
+        <h:outputText value="#{msg['name_enterprise']}" styleClass="font-bold text-white text-5xl pacifico-regular"/>
+      </div>
+      <div class="w-full h-full flex flex-column justify-content-center align-items-center">
+        <h:form
+          styleClass="w-20rem sm:w-20rem md:w-20rem lg:w-30rem xl:w-30rem flex flex-column justify-content-start align-items-center gap-4">
+          <h:graphicImage library="img" name="favicon.png"
+                          styleClass="w-8rem block sm:block md:block lg:hidden xl:hidden" />
+          <h:outputText value="#{msg['title_form_login']}" styleClass="font-bold text-primary text-4xl" />
+          <div class="flex flex-column gap-2 w-full">
+            <p:outputLabel for="email" value="#{msg['label_email']}" styleClass="w-full font-bold text-primary"/>
+            <span class="ui-input-icon-left w-full">
+              <i class="bi bi-envelope text-primary font-bold" />
+              <p:inputText value="#{formLoginValidation.email}" type="text" id="email" required="true" autocomplete="off" styleClass="w-full"
+                           placeholder="example@gmail.com"
+                           requiredMessage="#{msg['error_email_required']}"
+                           validatorMessage="#{msg['error_email_invalid']}">
+                <f:validateRequired />
+                <f:validateRegex pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" />
+              </p:inputText>
+            </span>
+            <h:message for="email" styleClass="text-red-500"/>
+          </div>
+
+          <div class="flex flex-column gap-2 w-full">
+            <p:outputLabel for="password" value="#{msg['label_password']}" styleClass="w-full font-bold text-primary"/>
+            <span class="ui-input-icon-left w-full">
+              <i class="bi bi-shield-lock text-primary font-bold" />
+              <p:inputText value="#{formLoginValidation.password}" type="password" id="password" required="true" autocomplete="off" styleClass="w-full"
+                           placeholder="•••••••••••••••••••••••"
+                           requiredMessage="#{msg['error_password_required']}"
+                           validatorMessage="#{msg['error_length_password']}" >
+                <f:validateRequired />
+                <f:validateLength minimum="8"/>
+              </p:inputText>
+            </span>
+            <h:message for="password" styleClass="text-red-500"/>
+          </div>
+          <div class="flex justify-content-between align-items-center w-full">
+            <h:outputLink value="/conexify/reset-password">
+              <h:outputText value="#{msg['link_forgot_password']}" styleClass="text-primary font-bold" />
+            </h:outputLink>
+            <h:outputLink value="/conexify/register">
+              <h:outputText value="#{msg['link_register']}" styleClass="text-primary font-bold" />
+            </h:outputLink>
+          </div>
+          <p:selectBooleanCheckbox value="#{formLoginValidation.rememberMe}" itemLabel="#{msg['label_remember_me']}"
+                                   styleClass="w-full font-bold text-primary"/>
+          <p:commandButton action="#{formLoginValidation.login}" value="#{msg['button_login']}"
+                           styleClass="ui-button-outlined w-full font-bold" process="@form" update="@form, formLoginMessage"/>
+          <p:divider align="center">
+            <span class="ui-tag">#{msg['tag_or']}</span>
+          </p:divider>
+          <div class="w-full flex justify-content-center align-items-center gap-3">
+            <p:button icon="bi bi-google" styleClass="ui-button-outlined ui-button-danger" />
+            <p:button icon="bi bi-facebook" styleClass="ui-button-outlined ui-button-primary" />
+          </div>
+
+          <ui:fragment rendered="#{formLoginValidation.showMessage}" id="formLoginMessage">
+            <div class="col-12 md:col-4 absolute bottom-0" style="right: 1rem;">
+              <p:staticMessage severity="error" summary="ERROR"
+                               detail="#{msg.error_email_or_password_incorrect}"
+                               closable="true"
+                               style="width: 100%" rendered="#{not formLoginValidation.closed}">
+                <p:ajax event="close" listener="#{formLoginValidation.onClose}" />
+              </p:staticMessage>
+            </div>
+          </ui:fragment>
+        </h:form>
+
+        <h:form>
+          <div class="w-20rem sm:w-20rem md:w-20rem lg:w-30rem xl:w-30rem mt-3">
+            <p:selectOneMenu id="locate" value="#{region.locale}" styleClass="w-full" onchange="submit()"
+                             placeholder="#{msg['placeholder_select_country']}">
+              <f:selectItem itemValue="es" itemLabel="#{msg['item_language_es']}" />
+              <f:selectItem itemValue="en" itemLabel="#{msg['item_language_en']}" />
+            </p:selectOneMenu>
+          </div>
+        </h:form>
+
+        <ui:fragment rendered="#{region.showMessage}">
+          <div class="col-12 md:col-4 absolute bottom-0" style="right: 1rem;">
+            <p:staticMessage severity="info" summary="INFO"
+                             detail="#{msg.message_change_language}"
+                             closable="true"
+                             style="width: 100%" rendered="#{not region.closed}">
+              <p:ajax event="close" listener="#{region.onClose()}"/>
+            </p:staticMessage>
+          </div>
+        </ui:fragment>
+      </div>
+    </div>
+  </h:body>
+</f:view>
+</html>

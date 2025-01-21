@@ -1,0 +1,7 @@
+<jboss-deployment-structure>
+  <deployment>
+    <exclusions>
+      <module name="org.eclipse.angus.mail" />
+    </exclusions>
+  </deployment>
+</jboss-deployment-structure>
