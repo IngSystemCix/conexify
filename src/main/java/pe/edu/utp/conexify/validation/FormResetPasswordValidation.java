@@ -23,17 +23,15 @@ public class FormResetPasswordValidation implements Serializable {
     private final EmailSenderService emailSenderService;
 
     private String email;
-    private String codeVerification;
-    private String oldPassword;
-    private String newPassword;
+    private String code;
+    private Integer time = 30;
 
     private boolean emailValidated = false;
-    private boolean codeValidated = true;
-    private boolean resendDisabled = false;
-    private boolean showChangePassword = false;
-    private boolean resendCodeDisabled = true;
-
-    private int resendCountdown = 60;
+    private boolean codeDisabled = true;
+    private boolean buttonCodeValidateDisable = true;
+    private boolean renderedButtonResendPassword = false;
+    private boolean buttonResendCodeDisable = true;
+    private boolean pollStopped = false;
 
     @Inject
     public FormResetPasswordValidation() {
@@ -41,27 +39,39 @@ public class FormResetPasswordValidation implements Serializable {
     }
 
     @SneakyThrows
-    public void validateEmail() {
-        if (email == null || email.isEmpty()) return;
-        emailSenderService.sendEmail(this.email, "Juan Romero", "12A456");
-        this.codeValidated = false;
-        this.resendDisabled = true;
-        this.emailValidated = true;
+    public void sendEmail() {
+        if (!validateEmail(email)) return;
+        emailSenderService.sendEmail(email, "Juan Romero", "A1SDD2");
+        LOGGER.info("Email sent to: " + email);
+        emailValidated = true;
+        codeDisabled = false;
+        buttonCodeValidateDisable = false;
+        renderedButtonResendPassword = true;
     }
 
-    public void validateCodeVerification() {
-        if (codeVerification == null || codeVerification.isEmpty()) return;
-        this.codeValidated = true;
-        this.resendDisabled = false;
-        this.showChangePassword = true;
-    }
-
-    public void startResendCountdown() {
-        resendCountdown--;
-        if (resendCountdown == 0) {
-            this.resendCodeDisabled = false;
-            this.resendCountdown = 60;
+    private boolean validateEmail(String email) {
+        if (email == null || email.isEmpty()) {
+            return false;
         }
+        return email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    public void countResendCode() {
+        if (time > 0) {
+            this.time--;
+        }else {
+            buttonResendCodeDisable = false;
+            pollStopped = true;
+        }
+    }
+
+    @SneakyThrows
+    public void resendCode() {
+        emailSenderService.sendEmail(email, "Juan Romero", "A1SDD2");
+        LOGGER.info("Email sent to: " + email);
+        time = 30;
+        buttonResendCodeDisable = true;
+        pollStopped = false;
     }
 
 }
