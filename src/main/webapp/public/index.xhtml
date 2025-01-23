@@ -79,8 +79,10 @@
             <span class="ui-tag">#{msg['tag_or']}</span>
           </p:divider>
           <div class="w-full flex justify-content-center align-items-center gap-3">
-            <p:button icon="bi bi-google" styleClass="ui-button-outlined ui-button-danger" />
-            <p:button icon="bi bi-facebook" styleClass="ui-button-outlined ui-button-primary" />
+            <p:tooltip for="logingByGoogle" position="top" value="#{msg['tooltip_login_by_google']}" />
+            <p:button id="logingByGoogle" icon="bi bi-google" styleClass="ui-button-outlined ui-button-danger" />
+            <p:tooltip for="loginByFacebook" position="top" value="#{msg['tooltip_login_by_facebook']}" />
+            <p:button id="loginByFacebook" disabled="true" icon="bi bi-facebook" styleClass="ui-button-outlined ui-button-primary" />
           </div>
 
           <ui:fragment rendered="#{formLoginValidation.showMessage}" id="formLoginMessage">
