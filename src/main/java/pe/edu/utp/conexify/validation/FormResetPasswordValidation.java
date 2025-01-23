@@ -8,6 +8,8 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import pe.edu.utp.conexify.service.EmailSenderService;
 import pe.edu.utp.conexify.service.EmailSenderServiceImpl;
+import pe.edu.utp.conexify.util.ControllerSession;
+import pe.edu.utp.conexify.util.GeneratorCode;
 
 import java.io.Serializable;
 import java.util.logging.Logger;
@@ -21,6 +23,7 @@ public class FormResetPasswordValidation implements Serializable {
     private static final Logger LOGGER = Logger.getLogger(FormResetPasswordValidation.class.getName());
 
     private final EmailSenderService emailSenderService;
+    private final ControllerSession controllerSession;
 
     private String email;
     private String code;
@@ -40,16 +43,21 @@ public class FormResetPasswordValidation implements Serializable {
     private boolean oldPasswordDisabled = false;
     private boolean showChangePassword = false;
     private boolean newPasswordDisabled = true;
+    private boolean showMessageNotMatchOldPassword = false;
+    private boolean showMessageInfoChangePassword = false;
 
     @Inject
     public FormResetPasswordValidation() {
         this.emailSenderService = new EmailSenderServiceImpl();
+        this.controllerSession = new ControllerSession();
     }
 
     @SneakyThrows
     public void sendEmail() {
         if (!validateEmail(email)) return;
-        emailSenderService.sendEmail(email, "Juan Romero", "A1SDD2");
+        Object sendCode = GeneratorCode.generateCode();
+        emailSenderService.sendEmail(email, "Juan Romero", sendCode.toString());
+        controllerSession.saveSession("sendCode", sendCode);
         LOGGER.info("Email sent to: " + email);
         emailValidated = true;
         codeDisabled = false;
@@ -75,7 +83,9 @@ public class FormResetPasswordValidation implements Serializable {
 
     @SneakyThrows
     public void resendCode() {
-        emailSenderService.sendEmail(email, "Juan Romero", "A1SDD2");
+        Object sendCode = GeneratorCode.generateCode();
+        controllerSession.saveSession("sendCode", sendCode);
+        emailSenderService.sendEmail(email, "Juan Romero", sendCode.toString());
         LOGGER.info("Email sent to: " + email);
         time = 30;
         buttonResendCodeDisable = true;
@@ -83,7 +93,7 @@ public class FormResetPasswordValidation implements Serializable {
     }
 
     public void validateCode() {
-        if (code.equals("A1SDD2")) {
+        if (code.equals(controllerSession.getSession("sendCode"))) {
             closed = true;
             showMessage = false;
             codeDisabled = true;
@@ -108,7 +118,7 @@ public class FormResetPasswordValidation implements Serializable {
     public void validateOldPassword() {
         if (oldPassword.equals("12345678")) {
             newPasswordDisabled = false;
-            showMessage = false;
+            showMessageNotMatchOldPassword = false;
             codeDisabled = true;
             oldPasswordDisabled = true;
             buttonOldPasswordDisable = true;
@@ -116,7 +126,7 @@ public class FormResetPasswordValidation implements Serializable {
         } else {
             newPasswordDisabled = true;
             closed = false;
-            showMessage = true;
+            showMessageNotMatchOldPassword = true;
             oldPasswordDisabled = false;
             buttonOldPasswordDisable = false;
             LOGGER.info("Old password not validated");
@@ -124,6 +134,34 @@ public class FormResetPasswordValidation implements Serializable {
     }
 
     public void changePassword() {
+        if (newPassword.isEmpty()) return;
+        showMessageInfoChangePassword = true;
+        showChangePassword = false;
+        emailValidated = false;
+        reset();
+        controllerSession.invalidateSession();
         LOGGER.info("Password changed");
+    }
+
+    private void reset() {
+        email = "";
+        code = "";
+        time = 30;
+        oldPassword = "";
+        newPassword = "";
+        emailValidated = false;
+        codeDisabled = true;
+        buttonCodeValidateDisable = true;
+        renderedButtonResendPassword = false;
+        buttonResendCodeDisable = true;
+        pollStopped = false;
+        showMessage = false;
+        closed = false;
+        buttonOldPasswordDisable = false;
+        oldPasswordDisabled = false;
+        showChangePassword = false;
+        newPasswordDisabled = true;
+        showMessageNotMatchOldPassword = false;
+        showMessageInfoChangePassword = false;
     }
 }
