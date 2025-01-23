@@ -25,6 +25,8 @@ public class FormResetPasswordValidation implements Serializable {
     private String email;
     private String code;
     private Integer time = 30;
+    private String oldPassword;
+    private String newPassword;
 
     private boolean emailValidated = false;
     private boolean codeDisabled = true;
@@ -32,6 +34,12 @@ public class FormResetPasswordValidation implements Serializable {
     private boolean renderedButtonResendPassword = false;
     private boolean buttonResendCodeDisable = true;
     private boolean pollStopped = false;
+    private boolean showMessage = false;
+    private boolean closed = false;
+    private boolean buttonOldPasswordDisable = false;
+    private boolean oldPasswordDisabled = false;
+    private boolean showChangePassword = false;
+    private boolean newPasswordDisabled = true;
 
     @Inject
     public FormResetPasswordValidation() {
@@ -74,4 +82,48 @@ public class FormResetPasswordValidation implements Serializable {
         pollStopped = false;
     }
 
+    public void validateCode() {
+        if (code.equals("A1SDD2")) {
+            closed = true;
+            showMessage = false;
+            codeDisabled = true;
+            buttonCodeValidateDisable = true;
+            renderedButtonResendPassword = false;
+            showChangePassword = true;
+            LOGGER.info("Code validated");
+        } else {
+            showChangePassword = false;
+            closed = false;
+            showMessage = true;
+            LOGGER.info("Code not validated");
+        }
+    }
+
+    public void onClose() {
+        closed = true;
+        showMessage = false;
+        LOGGER.info("Closed dialog");
+    }
+
+    public void validateOldPassword() {
+        if (oldPassword.equals("12345678")) {
+            newPasswordDisabled = false;
+            showMessage = false;
+            codeDisabled = true;
+            oldPasswordDisabled = true;
+            buttonOldPasswordDisable = true;
+            LOGGER.info("Old password validated");
+        } else {
+            newPasswordDisabled = true;
+            closed = false;
+            showMessage = true;
+            oldPasswordDisabled = false;
+            buttonOldPasswordDisable = false;
+            LOGGER.info("Old password not validated");
+        }
+    }
+
+    public void changePassword() {
+        LOGGER.info("Password changed");
+    }
 }
