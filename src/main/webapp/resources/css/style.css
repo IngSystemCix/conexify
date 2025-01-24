@@ -404,17 +404,55 @@ p {
     background-color: var(--surface-a)
 }
 
+/* Ajustar el contenedor principal del calendario */
 .ui-datepicker {
-    max-width: 300px; /* Ajusta según tu diseño */
-    width: auto !important; /* Evita que herede el 100% del ancho */
+    max-width: 400px; /* Limita el ancho máximo del calendario */
+    width: 100%; /* Permite que sea responsivo en su contenedor */
+    box-sizing: border-box; /* Asegura que los paddings y bordes no expandan el contenedor */
+    margin: 0 auto; /* Centra el calendario en el contenedor */
 }
 
+/* Ajustar la tabla del calendario */
 .ui-datepicker-calendar {
-    width: auto; /* Deja que el calendario ajuste su tamaño automáticamente */
+    width: 100%; /* La tabla ocupa todo el ancho del contenedor */
+    table-layout: fixed; /* Distribuye las celdas uniformemente */
+    border-collapse: collapse; /* Elimina los espacios entre las celdas */
 }
 
+/* Ajustar las celdas del calendario */
+.ui-datepicker-calendar td,
+.ui-datepicker-calendar th {
+    text-align: center; /* Centra los números */
+    overflow: hidden; /* Evita que el contenido se desborde */
+    word-wrap: break-word; /* Evita desbordamientos */
+    padding: 8px; /* Espaciado uniforme */
+}
+
+/* Estilo del ícono del datePicker */
 .ui-datepicker .ui-datepicker-trigger {
-    margin-left: 8px; /* Opcional: separación del ícono */
+    margin-left: 8px; /* Ajusta la separación del ícono */
+    display: flex;
+    align-items: center;
+}
+
+/* Responsividad específica para dispositivos móviles */
+@media (max-width: 480px) {
+    .ui-datepicker {
+        font-size: 14px; /* Reduce el tamaño de fuente para pantallas pequeñas */
+        max-width: 95%; /* Usa casi todo el ancho disponible */
+    }
+
+    .ui-datepicker-calendar th,
+    .ui-datepicker-calendar td {
+        padding: 4px; /* Reduce el relleno en celdas para móviles */
+    }
+}
+
+/* Responsividad para pantallas grandes */
+@media (min-width: 1200px) {
+    .ui-datepicker {
+        max-width: 300px; /* Limita el tamaño máximo en pantallas grandes */
+    }
 }
 
 .ui-inputfield,

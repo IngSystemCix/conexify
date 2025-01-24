@@ -21,105 +21,142 @@
     <link rel="shortcut icon" href="#{resource['img/favicon.png']}" type="image/png"/>
     <title>conexify :: <h:outputText value="#{msg['title_page_register']}"/></title>
   </h:head>
-  <h:body styleClass="w-full h-screen">
-    <div class="w-full h-full flex justify-content-center align-items-center">
-      <div
-        class="w-full h-full bg-primary hidden sm:hidden md:hidden lg:flex xl:flex flex-column justify-content-center align-items-center gap-2">
-        <h:graphicImage library="img" name="person_computer.svg" styleClass="w-24rem" />
-        <h:outputText value="#{msg['name_enterprise']}" styleClass="font-bold text-white text-5xl pacifico-regular"/>
-      </div>
-      <div class="w-full h-full flex flex-column justify-content-center align-items-center">
-        <h:form styleClass="w-20rem sm:w-20rem md:w-20rem lg:w-30rem xl:w-30rem flex flex-column justify-content-start align-items-center gap-4">
-          <h:outputText value="#{msg['title_form_register']}" styleClass="font-bold text-primary text-4xl" />
+  <h:body
+    styleClass="w-full h-full sm:h-full md:h-screen lg:h-screen xl:h-screen flex justify-content-center align-items-center">
+    <div
+      class="w-full h-full bg-primary hidden sm:hidden md:hidden lg:flex xl:flex flex-column justify-content-center align-items-center gap-2">
+      <h:graphicImage library="img" name="person_computer.svg" styleClass="w-24rem" />
+      <h:outputText value="#{msg['name_enterprise']}" styleClass="font-bold text-white text-5xl pacifico-regular"/>
+    </div>
+    <div class="w-full h-full flex flex-column justify-content-center align-items-center py-4">
+      <h:form styleClass="w-20rem sm:w-20rem md:w-20rem lg:w-30rem xl:w-30rem flex flex-column justify-content-start align-items-center gap-4">
+        <h:outputText value="#{msg['title_form_register']}" styleClass="font-bold text-primary text-4xl" />
 
-          <div class="flex flex-column gap-2 w-full px-2">
-            <p:outputLabel for="name" value="#{msg['label_name']}" styleClass="w-full font-bold text-primary" />
-            <div class="ui-inputgroup w-full">
+        <div class="flex flex-column gap-2 w-full px-2">
+          <p:outputLabel for="name" value="#{msg['label_name']}" styleClass="w-full font-bold text-primary" />
+          <div class="ui-inputgroup w-full">
                     <span class="ui-input-icon-left w-full">
                       <i class="bi bi-person-bounding-box text-primary font-bold" />
                       <p:inputText id="name" placeholder="Jhon Doe" required="true" autocomplete="off" styleClass="w-full"/>
                     </span>
-            </div>
           </div>
+        </div>
 
-          <p:panelGrid columns="2" layout="flex"
-                       columnClasses="col-12 sm:col-12 md:col-6 lg:col-6 xl:col-6, col-12 sm:col-12 md:col-6 lg:col-6 xl:col-6"
-                       styleClass="w-full">
+        <p:panelGrid columns="2" layout="flex"
+                     columnClasses="col-12 sm:col-12 md:col-6 lg:col-6 xl:col-6, col-12 sm:col-12 md:col-6 lg:col-6 xl:col-6"
+                     styleClass="w-full">
 
-            <p:row>
-              <p:column>
-                <div class="flex flex-column gap-2 w-full">
-                  <p:outputLabel for="paternalSurname" value="#{msg['label_paternal_surname']}" styleClass="w-full font-bold text-primary" />
-                  <div class="ui-inputgroup w-full">
+          <p:row>
+            <p:column>
+              <div class="flex flex-column gap-2 w-full">
+                <p:outputLabel for="paternalSurname" value="#{msg['label_paternal_surname']}" styleClass="w-full font-bold text-primary" />
+                <div class="ui-inputgroup w-full">
                     <span class="ui-input-icon-left w-full">
                       <i class="bi bi-person-bounding-box text-primary font-bold" />
                       <p:inputText id="paternalSurname" placeholder="Radit" required="true" autocomplete="off" styleClass="w-full"/>
                     </span>
-                  </div>
                 </div>
-              </p:column>
-            </p:row>
+              </div>
+            </p:column>
+          </p:row>
 
-            <p:row>
-              <p:column>
-                <div class="flex flex-column gap-2 w-full">
-                  <p:outputLabel for="maternalSurname" value="#{msg['label_maternal_surname']}" styleClass="w-full font-bold text-primary" />
-                  <div class="ui-inputgroup w-full">
+          <p:row>
+            <p:column>
+              <div class="flex flex-column gap-2 w-full">
+                <p:outputLabel for="maternalSurname" value="#{msg['label_maternal_surname']}" styleClass="w-full font-bold text-primary" />
+                <div class="ui-inputgroup w-full">
                     <span class="ui-input-icon-left w-full">
                       <i class="bi bi-person-bounding-box text-primary font-bold" />
                       <p:inputText id="maternalSurname" placeholder="Smith" required="true" autocomplete="off" styleClass="w-full"/>
                     </span>
-                  </div>
                 </div>
-              </p:column>
-            </p:row>
+              </div>
+            </p:column>
+          </p:row>
 
-            <p:row>
-              <p:column>
-                <div class="flex flex-column gap-2 w-full">
-                  <p:outputLabel for="numberPhone" value="#{msg['label_number_phone']}" styleClass="w-full font-bold text-primary" />
-                  <div class="ui-inputgroup w-full">
+          <p:row>
+            <p:column>
+              <div class="flex flex-column gap-2 w-full">
+                <p:outputLabel for="numberPhone" value="#{msg['label_number_phone']}" styleClass="w-full font-bold text-primary" />
+                <div class="ui-inputgroup w-full">
                     <span class="ui-input-icon-left w-full">
                       <i class="bi bi-phone text-primary font-bold" />
                       <p:inputText id="numberPhone" placeholder="+51915339493" required="true" autocomplete="off" styleClass="w-full"/>
                     </span>
-                  </div>
                 </div>
-              </p:column>
-            </p:row>
+              </div>
+            </p:column>
+          </p:row>
 
-            <p:row>
-              <p:column>
-                <div class="flex flex-column gap-2 w-full">
-                  <p:outputLabel for="email" value="#{msg['label_email']}" styleClass="w-full font-bold text-primary" />
-                  <div class="ui-inputgroup w-full">
+          <p:row>
+            <p:column>
+              <div class="flex flex-column gap-2 w-full">
+                <p:outputLabel for="email" value="#{msg['label_email']}" styleClass="w-full font-bold text-primary" />
+                <div class="ui-inputgroup w-full">
                     <span class="ui-input-icon-left w-full">
                       <i class="bi bi-envelope-at text-primary font-bold" />
                       <p:inputText id="email" placeholder="example@conexify.com" required="true" autocomplete="off" styleClass="w-full"/>
                     </span>
-                  </div>
                 </div>
-              </p:column>
-            </p:row>
+              </div>
+            </p:column>
+          </p:row>
 
-          </p:panelGrid>
+        </p:panelGrid>
 
-          <div class="flex flex-column gap-2 w-full px-2">
-            <p:outputLabel for="birthday" value="#{msg['label_birthday']}" styleClass="w-full font-bold text-primary" />
-            <p:datePicker
-                    id="birthday"
-                    placeholder="#{msg['placeholder_date_birthday']}"
-                    required="true"
-                    autocomplete="off"
-                    style="width: 100%; display: flex; align-items: center;"
-                    value="#{formRegisterValidation.birthDay}"
-                    enabledDates="#{formRegisterValidation.validDates}"
-                    showIcon="true"
-                    showOnFocus="false" />
-          </div>
+        <div class="flex flex-column gap-2 w-full px-2">
+          <p:outputLabel for="birthday" value="#{msg['label_birthday']}" styleClass="w-full font-bold text-primary" />
+          <p:datePicker
+            id="birthday"
+            placeholder="#{msg['placeholder_date_birthday']}"
+            required="true"
+            autocomplete="off"
+            style="width: 100%; display: flex; align-items: center;"
+            value="#{formRegisterValidation.birthDay}"
+            enabledDates="#{formRegisterValidation.validDates}"
+            showIcon="true"
+            showOnFocus="false" />
+        </div>
 
-        </h:form>
-      </div>
+        <p:panelGrid columns="2" layout="flex"
+                     columnClasses="col-12 sm:col-12 md:col-6 lg:col-6 xl:col-6, col-12 sm:col-12 md:col-6 lg:col-6 xl:col-6"
+                     styleClass="w-full">
+          <p:row>
+            <p:column>
+              <div class="flex flex-column gap-2 w-full">
+                <p:outputLabel for="password1" value="#{msg['label_password']}"
+                               styleClass="w-full font-bold text-primary" />
+                <div class="ui-inputgroup w-full">
+                    <span class="ui-input-icon-left w-full">
+                      <i class="bi bi-shield-lock text-primary font-bold" />
+                      <p:password id="password1" placeholder="•••••••••••••••••••" match="password2" required="true" autocomplete="off"
+                                  styleClass="w-full"/>
+                    </span>
+                </div>
+              </div>
+            </p:column>
+          </p:row>
+          <p:row>
+            <p:column>
+              <div class="flex flex-column gap-2 w-full">
+                <p:outputLabel for="password2" value="#{msg['label_repeat_password']}"
+                               styleClass="w-full font-bold text-primary" />
+                <div class="ui-inputgroup w-full">
+                    <span class="ui-input-icon-left w-full">
+                      <i class="bi bi-shield-lock text-primary font-bold" />
+                      <p:password id="password2" placeholder="•••••••••••••••••••" required="true" autocomplete="off"
+                                  styleClass="w-full"/>
+                    </span>
+                </div>
+              </div>
+            </p:column>
+          </p:row>
+        </p:panelGrid>
+        <div class="w-full">
+          <p:commandButton type="button" value="#{msg['button_register']}"
+                           styleClass="ui-button-outlined w-full font-bold" />
+        </div>
+      </h:form>
     </div>
   </h:body>
 </f:view>
