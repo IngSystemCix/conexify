@@ -28,7 +28,8 @@
       <h:graphicImage library="img" name="person_computer.svg" styleClass="w-24rem" />
       <h:outputText value="#{msg['name_enterprise']}" styleClass="font-bold text-white text-5xl pacifico-regular"/>
     </div>
-    <div class="w-full h-full flex flex-column justify-content-center align-items-center py-4">
+    <div
+      class="w-full h-full flex flex-column justify-content-center align-items-center py-4 sm:py-4 md:py-0 lg:py-0 xl:py-0">
       <h:form styleClass="w-20rem sm:w-20rem md:w-20rem lg:w-30rem xl:w-30rem flex flex-column justify-content-start align-items-center gap-4">
         <h:outputText value="#{msg['title_form_register']}" styleClass="font-bold text-primary text-4xl" />
 
@@ -129,7 +130,9 @@
                 <div class="ui-inputgroup w-full">
                     <span class="ui-input-icon-left w-full">
                       <i class="bi bi-shield-lock text-primary font-bold" />
-                      <p:password id="password1" placeholder="•••••••••••••••••••" match="password2" required="true" autocomplete="off"
+                      <p:password id="password1" placeholder="•••••••••••••••••••" feedback="true" match="password2"
+                                  required="true"
+                                  autocomplete="off"
                                   styleClass="w-full"/>
                     </span>
                 </div>
@@ -144,7 +147,8 @@
                 <div class="ui-inputgroup w-full">
                     <span class="ui-input-icon-left w-full">
                       <i class="bi bi-shield-lock text-primary font-bold" />
-                      <p:password id="password2" placeholder="•••••••••••••••••••" required="true" autocomplete="off"
+                      <p:password id="password2" placeholder="•••••••••••••••••••" feedback="true" required="true"
+                                  autocomplete="off"
                                   styleClass="w-full"/>
                     </span>
                 </div>
@@ -155,6 +159,11 @@
         <div class="w-full">
           <p:commandButton type="button" value="#{msg['button_register']}"
                            styleClass="ui-button-outlined w-full font-bold" />
+        </div>
+        <div
+          class="w-full">
+          <p:linkButton id="button_cancel_operation" value="#{msg['button_cancel_operation']}" outcome="/login"
+                        styleClass="ui-button-outlined ui-button-danger w-full font-bold" />
         </div>
       </h:form>
     </div>
