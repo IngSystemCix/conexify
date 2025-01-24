@@ -30,9 +30,7 @@
       </div>
       <div class="w-full h-full flex flex-column justify-content-center align-items-center">
         <h:form
-          styleClass="w-20rem sm:w-20rem md:w-20rem lg:w-30rem xl:w-30rem flex flex-column justify-content-start align-items-center gap-4">
-          <h:graphicImage library="img" name="favicon.png"
-                          styleClass="w-8rem block sm:block md:block lg:hidden xl:hidden" />
+          styleClass="w-full px-6 py-4 flex flex-column justify-content-start align-items-center gap-4">
           <h:outputText value="#{msg['title_form_login']}" styleClass="font-bold text-primary text-4xl" />
           <div class="flex flex-column gap-2 w-full">
             <p:outputLabel for="email" value="#{msg['label_email']}" styleClass="w-full font-bold text-primary"/>
@@ -97,8 +95,8 @@
           </ui:fragment>
         </h:form>
 
-        <h:form>
-          <div class="w-20rem sm:w-20rem md:w-20rem lg:w-30rem xl:w-30rem mt-3">
+        <h:form styleClass="w-full px-6">
+          <div class="mt-3">
             <p:selectOneMenu id="locate" value="#{region.locale}" styleClass="w-full" onchange="submit()"
                              placeholder="#{msg['placeholder_select_country']}">
               <f:selectItem itemValue="es" itemLabel="#{msg['item_language_es']}" />

@@ -22,15 +22,16 @@
     <title>conexify :: <h:outputText value="#{msg['title_page_register']}"/></title>
   </h:head>
   <h:body
-    styleClass="w-full h-full sm:h-full md:h-screen lg:h-screen xl:h-screen flex justify-content-center align-items-center">
+    styleClass="w-full min-h-screen flex justify-content-center align-items-center bg-primary">
     <div
-      class="w-full h-full bg-primary hidden sm:hidden md:hidden lg:flex xl:flex flex-column justify-content-center align-items-center gap-2">
+      class="w-full bg-primary hidden sm:hidden md:hidden lg:flex xl:flex flex-column justify-content-center align-items-center gap-2" style="min-height: calc(100vh - 4rem);">
       <h:graphicImage library="img" name="person_computer.svg" styleClass="w-24rem" />
       <h:outputText value="#{msg['name_enterprise']}" styleClass="font-bold text-white text-5xl pacifico-regular"/>
     </div>
     <div
-      class="w-full h-full flex flex-column justify-content-center align-items-center py-4 sm:py-4 md:py-0 lg:py-0 xl:py-0">
-      <h:form styleClass="w-20rem sm:w-20rem md:w-20rem lg:w-30rem xl:w-30rem flex flex-column justify-content-start align-items-center gap-4">
+      class="w-full h-full flex flex-column justify-content-center align-items-center bg-white">
+      <h:form
+        styleClass="w-full min-h-screen flex flex-column justify-content-center align-items-center gap-4 py-4 px-6">
         <h:outputText value="#{msg['title_form_register']}" styleClass="font-bold text-primary text-4xl" />
 
         <div class="flex flex-column gap-2 w-full px-2">
@@ -38,9 +39,17 @@
           <div class="ui-inputgroup w-full">
                     <span class="ui-input-icon-left w-full">
                       <i class="bi bi-person-bounding-box text-primary font-bold" />
-                      <p:inputText id="name" placeholder="Jhon Doe" required="true" autocomplete="off" styleClass="w-full"/>
+                      <p:inputText id="name" value="#{formRegisterValidation.name}"
+                                   placeholder="Jhon Doe" required="true" autocomplete="off"
+                                   requiredMessage="#{msg['message_required_name']}"
+                                   validatorMessage="#{msg['message_length_name']}"
+                                   styleClass="w-full">
+                        <f:validateRequired />
+                        <f:validateLength minimum="3" maximum="50" />
+                      </p:inputText>
                     </span>
           </div>
+          <h:message for="name" styleClass="text-red-500" />
         </div>
 
         <p:panelGrid columns="2" layout="flex"
@@ -54,9 +63,18 @@
                 <div class="ui-inputgroup w-full">
                     <span class="ui-input-icon-left w-full">
                       <i class="bi bi-person-bounding-box text-primary font-bold" />
-                      <p:inputText id="paternalSurname" placeholder="Radit" required="true" autocomplete="off" styleClass="w-full"/>
+                      <p:inputText id="paternalSurname"
+                                   value="#{formRegisterValidation.paternalSurname}"
+                                   placeholder="Radit" required="true" autocomplete="off"
+                                    requiredMessage="#{msg['message_required_paternal_surname']}"
+                                    validatorMessage="#{msg['message_length_paternal_surname']}"
+                                   styleClass="w-full">
+                        <f:validateRequired />
+                        <f:validateLength minimum="3" maximum="50" />
+                      </p:inputText>
                     </span>
                 </div>
+                <h:message for="paternalSurname" styleClass="text-red-500" />
               </div>
             </p:column>
           </p:row>
@@ -68,9 +86,18 @@
                 <div class="ui-inputgroup w-full">
                     <span class="ui-input-icon-left w-full">
                       <i class="bi bi-person-bounding-box text-primary font-bold" />
-                      <p:inputText id="maternalSurname" placeholder="Smith" required="true" autocomplete="off" styleClass="w-full"/>
+                      <p:inputText id="maternalSurname"
+                                   value="#{formRegisterValidation.maternalSurname}"
+                                   placeholder="Smith" required="true" autocomplete="off"
+                                   requiredMessage="#{msg['message_required_maternal_surname']}"
+                                   validatorMessage="#{msg['message_length_maternal_surname']}"
+                                   styleClass="w-full">
+                        <f:validateRequired />
+                        <f:validateLength minimum="3" maximum="50" />
+                      </p:inputText>
                     </span>
                 </div>
+                <h:message for="maternalSurname" styleClass="text-red-500" />
               </div>
             </p:column>
           </p:row>
@@ -82,9 +109,18 @@
                 <div class="ui-inputgroup w-full">
                     <span class="ui-input-icon-left w-full">
                       <i class="bi bi-phone text-primary font-bold" />
-                      <p:inputText id="numberPhone" placeholder="+51915339493" required="true" autocomplete="off" styleClass="w-full"/>
+                      <p:inputText id="numberPhone"
+                                   value="#{formRegisterValidation.numberPhone}"
+                                   placeholder="+51915339493" required="true" autocomplete="off"
+                                   requiredMessage="#{msg['message_required_number_phone']}"
+                                   validatorMessage="#{msg['message_pattern_number_phone']}"
+                                   styleClass="w-full">
+                        <f:validateRequired />
+                        <f:validateRegex pattern="(\+\d{1,3})?[0-9]{9,12}" />
+                      </p:inputText>
                     </span>
                 </div>
+                <h:message for="numberPhone" styleClass="text-red-500" />
               </div>
             </p:column>
           </p:row>
@@ -96,9 +132,18 @@
                 <div class="ui-inputgroup w-full">
                     <span class="ui-input-icon-left w-full">
                       <i class="bi bi-envelope-at text-primary font-bold" />
-                      <p:inputText id="email" placeholder="example@conexify.com" required="true" autocomplete="off" styleClass="w-full"/>
+                      <p:inputText id="email"
+                                   value="#{formRegisterValidation.email}"
+                                   placeholder="example@conexify.com" required="true" autocomplete="off"
+                                   requiredMessage="#{msg['message_required_email']}"
+                                   validatorMessage="#{msg['message_pattern_email']}"
+                                   styleClass="w-full">
+                        <f:validateRequired />
+                        <f:validateRegex pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$" />
+                      </p:inputText>
                     </span>
                 </div>
+                <h:message for="email" styleClass="text-red-500" />
               </div>
             </p:column>
           </p:row>
@@ -116,7 +161,13 @@
             value="#{formRegisterValidation.birthDay}"
             enabledDates="#{formRegisterValidation.validDates}"
             showIcon="true"
-            showOnFocus="false" />
+            showOnFocus="false"
+            pattern="dd/MM/yyyy"
+            validatorMessage="#{msg['message_required_birthday']}"
+          >
+            <f:validateRequired />
+          </p:datePicker>
+          <h:message for="birthday" styleClass="text-red-500" />
         </div>
 
         <p:panelGrid columns="2" layout="flex"
@@ -131,11 +182,19 @@
                     <span class="ui-input-icon-left w-full">
                       <i class="bi bi-shield-lock text-primary font-bold" />
                       <p:password id="password1" placeholder="•••••••••••••••••••" feedback="true" match="password2"
+                                  value="#{formRegisterValidation.password1}"
                                   required="true"
                                   autocomplete="off"
-                                  styleClass="w-full"/>
+                                  styleClass="w-full"
+                                  requiredMessage="#{msg['message_required_password']}"
+                                  validatorMessage="#{msg['message_length_password']}"
+                      >
+                        <f:validateRequired />
+                        <f:validateLength minimum="8" maximum="20" />
+                      </p:password>
                     </span>
                 </div>
+                <h:message for="password1" styleClass="text-red-500" />
               </div>
             </p:column>
           </p:row>
@@ -148,16 +207,26 @@
                     <span class="ui-input-icon-left w-full">
                       <i class="bi bi-shield-lock text-primary font-bold" />
                       <p:password id="password2" placeholder="•••••••••••••••••••" feedback="true" required="true"
+                                  value="#{formRegisterValidation.password2}"
                                   autocomplete="off"
-                                  styleClass="w-full"/>
+                                  styleClass="w-full"
+                                  requiredMessage="#{msg['message_required_repeat_password']}"
+                                  validatorMessage="#{msg['message_length_password']}"
+                      >
+                        <f:validateRequired />
+                        <f:validateLength minimum="8" maximum="20" />
+                      </p:password>
                     </span>
                 </div>
+                <h:message for="password2" styleClass="text-red-500" />
               </div>
             </p:column>
           </p:row>
         </p:panelGrid>
         <div class="w-full">
-          <p:commandButton type="button" value="#{msg['button_register']}"
+          <p:commandButton value="#{msg['button_register']}"
+                           action="#{formRegisterValidation.register}"
+                           update="@form"
                            styleClass="ui-button-outlined w-full font-bold" />
         </div>
         <div
