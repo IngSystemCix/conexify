@@ -404,6 +404,24 @@ p {
     background-color: var(--surface-a)
 }
 
+.ui-datepicker {
+    max-width: 300px; /* Ajusta según tu diseño */
+    width: auto !important; /* Evita que herede el 100% del ancho */
+}
+
+.ui-datepicker-calendar {
+    width: auto; /* Deja que el calendario ajuste su tamaño automáticamente */
+}
+
+.ui-datepicker .ui-datepicker-trigger {
+    margin-left: 8px; /* Opcional: separación del ícono */
+}
+
+.ui-inputfield,
+.ui-datepicker {
+    width: 100% !important;
+}
+
 .layout-sidebar .layout-menu {
     padding: 0 1rem;
     overflow-y: auto;
