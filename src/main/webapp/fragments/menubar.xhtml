@@ -31,13 +31,13 @@
                        styleClass="p-link text-xl font-bold cursor-pointer ui-button-outlined hidden sm:hidden md:block lg:block xl:block"
                        type="button" />
 
-      <p:overlayPanel for="requestPeoplePanel" widgetVar="requestPanel" dynamic="true">
+      <p:overlayPanel blockScroll="true" for="requestPeoplePanel" widgetVar="requestPanel" dynamic="true">
         <div class="text-lg font-bold mb-3 text-primary">
-          #{msg['label_amount_request_people']}: #{requestsPeople.requests.size()}
+          #{msg['label_amount_request_people']}: #{requestsPeople.requests.size() gt 99? '99+': requestsPeople.requests.size()}
         </div>
         <ul class="list-none p-2" style="width: 300px;">
           <ui:repeat value="#{requestsPeople.requests}" var="requestPeople">
-            <li class="border-b pb-2 mb-2">
+            <li class="border-bottom-1 border-gray-400 pb-2 mb-2">
               <!-- Nombre de la persona que hizo la solicitud -->
               <div class="font-bold text-lg">
                 #{requestPeople.fullName}
@@ -75,11 +75,14 @@
                        styleClass="p-link text-xl font-bold cursor-pointer ui-button-outlined hidden sm:hidden md:block lg:block xl:block"
                        type="button" />
 
-      <p:overlayPanel for="notificationPanel" widgetVar="notifyPanel" dynamic="true">
+      <p:overlayPanel for="notificationPanel" blockScroll="true" widgetVar="notifyPanel" dynamic="true">
+        <div class="text-lg font-bold mb-3 text-primary">
+          #{msg['label_amount_notifications']}: #{notification.notifications.size() gt 99? '99+': notification.notifications.size()}
+        </div>
         <ul class="list-none p-2" style="width: 300px;">
           <ui:repeat value="#{notification.notifications}" var="notif">
-            <li class="border-b pb-2 mb-2">
-              <h:outputLink value="#{notif.link}" styleClass="flex justify-content-start items-center gap-2">
+            <li class="border-bottom-1 border-gray-400 pb-2 mb-2">
+              <h:outputLink value="#{notif.link}" styleClass="flex justify-content-start align-items-center gap-2">
                 <i class="bi bi-#{notif.icon} text-2xl text-#{notif.color}" />
                 <div>
                   <small class="block text-gray-500">#{notif.sender}</small>
@@ -92,8 +95,49 @@
       </p:overlayPanel>
 
       <!-- Avatar -->
-      <p:avatar label="Juan Romero" dynamicColor="true"
+      <p:avatar id="userAvatar" label="Juan Romero" dynamicColor="true"
                 styleClass="select-none cursor-pointer" size="large" />
+
+      <p:overlayPanel for="userAvatar" blockScroll="true" widgetVar="userPanel" dynamic="true">
+        <ul class="list-none p-2" style="width: 300px;">
+          <li class="border-bottom-1 border-gray-400 pb-2 mb-2">
+            <h:outputLink value="/u/profile" styleClass="flex justify-content-start align-items-center gap-2">
+              <i class="bi bi-person-circle text-2xl text-primary" />
+              <div>
+                <small class="block text-gray-500">#{msg['label_profile']}</small>
+                <h:outputText value="#{msg['label_profile']}" styleClass="font-bold text-gray-800" />
+              </div>
+            </h:outputLink>
+          </li>
+          <li class="border-bottom-1 border-gray-400 pb-2 mb-2">
+            <h:outputLink value="/u/settings" styleClass="flex justify-content-start align-items-center gap-2">
+              <i class="bi bi-gear text-2xl text-primary" />
+              <div>
+                <small class="block text-gray-500">#{msg['label_settings']}</small>
+                <h:outputText value="#{msg['label_settings']}" styleClass="font-bold text-gray-800" />
+              </div>
+            </h:outputLink>
+          </li>
+          <li class="border-bottom-1 border-gray-400 pb-2 mb-2">
+            <h:outputLink value="/u/help" styleClass="flex justify-content-start align-items-center gap-2">
+              <i class="bi bi-question-circle text-2xl text-primary" />
+              <div>
+                <small class="block text-gray-500">#{msg['label_help']}</small>
+                <h:outputText value="#{msg['label_help']}" styleClass="font-bold text-gray-800" />
+              </div>
+            </h:outputLink>
+          </li>
+          <li class="border-b pb-2 mb-2">
+            <h:outputLink value="/logout" styleClass="flex justify-content-start align-items-center gap-2">
+              <i class="bi bi-box-arrow-right text-2xl text-primary" />
+              <div>
+                <small class="block text-gray-500">#{msg['label_logout']}</small>
+                <h:outputText value="#{msg['label_logout']}" styleClass="font-bold text-gray-800" />
+              </div>
+            </h:outputLink>
+          </li>
+        </ul>
+      </p:overlayPanel>
     </div>
   </f:facet>
 </p:menubar>

@@ -55,6 +55,11 @@
       <artifactId>primeflex</artifactId>
       <version>3.3.1</version>
     </dependency>
+    <dependency>
+      <groupId>org.primefaces.themes</groupId>
+      <artifactId>all-themes</artifactId>
+      <version>1.0.10</version>
+    </dependency>
     <!--  PRETTYFACES  -->
     <dependency>
       <groupId>org.ocpsoft.rewrite</groupId>
@@ -134,6 +139,18 @@
       <groupId>io.github.cdimascio</groupId>
       <artifactId>dotenv-java</artifactId>
       <version>3.1.0</version>
+    </dependency>
+    <!--  JWT  -->
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-api</artifactId>
+      <version>0.12.6</version>
+    </dependency>
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt-impl</artifactId>
+      <version>0.12.6</version>
+      <scope>runtime</scope>
     </dependency>
     <!--  TEST  -->
     <dependency>
