@@ -1,5 +1,10 @@
 package pe.edu.utp.conexify.util;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class Notify {
     private String message;
     private String type;
@@ -10,38 +15,6 @@ public class Notify {
         this.message = message;
         this.type = type;
         this.sender = sender;
-        this.link = link;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getSender() {
-        return sender;
-    }
-
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
         this.link = link;
     }
 
