@@ -455,6 +455,36 @@ p {
     }
 }
 
+body .ui-scrollpanel {
+    padding: 0;
+}
+
+.truncate-text {
+    white-space: nowrap;      /* No permite saltos de línea */
+    overflow: hidden;         /* Oculta el texto que exceda */
+    text-overflow: ellipsis;  /* Muestra los puntos suspensivos */
+    width: 150px;             /* Ajusta el ancho según sea necesario */
+    display: block;           /* Asegúrate de que sea un bloque o inline-block */
+}
+
+body .ui-overlay-badge .ui-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+    margin: 0;
+    width: 1rem;
+    height: 1rem;
+}
+
+body .ui-scrollpanel {
+    border: 0;
+}
+
+body .ui-tabmenu .ui-tabmenu-nav {
+    overflow-x: hidden;
+}
+
 .ui-inputfield,
 .ui-datepicker {
     width: 100% !important;

@@ -14,8 +14,8 @@
 <f:view contentType="text/html" locale="#{region.locale}">
   <h:head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css"/>
     <h:outputStylesheet id="theme-css" library="css" name="style.css" />
+    <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css"/>
     <h:outputStylesheet library="css" name="font.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
     <link rel="shortcut icon" href="#{resource['img/favicon.png']}" type="image/png"/>
@@ -29,19 +29,76 @@
           <i class="bi bi-chat-left-dots" />
           <h:outputText value="#{msg['chat']}" styleClass="text-2xl font-bold" />
         </div>
-        <p:tabMenu styleClass="w-full">
-          <p:menuitem value="#{msg['chat']}" icon="bi bi-chat-left-dots" url="/u/chat" badge="#{chat.badge}" />
-          <p:menuitem value="#{msg['friends']}" icon="bi bi-people-fill" url="/u/friends" />
-        </p:tabMenu>
+        <p:tabView styleClass="w-full">
+          <p:tab>
+            <f:facet name="title">
+              <h:outputText value="#{msg['chat']}" />
+              <p:badge value="#{chat.messages.size() gt 99 ? '99+' : chat.messages.size()}" severity="danger" class="ml-1" />
+            </f:facet>
+            <p:scrollPanel mode="native" styleClass="w-full flex flex-column gap-4"
+                           style="min-height: calc(100vh - 13rem);" >
+              <p:autoComplete placeholder="#{msg['search']}" styleClass="w-full" value="#{chat.searchUsername}"
+                              completeMethod="#{chat.completeUsername}" scrollHeight="250" />
+              <div class="w-full flex flex-column gap-3">
+                <ui:repeat value="#{chat.messages}" var="message">
+                  <div class="w-full flex justify-start items-center gap-2 cursor-pointer select-none">
+                    <!-- Avatar -->
+                    <p:badge
+                      styleClass="#{message.online ? 'bg-green-400' : 'bg-red-400'} border-2 border-white">
+                      <p:avatar id="#{'username-'.concat(message.username)}" label="#{message.username}" dynamicColor="true"
+                                styleClass="select-none cursor-pointer" size="large"/>
+                    </p:badge>
+                    <!-- Contenedor del mensaje -->
+                    <div class="flex flex-column" style="width: calc(100% - 3rem);">
+                      <!-- Nombre de usuario -->
+
+                      <h:outputText  value="#{message.username}"
+                                    styleClass="text-lg font-bold truncate-text" />
+                      <!-- Mensaje con truncado -->
+
+                      <h:outputText  value="#{message.message}"
+                                    styleClass="truncate-text" />
+                    </div>
+                  </div>
+                </ui:repeat>
+              </div>
+            </p:scrollPanel>
+          </p:tab>
+          <p:tab title="#{msg['friends']}">
+            <p:scrollPanel mode="native" styleClass="w-full flex flex-column gap-4" >
+              <p:autoComplete placeholder="#{msg['search']}" styleClass="w-full" value="#{chat.searchUsernamePlatform}"
+                              completeMethod="#{chat.completePlatform}" scrollHeight="250" />
+              <div class="w-full flex flex-column gap-3">
+                <ui:repeat value="#{chat.friends}" var="friend">
+                  <div class="w-full flex justify-start items-center gap-2 cursor-pointer select-none">
+                    <!-- Avatar -->
+                    <p:badge
+                      styleClass="#{friend.onlineStatus ? 'bg-green-400' : 'bg-red-400'} border-2 border-white">
+                      <p:avatar id="#{'username-friends-'.concat(friend.username)}" label="#{friend.username}"
+                                dynamicColor="true"
+                                styleClass="select-none cursor-pointer" size="large"/>
+                    </p:badge>
+                    <!-- Contenedor del mensaje -->
+                    <div class="flex flex-column justify-content-center align-items-center" style="width: calc(100% - 3rem);">
+                      <!-- Nombre de usuario -->
+
+                      <h:outputText  value="#{friend.username}"
+                                    styleClass="text-lg font-bold truncate-text" />
+                    </div>
+                  </div>
+                </ui:repeat>
+              </div>
+            </p:scrollPanel>
+          </p:tab>
+        </p:tabView>
       </p:sidebar>
       <div class="flex flex-column" >
         <div class="w-full flex flex-column justify-content-between align-items-center">
-          <div class="w-full flex flex-column justify-content-start items-center gap-1 px-3 py-2 bg-gray-200">
-            <h:outputText value="#{chat.username}" styleClass="text-2xl font-bold" />
-            <h:outputText value="#{chat.onlineStatus ? msg['online'] : msg['offline']}"
-                          styleClass="#{chat.onlineStatus ? 'text-green-500' : 'text-red-500'} font-bold" />
+          <div class="w-full flex flex-column justify-content-start items-center gap-1 pt-2 bg-gray-200">
+            <h:outputText value="#{chat.username}" styleClass="text-2xl font-bold ml-3" />
+            <p:tag severity="#{chat.onlineStatus ? 'success' : 'danger'}" value="#{chat.onlineStatus ? msg['online'] : msg['offline']}" />
           </div>
-          <p:scrollPanel mode="native" styleClass="w-full" style="min-height: calc(100vh - 13rem);" >
+          <p:scrollPanel mode="native" styleClass="w-full" style="min-height: calc(100vh - 12.1rem);" >
 
           </p:scrollPanel>
         </div>
