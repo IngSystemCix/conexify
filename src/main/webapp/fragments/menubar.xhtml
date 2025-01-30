@@ -13,17 +13,16 @@
       xmlns:p="http://primefaces.org/ui">
 <p:menubar>
   <f:facet name="start">
-    <h:outputLink value="/conexify/u/home" styleClass="w-3rem flex gap-3">
-      <h:graphicImage library="img" name="favicon.png" styleClass="w-3rem" />
-      <h:outputText value="#{msg['name_enterprise']}"
-                    styleClass="font-bold text-primary text-2xl pacifico-regular h-full text-center" />
+    <h:outputLink value="/conexify/u/home">
+      <h:graphicImage library="img" name="favicon.png" style="width: 2.9rem;" />
     </h:outputLink>
   </f:facet>
 
   <f:facet name="end">
     <div class="flex items-center gap-1 sm:gap-1 md:gap-3 lg:gap-3 xl:gap-3">
+      <p:commandButton icon="bi bi-chat-dots-fill" type="button" onclick="PF('sidebar').show()" styleClass="ui-button" />
 
-      <p:linkButton outcome="/u/request-friend" icon="bi bi-person-fill-add" style="margin-right:20px;"
+      <p:linkButton outcome="/u/request-friend" icon="bi bi-person-fill-add"
                     title="Notificaciones"
                     styleClass="block sm:block md:hidden lg:hidden xl:hidden ui-button-outlined" />
 

@@ -1,11 +1,9 @@
 package pe.edu.utp.conexify.util;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,7 +11,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Message {
     private String username;
-    private String message;
+    private List<String> messages;
     private LocalDateTime timeSendMessage;
     private boolean isOnline;
+//    private boolean isRead;
+//    private boolean isSent;
+//    private boolean isReceived;
+//    private boolean isDelivered;
+//    private boolean isSeen;
+//    private boolean isTyping;
+//    private List<String> transmittedMessages;
+//    private List<String> receivedMessages;
 }

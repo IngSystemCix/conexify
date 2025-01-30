@@ -11,4 +11,6 @@ public class EnvironmentVariables {
     public static final String HOST_NAME = ENV.get("GMAIL_HOSTNAME");
     public static final int SMTP_PORT = Integer.parseInt(ENV.get("GMAIL_SMTP_PORT"));
     public static final Duration SOCKET_TIMEOUT = Duration.ofSeconds(20);
+    public static final Duration CONNECTION_TIMEOUT = Duration.ofSeconds(20);
+    public static final String TOKEN_EMOJIN = ENV.get("TOKEN_EMOJIN");
 }

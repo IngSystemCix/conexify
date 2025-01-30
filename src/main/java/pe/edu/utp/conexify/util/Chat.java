@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Getter
@@ -18,24 +19,44 @@ import java.util.stream.Collectors;
 @Named
 @ViewScoped
 public class Chat implements Serializable {
+    private static final Logger LOGGER = Logger.getLogger(Chat.class.getName());
     private String username;
     private boolean onlineStatus;
     private List<Message> messages;
+    private List<Message> messagesChat;
     private List<Friend> friends;
     private List<UserPlatform> userPlatforms;
     private String searchUsername;
     private String searchUsernamePlatform;
-
+    private boolean selectedChat;
+    private String valueInputMessage = "";
 
     @PostConstruct
     public void init() {
-        this.username = "Pedro Tarasona";
+        this.username = null;
         this.onlineStatus = false;
+        this.selectedChat = false;
+        this.messagesChat = new ArrayList<>();
         messages = new ArrayList<>(Arrays.asList(
-                new Message("Luisa Mendoza", "Hola, ¿cómo estás?", LocalDateTime.now().minusMinutes(5), true),
-                new Message("Fatima Perez", "Hola, bien gracias, ¿y tú?", LocalDateTime.now().minusMinutes(4), false),
-                new Message("Xavi Ugarte", "Bien, gracias por preguntar", LocalDateTime.now().minusMinutes(3), false),
-                new Message("Susy Arjona", "¿En qué puedo ayudarte?", LocalDateTime.now().minusMinutes(2), true)
+                new Message("Luisa Mendoza", Arrays.asList(
+                        "Hola, ¿cómo estás?",
+                        "¿En qué puedo ayudarte?"
+                ), LocalDateTime.now().minusMinutes(5), true),
+                new Message("Fatima Perez", Arrays.asList(
+                        "Hola, ¿cómo estás guapo?",
+                        "¿En qué puedo ayudarte?",
+                        "Quiero verte pronto"
+                ), LocalDateTime.now().minusMinutes(4), false),
+                new Message("Xavi Ugarte", Arrays.asList(
+                        "Hola, ¿cómo estás?",
+                        "¿En qué puedo ayudarte?",
+                        "Soy Xavi, tu amigo de la infancia"
+                ), LocalDateTime.now().minusMinutes(3), false),
+                new Message("Susy Arjona", Arrays.asList(
+                        "Hola, ¿cómo estás?",
+                        "¿En qué puedo ayudarte?",
+                        "Te extraño 😔"
+                ), LocalDateTime.now().minusMinutes(2), true)
         ));
         friends = new ArrayList<>(Arrays.asList(
                 new Friend("Fatima Perez", false),
@@ -52,22 +73,45 @@ public class Chat implements Serializable {
     }
 
     public List<String> completeUsername(String query) {
-        List<String> results = new ArrayList<>();
-        for (Friend friend : friends) {
-            if (friend.getUsername().toLowerCase().contains(query.toLowerCase())) {
-                results.add(friend.getUsername());
-            }
-        }
-        return results.stream().filter(result -> !result.equals(username)).collect(Collectors.toList());
+        return friends.stream()
+                .map(Friend::getUsername)
+                .filter(name -> name.toLowerCase().contains(query.toLowerCase()))
+                .filter(name -> !name.equals(username))
+                .collect(Collectors.toList());
     }
 
     public List<String> completePlatform(String query) {
-        List<String> results = new ArrayList<>();
-        for (UserPlatform userPlatform : userPlatforms) {
-            if (userPlatform.getName().toLowerCase().contains(query.toLowerCase())) {
-                results.add(userPlatform.getName());
-            }
+        return userPlatforms.stream()
+                .map(UserPlatform::getName)
+                .filter(name -> name.toLowerCase().contains(query.toLowerCase()))
+                .filter(name -> !name.equals(username))
+                .collect(Collectors.toList());
+    }
+
+    public void selectChat(Message message, String username, boolean onlineStatus) {
+        List<String> newMessages = new ArrayList<>(message.getMessages());
+
+        this.messagesChat.add(new Message(username, newMessages, LocalDateTime.now().minusMinutes(5), onlineStatus));
+
+        this.username = username;
+        this.onlineStatus = onlineStatus;
+        this.selectedChat = true;
+    }
+
+    public void closeChat() {
+        this.username = null;
+        this.onlineStatus = false;
+        this.selectedChat = false;
+        this.messagesChat.clear();
+    }
+
+    public void addEmojin(String emoji) {
+        LOGGER.info("emoji: " + emoji);
+        if (valueInputMessage == null) {
+            valueInputMessage = emoji;
+        } else {
+            valueInputMessage += emoji;
         }
-        return results.stream().filter(result -> !result.equals(username)).collect(Collectors.toList());
+        LOGGER.info("valueInputMessage: " + valueInputMessage);
     }
 }
