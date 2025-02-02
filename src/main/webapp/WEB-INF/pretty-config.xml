@@ -31,4 +31,10 @@
     <pattern value="/reset-password" />
     <view-id value="/public/reset-password.xhtml" />
   </url-mapping>
+
+  <url-mapping id="profile-user">
+    <pattern value="/profile" />
+    <view-id value="/private/profile.xhtml" />
+  </url-mapping>
+
 </pretty-config>

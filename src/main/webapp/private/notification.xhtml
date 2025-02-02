@@ -23,6 +23,9 @@
   </h:head>
   <h:body styleClass="w-full h-screen">
     <ui:include src="/fragments/menubar.xhtml" />
+    <div class="text-lg font-bold mb-2 p-2 text-primary" style="margin-top: 4rem">
+      #{msg['label_amount_notifications']}: #{notification.notifications.size() gt 99? '99+': notification.notifications.size()}
+    </div>
     <ul class="list-none p-2" style="width: 300px;">
       <ui:repeat value="#{notification.notifications}" var="notif">
         <li class="border-b pb-2 mb-2">

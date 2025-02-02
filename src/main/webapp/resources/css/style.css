@@ -2107,3 +2107,229 @@ pre[class*=language-]:after, pre[class*=language-]:before {
     width: 1rem;
     padding: 0
 }
+/* Contenedor de los mensajes */
+.message-container {
+    display: flex;
+    margin: 0.5rem 0;
+    padding: 0 1rem;
+    width: 100%; /* Asegurarse de que el contenedor ocupe todo el ancho disponible */
+}
+
+/* Alinear mensajes transmitidos (izquierda) y recibidos (derecha) */
+.message-container.left {
+    justify-content: flex-start;
+}
+
+.message-container.right {
+    justify-content: flex-end;
+}
+
+/* Burbuja de mensaje */
+.message-bubble {
+    display: inline-block;
+    padding: 0.75rem 1rem;
+    border-radius: 18px;
+    max-width: 50%; /* Limitar el ancho a un máximo del 50% */
+    font-size: 0.95rem;
+    line-height: 1.4;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease-in-out;
+    position: relative;
+    word-wrap: break-word;
+}
+
+/* Estilos para los mensajes enviados (transmitidos) */
+.message-container.left .message-bubble {
+    background-color: #dcf8c6;
+    color: #333;
+    border-bottom-left-radius: 4px;
+}
+
+/* Estilos para los mensajes recibidos */
+.message-container.right .message-bubble {
+    background-color: #d0e4fc;
+    color: #222;
+    border-bottom-right-radius: 4px;
+}
+
+/* Estilos para la hora del mensaje */
+.message-bubble small {
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    color: #555;
+    margin-top: 4px;
+}
+
+/* Aplicar truncado por defecto */
+.message-content {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-word;
+    white-space: normal;
+}
+
+.message-content.truncated {
+    -webkit-line-clamp: 5;
+    max-height: 7.5em; /* Ajustar según el line-height */
+}
+
+.message-content.expanded {
+    -webkit-line-clamp: unset;
+    max-height: none;
+}
+
+.show-more-link {
+    display: none; /* Ocultar el botón por defecto */
+}
+
+/* Animación de aparición */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem; /* 14px */
+    color: #47494f; /* Gris neutro */
+    margin-top: 0.25rem; /* Espaciado superior */
+    padding: 0.25rem 0; /* Espaciado interno */
+    border-top: 1px solid #e5e7eb; /* Línea sutil de separación */
+}
+
+.message-footer .show-more-link {
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+
+.message-footer small {
+    font-size: 0.75rem; /* 12px */
+    color: #9ca3af; /* Gris más claro */
+}
+
+.message-content p {
+    margin: 0; /* Elimina el margen por defecto del párrafo */
+}
+
+.message-footer:has(.show-more-link[style*="display: none"]) {
+    justify-content: flex-end;
+}
+
+.avatar_profile {
+    width: 10rem !important;
+    height: 10rem !important;
+    bottom: -8rem;
+    left: 1rem;
+    font-size: 5em !important;
+}
+
+.group-content-data-profile {
+    left: 15rem;
+    bottom: -10rem;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+#name_user_profile {
+    font-size: 1.5rem;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box; /* Necesario para que funcione -webkit-line-clamp */
+    -webkit-box-orient: vertical; /* Dirección del texto (vertical) */
+    -webkit-line-clamp: 1; /* Número de líneas a mostrar */
+    width: 100%; /* O un valor máximo de ancho si prefieres */
+    max-width: 200px; /* Ajusta el tamaño según tu necesidad */
+    white-space: normal; /* Permite el salto de línea */
+}
+
+@media (max-width: 640px) { /* sm: */
+    .avatar_profile {
+        width: 6rem !important;
+        height: 6rem !important;
+        bottom: -5rem;
+        font-size: 3em !important;
+    }
+    .group-content-data-profile {
+        left: 8rem;
+        bottom: -8rem;
+    }
+    #name_user_profile {
+        font-size: 1.25rem;
+        -webkit-line-clamp: 1; /* 1 línea de texto */
+        max-width: 200px; /* Ajusta el tamaño según tu necesidad */
+    }
+}
+
+@media (min-width: 640px) and (max-width: 768px) { /* md: */
+    .avatar_profile {
+        width: 8rem !important;
+        height: 8rem !important;
+        bottom: -6rem;
+        font-size: 4em !important;
+    }
+    .group-content-data-profile {
+        left: 12rem;
+        bottom: -9rem;
+    }
+    #name_user_profile {
+        font-size: 1.5rem;
+        -webkit-line-clamp: 1; /* 1 línea de texto */
+        max-width: 200px; /* Ajusta el tamaño según tu necesidad */
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) { /* lg: */
+    .avatar_profile {
+        width: 10rem !important;
+        height: 10rem !important;
+        bottom: -8rem;
+        font-size: 5em !important;
+    }
+    .group-content-data-profile {
+        left: 14rem;
+        bottom: -8rem;
+    }
+    #name_user_profile {
+        font-size: 1.75rem;
+        -webkit-line-clamp: 1; /* 1 línea de texto */
+        max-width: 400px; /* Ajusta el tamaño según tu necesidad */
+    }
+}
+
+@media (min-width: 1024px) { /* xl: */
+    .avatar_profile {
+        width: 12rem !important;
+        height: 12rem !important;
+        bottom: -9rem;
+        font-size: 6em !important;
+    }
+    .group-content-data-profile {
+        left: 15rem;
+        bottom: -8rem;
+    }
+    #name_user_profile {
+        font-size: 2rem;
+        -webkit-line-clamp: 1; /* 1 línea de texto */
+        max-width: 400px; /* Ajusta el tamaño según tu necesidad */
+    }
+}
+
+ul.ui-menu-list.ui-helper-reset {
+    width: -webkit-fill-available;
+}

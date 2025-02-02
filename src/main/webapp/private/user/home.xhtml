@@ -13,6 +13,7 @@
       xmlns:p="http://primefaces.org/ui">
 <f:view contentType="text/html" locale="#{region.locale}">
   <h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <h:outputStylesheet id="theme-css" library="css" name="style.css" />
     <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css"/>
@@ -35,16 +36,14 @@
               <h:outputText value="#{msg['chat']}" />
               <p:badge value="#{chat.messages.size() gt 99 ? '99+' : chat.messages.size()}" severity="danger" class="ml-1" />
             </f:facet>
-            <p:scrollPanel mode="native" styleClass="w-full flex flex-column gap-4"
-                           style="min-height: calc(100vh - 13rem);" >
+            <p:scrollPanel mode="native" styleClass="w-full flex flex-column gap-4" style="min-height: calc(100vh - 13rem);">
               <p:autoComplete placeholder="#{msg['search']}" styleClass="w-full" value="#{chat.searchUsername}"
                               completeMethod="#{chat.completeUsername}" scrollHeight="250" />
               <div class="w-full flex flex-column gap-3">
                 <ui:repeat value="#{chat.messages}" var="message">
                   <h:form class="w-full flex justify-start items-center gap-2 cursor-pointer select-none">
                     <!-- Avatar -->
-                    <p:badge
-                      styleClass="#{message.online ? 'bg-green-400' : 'bg-red-400'} border-2 border-white">
+                    <p:badge styleClass="#{message.online ? 'bg-green-400' : 'bg-red-400'} border-2 border-white">
                       <p:avatar id="#{'username-'.concat(message.username.replace(' ', '_'))}"
                                 label="#{message.username}"
                                 dynamicColor="true"
@@ -53,16 +52,15 @@
                     <!-- Contenedor del mensaje -->
                     <div class="flex flex-column" style="width: calc(100% - 3rem);">
                       <!-- Nombre de usuario -->
-
-                      <h:outputText  value="#{message.username}"
+                      <h:outputText value="#{message.username}"
                                     styleClass="text-lg font-bold truncate-text" />
-                      <!-- Mensaje con truncado -->
-
-                      <h:outputText  value="#{message.messages.get(message.messages.size() - 1)}"
+                      <!-- Último mensaje -->
+                      <h:outputText value="#{message.lastMessage}"
                                     styleClass="truncate-text" />
-
                       <p:ajax event="click" update="chatWithMessage"
-                              listener="#{chat.selectChat(message, message.username, message.online)}" />
+                              listener="#{chat.selectChat(message, message.username, message.online)}"
+                              oncomplete="evaluarMensajes();"
+                      />
                     </div>
                   </h:form>
                 </ui:repeat>
@@ -101,7 +99,7 @@
       <h:form id="chatWithMessage" class="flex flex-column" >
         <p:fragment rendered="#{not chat.selectedChat}">
           <div class="w-full flex flex-column justify-content-center align-items-center gap-2 select-none" style="min-height:
-          calc(100vh - 4.3rem);" >
+          calc(100vh - 4.3rem); margin-top: 4rem;" >
             <h:graphicImage library="img" name="icon_chat_not_selected_chat.png" styleClass="w-5" />
             <h:outputText value="#{msg['select_chat']}" styleClass="text-2xl font-bold" />
             <h:outputText value="#{msg['select_chat_description']}" styleClass="text-lg text-center" />
@@ -113,7 +111,7 @@
         </p:fragment>
         <p:fragment rendered="#{chat.selectedChat}">
           <!--   CHAT     -->
-          <div class="w-full flex flex-column justify-content-between align-items-center">
+          <div class="w-full flex flex-column justify-content-between align-items-center" style="margin-top: 4rem;">
             <div class="w-full flex flex-column justify-content-start items-center gap-1 pt-2 bg-gray-200">
               <div class="flex justify-content-start align-items-center gap-2 ml-3 mb-1">
                 <p:avatar id="#{'username-friends-'.concat(chat.username.replace(' ', '_'))}"
@@ -124,14 +122,41 @@
               </div>
               <p:tag severity="#{chat.onlineStatus ? 'success' : 'danger'}" value="#{chat.onlineStatus ? msg['online'] : msg['offline']}" />
             </div>
-            <p:scrollPanel mode="native" styleClass="w-full" style="min-height: calc(100vh - 13.5rem);" >
+            <p:scrollPanel mode="native" styleClass="w-full" style="height: calc(100vh - 13.5rem);">
+              <ui:repeat var="message" value="#{chat.allMessagesSorted}">
+                <!-- Mostrar divider solo si la fecha es diferente -->
+                <h:panelGroup rendered="#{chat.shouldShowDivider(message.timeSendMessage)}">
+                  <p:divider>
+                    <h:outputText value="#{chat.convertTime(message.timeSendMessage)}" />
+                  </p:divider>
+                </h:panelGroup>
 
+                <div class="message-container #{message.transmitted ? 'left' : 'right'}">
+                  <div class="message-bubble">
+                    <div class="message-content">
+                      <p>
+                        #{message.lastMessage}
+                      </p>
+                    </div>
+                    <div class="message-footer">
+                      <h:outputLink href="#" styleClass="show-more-link text-primary"
+                         onclick="toggleMessage(this); return false;"
+                      >
+                        #{msg['view_more']}
+                        <f:passThroughAttribute name="data-view-more" value="#{msg['view_more']}" />
+                        <f:passThroughAttribute name="data-view-less" value="#{msg['view_less']}" />
+                      </h:outputLink>
+                      <small>#{chat.convertTime(message.timeSendMessage)}</small>
+                    </div>
+                  </div>
+                </div>
+              </ui:repeat>
             </p:scrollPanel>
           </div>
           <div class="flex gap-4 justify-content-center align-items-center px-3 py-2 bg-gray-200">
             <div class="ui-inputgroup w-full">
-              <p:inputText id="messageInput" placeholder="#{msg['write_message']}" value="#{chat.valueInputMessage}"
-                           styleClass="w-full" widgetVar="messageInput" />
+              <p:inputText id="inputWriteMessage" placeholder="#{msg['write_message']}" value="#{chat.valueInputMessage}"
+                           styleClass="w-full" />
               <p:commandButton icon="bi bi-send" />
             </div>
             <p:overlayPanel style="width: calc(100vh - 16rem);" blockScroll="false" for="buttonEmojin"
@@ -139,20 +164,22 @@
                             dynamic="true">
               <p:tabView scrollable="true" >
                 <!-- Recorremos las categorías -->
-                <c:forEach items="#{emojin.emojisByCategory}" var="category">
-                  <p:tab title="#{emojin.getEmoticonTab(category.key)}">
+                <c:forEach items="#{chat.emojisByCategory}" var="category">
+                  <p:tab title="#{chat.getEmoticonTab(category.key)}">
                     <!-- Panel de scroll para los emojis -->
                     <p:panelGrid columns="6" layout="flex"
                                  columnClasses="col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2, col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2, col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2, col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2, col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2, col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2"
                                  styleClass="w-full overflow-x-hidden" style="height: 300px; overflow: auto;">
 
-                      <c:forEach items="#{category.value}" var="emoji">
+                      <c:forEach items="#{category.value}" var="emoji" varStatus="status">
                         <p:row>
                           <p:column>
                             <p:commandLink value="#{emoji}"
-                                           update=":chatWithMessage:messageInput"
-                                           actionListener="#{chat.addEmojin(emoji)}"
-                                           style="text-decoration: none;" />
+                                           styleClass="ui-button-flat"
+                                           style="text-decoration: none;"
+                                           type="button"
+                                           action="#{chat.addEmojin(emoji)}"
+                                           update=":chatWithMessage:inputWriteMessage" />
                           </p:column>
                         </p:row>
                       </c:forEach>
@@ -167,6 +194,7 @@
         </p:fragment>
       </h:form>
     </div>
+    <h:outputScript library="js" name="toggle-show-more.js" />
   </h:body>
 </f:view>
 </html>

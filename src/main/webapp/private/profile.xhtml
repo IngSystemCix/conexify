@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:faces="jakarta.faces"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:pt="jakarta.faces.passthrough"
+      xmlns:cc="jakarta.faces.composite"
+      xmlns:c="jakarta.tags.core"
+      xmlns:fn="jakarta.tags.functions"
+      xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html" locale="#{region.locale}">
+  <h:head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <h:outputStylesheet library="css" name="style.css"/>
+    <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css"/>
+    <h:outputStylesheet library="css" name="font.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+    <link rel="shortcut icon" href="#{resource['img/favicon.png']}" type="image/png"/>
+    <title>conexify :: <h:outputText value="#{msg['title_page_profile']}"/></title>
+  </h:head>
+  <h:body styleClass="w-full h-screen">
+    <ui:include src="/fragments/menubar.xhtml" />
+    <h:form
+      styleClass="w-full h-10rem sm:h-10rem md:h-16rem lg:h-24rem xl:h-24rem px-2 sm:px-2 md:px-2 lg:px-8 xl:px-8"
+            style="background:
+    linear-gradient(to bottom, #808080, #ffffff); margin-top: 4rem;" enctype="multipart/form-data">
+      <div class="relative w-full h-full">
+        <p:galleria id="banner_profile_user" widgetVar="bannerGalleria" value="#{bannerView.photos}"
+                    var="photo" circular="true" fullScreen="true" showItemNavigators="true" showThumbnails="false"
+                    style="max-width: 100%;">
+          <p:graphicImage library="img" name="#{photo.itemImageSrc}" alt="#{photo.alt}"
+                          style="width: 100%; height: 500px; object-fit: cover; box-shadow: inset 0px -10px 15px rgba(0, 0, 0, 0.5);" />
+        </p:galleria>
+
+        <!-- Imagen estática que al hacer clic abrirá la galería -->
+        <h:graphicImage library="img" name="#{bannerView.photos[0].itemImageSrc}"
+                        alt="#{bannerView.photos[0].alt}"
+                        style="width: 100%; height: 100%; object-fit: cover; cursor: pointer; box-shadow: inset 0px -10px 15px rgba(0, 0, 0, 0.5);"
+                        onclick="PF('bannerGalleria').show(0)" />
+        <p:fileUpload id="fileUpload" displayFilename="false" chooseIcon="bi bi-camera" skinSimple="true"
+                      fileUploadListener="#{bannerView.upload}"
+                      mode="simple" update="banner_profile_user" auto="true" styleClass="absolute"
+                      style="right: .5rem; bottom: 1rem;" virusScan="true" sizeLimit="1000000" label="#{msg['upload_image']}">
+          <p:validateFile allowTypes="/(\.|\/)(jpe?g|png)$/" />
+        </p:fileUpload>
+        <p:avatar id="photo_profile_user" label="Juan Romero" styleClass="absolute avatar_profile" dynamicColor="true"
+                    shape="circle" />
+        <div
+          class="absolute flex flex-column justify-content-center align-items-start group-content-data-profile"
+          style="gap: .3rem">
+          <p id="name_user_profile"
+             class="font-bold text-2xl" >
+            Juan Bladimir Romero Collazos
+          </p>
+          <p class="text-gray-400">1,1 mil amigos</p>
+          <p:avatarGroup>
+            <p:avatar id="avatar_friend_1" size="large" shape="circle" label="Fatima Perez" dynamicColor="true" />
+            <p:avatar id="avatar_friend_2" size="large" shape="circle" label="Xavi Ugarte" dynamicColor="true" />
+            <p:avatar id="avatar_friend_3" size="large" shape="circle" label="Susy Arjona" dynamicColor="true" />
+            <p:avatar id="avatar_friend_more" size="large" shape="circle" label="+9" dynamicColor="true" />
+          </p:avatarGroup>
+        </div>
+      </div>
+    </h:form>
+    <p:panelGrid columns="2" layout="flex"
+                 columnClasses="col-12 sm:col-12 md:col-6 lg:col-6 xl:col-6, col-12 sm:col-12 md:col-6 lg:col-6 xl:col-6"
+                 styleClass="w-full px-2 sm:px-2 md:px-2 lg:px-8 xl:px-8" style="margin-top: 10rem;">
+      <p:row>
+        <p:column>
+          <h:form>
+            <div class="card">
+              <h5 class="font-bold">#{msg['label_gallery']}</h5>
+              <p:galleria id="gallery_user" widgetVar="gallery_user" value="#{galleryView.photos}" var="photo"
+                          activeIndex="#{galleryView.activeIndex}" numVisible="7"
+                          circular="true" fullScreen="true" showItemNavigators="true" showThumbnails="false" style="max-width: 850px">
+                <p:graphicImage library="img" name="#{photo.itemImageSrc}" alt="#{photo.alt}"
+                                style="width: 100%; display: block" />
+              </p:galleria>
+
+              <div class="grid" style="max-width: 800px">
+                <ui:repeat value="#{galleryView.photos}" var="photo" varStatus="status">
+                  <div class="col-3">
+                    <p:graphicImage library="img" name="#{photo.thumbnailImageSrc}" alt="#{photo.alt}"
+                                    style="cursor: pointer; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);"
+                                    onclick="PF('gallery_user').show()"
+                                    styleClass="w-5rem h-5rem sm:w-5rem sm:h-5rem md:w-10rem md:h-10rem lg:w-10rem lg:h-10rem xl:w-10rem xl:h-10rem" />
+                  </div>
+                </ui:repeat>
+              </div>
+            </div>
+          </h:form>
+        </p:column>
+      </p:row>
+
+      <p:row>
+        <p:column>
+          <h:form styleClass="flex flex-column gap-2">
+            <p:textEditor widgetVar="editor1" value="#{editorView.text}" height="150px" secure="true"  />
+            <div class="w-full flex justify-content-end">
+              <p:commandButton value="#{msg['button_post']}" update="@form" icon="bi bi-sticky"/>
+            </div>
+          </h:form>
+          <h5 class="font-bold">#{msg['label_publications']}</h5>
+        </p:column>
+      </p:row>
+    </p:panelGrid>
+  </h:body>
+</f:view>
+</html>
