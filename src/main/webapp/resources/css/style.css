@@ -2258,6 +2258,15 @@ p {
     white-space: normal; /* Permite el salto de línea */
 }
 
+.button-edit-profile-ui {
+    right: 1rem;
+    bottom: -5rem;
+}
+
+.panel-grid-content {
+    margin-top: 10rem;
+}
+
 @media (max-width: 640px) { /* sm: */
     .avatar_profile {
         width: 6rem !important;
@@ -2273,6 +2282,14 @@ p {
         font-size: 1.25rem;
         -webkit-line-clamp: 1; /* 1 línea de texto */
         max-width: 200px; /* Ajusta el tamaño según tu necesidad */
+    }
+    .button-edit-profile-ui {
+        right: 0;
+        left: 0;
+        bottom: -12rem;
+    }
+    .panel-grid-content {
+        margin-top: 14rem;
     }
 }
 
@@ -2292,6 +2309,10 @@ p {
         -webkit-line-clamp: 1; /* 1 línea de texto */
         max-width: 200px; /* Ajusta el tamaño según tu necesidad */
     }
+    .button-edit-profile-ui {
+        right: 0;
+        bottom: -12rem;
+    }
 }
 
 @media (min-width: 768px) and (max-width: 1024px) { /* lg: */
@@ -2309,6 +2330,10 @@ p {
         font-size: 1.75rem;
         -webkit-line-clamp: 1; /* 1 línea de texto */
         max-width: 400px; /* Ajusta el tamaño según tu necesidad */
+    }
+    .button-edit-profile-ui {
+        right: 1rem;
+        bottom: -5rem;
     }
 }
 
@@ -2328,8 +2353,18 @@ p {
         -webkit-line-clamp: 1; /* 1 línea de texto */
         max-width: 400px; /* Ajusta el tamaño según tu necesidad */
     }
+    .button-edit-profile-ui {
+        right: 1rem;
+        bottom: -5rem;
+    }
 }
 
 ul.ui-menu-list.ui-helper-reset {
     width: -webkit-fill-available;
+}
+
+#inputWriteMessage {
+    overflow-y: auto !important;
+    max-height: 100px; /* Ajusta según necesites */
+    resize: none;
 }

@@ -55,7 +55,7 @@
              class="font-bold text-2xl" >
             Juan Bladimir Romero Collazos
           </p>
-          <p class="text-gray-400">1,1 mil amigos</p>
+          <p class="text-gray-400">#{profileView.converterAmountFriends(profileView.amountFriends)}</p>
           <p:avatarGroup>
             <p:avatar id="avatar_friend_1" size="large" shape="circle" label="Fatima Perez" dynamicColor="true" />
             <p:avatar id="avatar_friend_2" size="large" shape="circle" label="Xavi Ugarte" dynamicColor="true" />
@@ -63,50 +63,117 @@
             <p:avatar id="avatar_friend_more" size="large" shape="circle" label="+9" dynamicColor="true" />
           </p:avatarGroup>
         </div>
+
+        <p:commandButton value="#{msg['button_edit_profile']}" icon="bi bi-pencil"
+                         action="#{editProfile.editProfile('Juan Bladimir', 'Romero', 'Collazos', profileView.bio,
+                         profileView.email, profileView.phone , profileView.birthday, profileView.city)}"
+                         styleClass="absolute button-edit-profile-ui" />
       </div>
     </h:form>
-    <p:panelGrid columns="2" layout="flex"
-                 columnClasses="col-12 sm:col-12 md:col-6 lg:col-6 xl:col-6, col-12 sm:col-12 md:col-6 lg:col-6 xl:col-6"
-                 styleClass="w-full px-2 sm:px-2 md:px-2 lg:px-8 xl:px-8" style="margin-top: 10rem;">
-      <p:row>
-        <p:column>
-          <h:form>
-            <div class="card">
-              <h5 class="font-bold">#{msg['label_gallery']}</h5>
-              <p:galleria id="gallery_user" widgetVar="gallery_user" value="#{galleryView.photos}" var="photo"
-                          activeIndex="#{galleryView.activeIndex}" numVisible="7"
-                          circular="true" fullScreen="true" showItemNavigators="true" showThumbnails="false" style="max-width: 850px">
-                <p:graphicImage library="img" name="#{photo.itemImageSrc}" alt="#{photo.alt}"
-                                style="width: 100%; display: block" />
-              </p:galleria>
-
-              <div class="grid" style="max-width: 800px">
-                <ui:repeat value="#{galleryView.photos}" var="photo" varStatus="status">
-                  <div class="col-3">
-                    <p:graphicImage library="img" name="#{photo.thumbnailImageSrc}" alt="#{photo.alt}"
-                                    style="cursor: pointer; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);"
-                                    onclick="PF('gallery_user').show()"
-                                    styleClass="w-5rem h-5rem sm:w-5rem sm:h-5rem md:w-10rem md:h-10rem lg:w-10rem lg:h-10rem xl:w-10rem xl:h-10rem" />
+    <div class="panel-grid-content">
+      <p:panelGrid columns="2" layout="flex"
+                   columnClasses="col-12 sm:col-12 md:col-6 lg:col-6 xl:col-6, col-12 sm:col-12 md:col-6 lg:col-6 xl:col-6"
+                   styleClass="w-full px-2 sm:px-2 md:px-2 lg:px-8 xl:px-8">
+        <p:row>
+          <p:column>
+            <div class="card mb-4">
+              <h5 class="font-bold">#{msg['label_bio']}</h5>
+              <ui:fragment rendered="#{empty profileView.bio or profileView.bio eq ''}">
+                <p class="text-gray-600">#{msg['label_not_exist_bio']}</p>
+              </ui:fragment>
+              <ui:fragment rendered="#{not empty profileView.bio}">
+                <p class="text-gray-600">#{profileView.bio}</p>
+              </ui:fragment>
+            </div>
+            <div class="card mb-4">
+              <h5 class="font-bold">#{msg['label_details']}</h5>
+              <div class="flex flex-column gap-2">
+                <ui:fragment rendered="#{not empty profileView.city}">
+                  <div class="flex gap-2">
+                    <i class="bi bi-geo-alt text-gray-600" />
+                    <p class="text-primary">#{profileView.city}</p>
                   </div>
-                </ui:repeat>
+                </ui:fragment>
+                <ui:fragment rendered="#{not empty profileView.email}">
+                  <div class="flex gap-2">
+                    <i class="bi bi-envelope text-gray-600"/>
+                    <p class="text-primary">#{profileView.email}</p>
+                  </div>
+                </ui:fragment>
+                <ui:fragment rendered="#{not empty profileView.birthday}">
+                  <div class="flex gap-2">
+                    <i class="bi bi-calendar text-gray-600"/>
+                    <p class="text-primary">#{profileView.birthday}</p>
+                  </div>
+                </ui:fragment>
+                <ui:fragment rendered="#{not empty profileView.phone}">
+                  <div class="flex gap-2">
+                    <i class="bi bi-telephone text-gray-600"/>
+                    <p class="text-primary">#{profileView.phone}</p>
+                  </div>
+                </ui:fragment>
+                <ui:fragment rendered="#{not empty profileView.website}">
+                  <div class="flex gap-2">
+                    <i class="bi bi-globe text-gray-600"/>
+                    <p class="text-primary">#{profileView.website}</p>
+                  </div>
+                </ui:fragment>
               </div>
             </div>
-          </h:form>
-        </p:column>
-      </p:row>
+            <h:form>
+              <div class="card">
+                <h5 class="font-bold">#{msg['label_gallery']}</h5>
+                <ui:fragment rendered="#{not empty galleryView.photos}">
+                  <p:galleria id="gallery_user" widgetVar="gallery_user" value="#{galleryView.photos}" var="photo"
+                              activeIndex="#{galleryView.activeIndex}" numVisible="7"
+                              circular="true" fullScreen="true" showItemNavigators="true" showThumbnails="false" style="max-width: 850px">
+                    <p:graphicImage library="img" name="#{photo.itemImageSrc}" alt="#{photo.alt}"
+                                    style="width: 100%; display: block" />
+                  </p:galleria>
 
-      <p:row>
-        <p:column>
-          <h:form styleClass="flex flex-column gap-2">
-            <p:textEditor widgetVar="editor1" value="#{editorView.text}" height="150px" secure="true"  />
-            <div class="w-full flex justify-content-end">
-              <p:commandButton value="#{msg['button_post']}" update="@form" icon="bi bi-sticky"/>
+                  <div class="grid" style="max-width: 800px">
+                    <ui:repeat value="#{galleryView.photos}" var="photo" varStatus="status">
+                      <div class="col-3">
+                        <p:graphicImage library="img" name="#{photo.thumbnailImageSrc}" alt="#{photo.alt}"
+                                        style="cursor: pointer; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);"
+                                        onclick="PF('gallery_user').show()"
+                                        styleClass="w-5rem h-5rem sm:w-5rem sm:h-5rem md:w-10rem md:h-10rem lg:w-10rem lg:h-10rem xl:w-10rem xl:h-10rem" />
+                      </div>
+                    </ui:repeat>
+                  </div>
+                </ui:fragment>
+                <ui:fragment rendered="#{empty galleryView.photos}">
+                  <div class="w-full flex flex-column justify-content-center align-items-center gap-2">
+                    <h:graphicImage library="img" name="cat_cryed.png" alt="not exist gallery"
+                                    styleClass="w-16rem h-16rem"
+                                    style="cursor: pointer;"/>
+                    <h:outputText value="#{msg['label_not_exist_gallery']}" styleClass="text-center"/>
+                  </div>
+                </ui:fragment>
+              </div>
+            </h:form>
+          </p:column>
+        </p:row>
+
+        <p:row>
+          <p:column>
+            <h:form styleClass="flex flex-column gap-2">
+              <p:textEditor widgetVar="editor-post" value="#{editorView.text}" height="150px" secure="true"/>
+              <div class="w-full flex justify-content-end">
+                <p:commandButton value="#{msg['button_post']}" update="@form" icon="bi bi-sticky"/>
+              </div>
+            </h:form>
+            <h5 class="font-bold">#{msg['label_publications']}</h5>
+            <div class="w-full flex flex-column justify-content-center align-items-center gap-2">
+              <h:graphicImage library="img" name="cat_cry.png" alt="not exist publications"
+                              styleClass="w-16rem h-16rem"
+                              style="cursor: pointer;"/>
+              <h:outputText value="#{msg['label_not_exist_publications']}" styleClass="text-center"/>
             </div>
-          </h:form>
-          <h5 class="font-bold">#{msg['label_publications']}</h5>
-        </p:column>
-      </p:row>
-    </p:panelGrid>
+          </p:column>
+        </p:row>
+      </p:panelGrid>
+    </div>
   </h:body>
 </f:view>
 </html>

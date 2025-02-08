@@ -96,7 +96,7 @@
           </p:tab>
         </p:tabView>
       </p:sidebar>
-      <h:form id="chatWithMessage" class="flex flex-column" >
+      <h:form id="chatWithMessage" class="flex flex-column" prependId="false" >
         <p:fragment rendered="#{not chat.selectedChat}">
           <div class="w-full flex flex-column justify-content-center align-items-center gap-2 select-none" style="min-height:
           calc(100vh - 4.3rem); margin-top: 4rem;" >
@@ -155,8 +155,13 @@
           </div>
           <div class="flex gap-4 justify-content-center align-items-center px-3 py-2 bg-gray-200">
             <div class="ui-inputgroup w-full">
-              <p:inputText id="inputWriteMessage" placeholder="#{msg['write_message']}" value="#{chat.valueInputMessage}"
-                           styleClass="w-full" />
+              <p:inputTextarea rows="1" cols="33" id="inputWriteMessage"
+                               placeholder="#{msg['write_message']}"
+                               value="#{chat.valueInputMessage}"
+                               scrollHeight="100"
+                               autoResize="false"
+                               styleClass="w-full"
+                               style="overflow: auto;" />
               <p:commandButton icon="bi bi-send" />
             </div>
             <p:overlayPanel style="width: calc(100vh - 16rem);" blockScroll="false" for="buttonEmojin"
@@ -179,7 +184,7 @@
                                            style="text-decoration: none;"
                                            type="button"
                                            action="#{chat.addEmojin(emoji)}"
-                                           update=":chatWithMessage:inputWriteMessage" />
+                                           update="inputWriteMessage" />
                           </p:column>
                         </p:row>
                       </c:forEach>

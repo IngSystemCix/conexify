@@ -1,16 +1,17 @@
 package pe.edu.utp.conexify.util;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.el.MethodExpression;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.PrimeFaces;
 import pe.edu.utp.conexify.service.EmojinService;
 import pe.edu.utp.conexify.service.EmojinServiceImpl;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -202,13 +203,9 @@ public class Chat implements Serializable {
     }
 
     public void addEmojin(String emoji) {
-        LOGGER.info("emoji: " + emoji);
-        if (valueInputMessage == null) {
-            valueInputMessage = emoji;
-        } else {
-            valueInputMessage += emoji;
-        }
-        LOGGER.info("valueInputMessage: " + valueInputMessage);
+        this.valueInputMessage += emoji;
+        PrimeFaces.current().executeScript("PF('inputWriteMessage').val('" + this.valueInputMessage + "');");
+        LOGGER.info("Emoji agregado: " + emoji);
     }
 
     public List<Message> getAllMessagesSorted() {

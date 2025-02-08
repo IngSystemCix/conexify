@@ -13,4 +13,5 @@ public class EnvironmentVariables {
     public static final Duration SOCKET_TIMEOUT = Duration.ofSeconds(20);
     public static final Duration CONNECTION_TIMEOUT = Duration.ofSeconds(20);
     public static final String TOKEN_EMOJIN = ENV.get("TOKEN_EMOJIN");
+    public static final String TOKEN_GCP_API_MAPS = ENV.get("GOOGLE_MAPS_API_KEY");
 }
