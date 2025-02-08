@@ -17,6 +17,8 @@ Conexify es una red social que permite a los usuarios conectarse con otras perso
 - PrimeFaces
 - Wildfly
 - MariaDB
+- Redis
+- WebSockets
 - Maven
 - XHTML
 - CSS
