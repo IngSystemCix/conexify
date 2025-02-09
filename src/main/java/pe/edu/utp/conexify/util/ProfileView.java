@@ -20,6 +20,8 @@ public class ProfileView implements Serializable {
     private String phone;
     private String website;
     private String birthday;
+    private String profession;
+    private boolean verified = true;
 
     @PostConstruct
     public void init() {
@@ -30,6 +32,7 @@ public class ProfileView implements Serializable {
         phone = "+51 900 0002 602";
         birthday = "05/03/2002";
         website = "";
+        profession = "Software Engineer";
     }
 
     public String converterAmountFriends(Long amountFriends) {

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:faces="jakarta.faces"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:pt="jakarta.faces.passthrough"
+      xmlns:cc="jakarta.faces.composite"
+      xmlns:c="jakarta.tags.core"
+      xmlns:fn="jakarta.tags.functions"
+      xmlns:p="http://primefaces.org/ui">
+<p:sidebar widgetVar="sidebar">
+  <div class="w-full flex justify-content-start align-items-center gap-2 mb-2">
+    <i class="bi bi-chat-left-dots" />
+    <h:outputText value="#{msg['chat']}" styleClass="text-2xl font-bold" />
+  </div>
+  <p:tabView styleClass="w-full">
+    <p:tab>
+      <f:facet name="title">
+        <h:outputText value="#{msg['chat']}" />
+        <p:badge value="#{chat.messages.size() gt 99 ? '99+' : chat.messages.size()}" severity="danger" class="ml-1" />
+      </f:facet>
+      <p:scrollPanel mode="native" styleClass="w-full flex flex-column gap-4" style="min-height: calc(100vh - 13rem);">
+        <p:autoComplete placeholder="#{msg['search']}" styleClass="w-full" value="#{chat.searchUsername}"
+                        completeMethod="#{chat.completeUsername}" scrollHeight="250" />
+        <div class="w-full flex flex-column gap-3">
+          <ui:repeat value="#{chat.messages}" var="message">
+            <h:form class="w-full flex justify-start items-center gap-2 cursor-pointer select-none">
+              <!-- Avatar -->
+              <p:badge styleClass="#{message.online ? 'bg-green-400' : 'bg-red-400'} border-2 border-white">
+                <p:avatar id="#{'username-'.concat(message.username.replace(' ', '_'))}"
+                          label="#{message.username}"
+                          dynamicColor="true"
+                          styleClass="select-none cursor-pointer" size="large"/>
+              </p:badge>
+              <!-- Contenedor del mensaje -->
+              <div class="flex flex-column" style="width: calc(100% - 3rem);">
+                <!-- Nombre de usuario -->
+                <h:outputText value="#{message.username}"
+                              styleClass="text-lg font-bold truncate-text" />
+                <!-- Último mensaje -->
+                <h:outputText value="#{message.lastMessage}"
+                              styleClass="truncate-text" />
+                <p:ajax event="click" update="chatWithMessage"
+                        listener="#{chat.selectChat(message, message.username, message.online)}"
+                        oncomplete="evaluarMensajes(); openChatFloat();"
+                />
+              </div>
+            </h:form>
+          </ui:repeat>
+        </div>
+      </p:scrollPanel>
+    </p:tab>
+    <p:tab title="#{msg['friends']}">
+      <p:scrollPanel mode="native" styleClass="w-full flex flex-column gap-4" >
+        <p:autoComplete placeholder="#{msg['search']}" styleClass="w-full" value="#{chat.searchUsernamePlatform}"
+                        completeMethod="#{chat.completePlatform}" scrollHeight="250" />
+        <div class="w-full flex flex-column gap-3">
+          <ui:repeat value="#{chat.friends}" var="friend">
+            <div class="w-full flex justify-start items-center gap-2 cursor-pointer select-none">
+              <!-- Avatar -->
+              <p:badge
+                styleClass="#{friend.onlineStatus ? 'bg-green-400' : 'bg-red-400'} border-2 border-white">
+                <p:avatar id="#{'username-friends-'.concat(friend.username.replace(' ', '_'))}"
+                          label="#{friend.username}"
+                          dynamicColor="true"
+                          styleClass="select-none cursor-pointer" size="large"/>
+              </p:badge>
+              <!-- Contenedor del mensaje -->
+              <div class="flex flex-column justify-content-center align-items-center" style="width: calc(100% - 3rem);">
+                <!-- Nombre de usuario -->
+
+                <h:outputText  value="#{friend.username}"
+                               styleClass="text-lg font-bold truncate-text" />
+              </div>
+            </div>
+          </ui:repeat>
+        </div>
+      </p:scrollPanel>
+    </p:tab>
+  </p:tabView>
+</p:sidebar>
+</html>
+
+
+

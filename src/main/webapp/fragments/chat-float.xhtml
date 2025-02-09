@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:faces="jakarta.faces"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:pt="jakarta.faces.passthrough"
+      xmlns:cc="jakarta.faces.composite"
+      xmlns:c="jakarta.tags.core"
+      xmlns:fn="jakarta.tags.functions"
+      xmlns:p="http://primefaces.org/ui">
+<h:form id="chatWithMessage" class="flex flex-column" prependId="false" >
+  <p:fragment rendered="#{not chat.selectedChat}">
+    <div class="w-full flex flex-column justify-content-center align-items-center gap-2 select-none" style="min-height:
+          calc(100vh - 25rem);" >
+      <h:graphicImage library="img" name="icon_chat_not_selected_chat.png" styleClass="w-5" />
+      <h:outputText value="#{msg['select_chat']}" styleClass="text-2xl font-bold" />
+      <h:outputText value="#{msg['select_chat_description']}" styleClass="text-lg text-center" />
+      <div class="text-center">
+        <i class="bi bi-lock" />
+        <h:outputText value="#{msg['label_end_to_end_encryption']}" styleClass="text-lg text-center" />
+      </div>
+    </div>
+  </p:fragment>
+  <p:fragment rendered="#{chat.selectedChat}">
+    <!--   CHAT     -->
+    <div class="w-full flex flex-column justify-content-between align-items-center">
+      <div class="w-full flex flex-column justify-content-start items-center gap-1 pt-2 bg-gray-200">
+        <div class="flex justify-content-start align-items-center gap-2 ml-3 mb-1">
+          <p:avatar id="#{'username-friends-'.concat(chat.username.replace(' ', '_'))}"
+                    label="#{chat.username}"
+                    dynamicColor="true"
+                    styleClass="select-none cursor-pointer" />
+          <h:outputText value="#{chat.username}" styleClass="font-bold" />
+        </div>
+        <p:tag severity="#{chat.onlineStatus ? 'success' : 'danger'}" value="#{chat.onlineStatus ? msg['online'] : msg['offline']}" />
+      </div>
+      <p:scrollPanel mode="native" styleClass="w-full" style="height: calc(100vh - 33.5rem);">
+        <ui:repeat var="message" value="#{chat.allMessagesSorted}">
+          <!-- Mostrar divider solo si la fecha es diferente -->
+          <h:panelGroup rendered="#{chat.shouldShowDivider(message.timeSendMessage)}">
+            <p:divider>
+              <h:outputText value="#{chat.convertTime(message.timeSendMessage)}" />
+            </p:divider>
+          </h:panelGroup>
+
+          <div class="message-container #{message.transmitted ? 'left' : 'right'}">
+            <div class="message-bubble">
+              <div class="message-content">
+                <p>
+                  #{message.lastMessage}
+                </p>
+              </div>
+              <div class="message-footer">
+                <h:outputLink href="#" styleClass="show-more-link text-primary"
+                              onclick="toggleMessage(this); return false;"
+                >
+                  #{msg['view_more']}
+                  <f:passThroughAttribute name="data-view-more" value="#{msg['view_more']}" />
+                  <f:passThroughAttribute name="data-view-less" value="#{msg['view_less']}" />
+                </h:outputLink>
+                <small>#{chat.convertTime(message.timeSendMessage)}</small>
+              </div>
+            </div>
+          </div>
+        </ui:repeat>
+      </p:scrollPanel>
+    </div>
+    <div class="flex gap-4 justify-content-center align-items-center px-3 py-2 bg-gray-200">
+      <div class="ui-inputgroup w-full">
+        <p:inputTextarea rows="1" cols="33" id="inputWriteMessage"
+                         placeholder="#{msg['write_message']}"
+                         value="#{chat.valueInputMessage}"
+                         scrollHeight="100"
+                         autoResize="false"
+                         styleClass="w-full"
+                         style="overflow: auto;" />
+        <p:commandButton icon="bi bi-send" />
+      </div>
+      <p:overlayPanel style="width: calc(100vh - 16rem);" blockScroll="false" for="buttonEmojin"
+                      widgetVar="emojin"
+                      dynamic="true">
+        <p:tabView scrollable="true" dynamic="true">
+          <!-- Recorremos las categorías -->
+          <c:forEach items="#{chat.emojisByCategory}" var="category">
+            <p:tab title="#{chat.getEmoticonTab(category.key)}">
+              <!-- Panel de scroll para los emojis -->
+              <p:panelGrid columns="6" layout="flex"
+                           columnClasses="col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2, col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2, col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2, col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2, col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2, col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2"
+                           styleClass="w-full overflow-x-hidden" style="height: 300px; overflow: auto;">
+
+                <c:forEach items="#{category.value}" var="emoji" varStatus="status">
+                  <p:row>
+                    <p:column>
+                      <p:commandLink value="#{emoji}"
+                                     styleClass="ui-button-flat"
+                                     style="text-decoration: none;"
+                                     type="button"
+                                     action="#{chat.addEmojin(emoji)}"
+                                     update="inputWriteMessage" />
+                    </p:column>
+                  </p:row>
+                </c:forEach>
+              </p:panelGrid>
+            </p:tab>
+          </c:forEach>
+        </p:tabView>
+      </p:overlayPanel>
+      <p:commandButton id="buttonEmojin" icon="bi bi-emoji-smile" type="button" />
+    </div>
+    <p:hotkey bind="esc" update="@all" action="#{chat.closeChat()}"/>
+  </p:fragment>
+</h:form>
+</html>

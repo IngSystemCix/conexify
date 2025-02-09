@@ -2281,7 +2281,7 @@ p {
     #name_user_profile {
         font-size: 1.25rem;
         -webkit-line-clamp: 1; /* 1 línea de texto */
-        max-width: 200px; /* Ajusta el tamaño según tu necesidad */
+        max-width: 150px; /* Ajusta el tamaño según tu necesidad */
     }
     .button-edit-profile-ui {
         right: 0;
@@ -2307,7 +2307,7 @@ p {
     #name_user_profile {
         font-size: 1.5rem;
         -webkit-line-clamp: 1; /* 1 línea de texto */
-        max-width: 200px; /* Ajusta el tamaño según tu necesidad */
+        max-width: 150px; /* Ajusta el tamaño según tu necesidad */
     }
     .button-edit-profile-ui {
         right: 0;
@@ -2367,4 +2367,20 @@ ul.ui-menu-list.ui-helper-reset {
     overflow-y: auto !important;
     max-height: 100px; /* Ajusta según necesites */
     resize: none;
+}
+
+.chat-float {
+    background-color: #fff;
+    position: fixed;
+    bottom: 0;
+    right: 1rem;
+    z-index: 999;
+    height: 25rem;
+    width: 25rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: none;
+    flex-direction: column;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
 }

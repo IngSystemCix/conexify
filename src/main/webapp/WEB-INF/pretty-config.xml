@@ -37,4 +37,8 @@
     <view-id value="/private/profile.xhtml" />
   </url-mapping>
 
+  <url-mapping id="chat">
+    <pattern value="/chat" />
+    <view-id value="/private/chat.xhtml" />
+  </url-mapping>
 </pretty-config>

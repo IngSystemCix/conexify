@@ -23,6 +23,12 @@
   </h:head>
   <h:body styleClass="w-full h-screen">
     <ui:include src="/fragments/menubar.xhtml" />
+    <ui:include src="/fragments/sidebar-chats-float.xhtml" />
+    <div id="chat_float" class="chat-float">
+      <i id="close_float_chat" class="bi bi-x-circle absolute font-bold text-lg hover:text-red-400 cursor-pointer"
+         style="top: .5rem; right: .5rem;" />
+      <ui:include src="/fragments/chat-float.xhtml" />
+    </div>
     <h:form
       styleClass="w-full h-10rem sm:h-10rem md:h-16rem lg:h-24rem xl:h-24rem px-2 sm:px-2 md:px-2 lg:px-8 xl:px-8"
             style="background:
@@ -51,10 +57,15 @@
         <div
           class="absolute flex flex-column justify-content-center align-items-start group-content-data-profile"
           style="gap: .3rem">
-          <p id="name_user_profile"
-             class="font-bold text-2xl" >
-            Juan Bladimir Romero Collazos
-          </p>
+          <div class="flex gap-2 justify-content-center align-items-center">
+            <p id="name_user_profile"
+               class="font-bold text-2xl" >
+              Juan Bladimir Romero Collazos
+            </p>
+            <ui:fragment rendered="#{profileView.verified}">
+              <i class="bi bi-patch-check text-primary font-bold text-lg" />
+            </ui:fragment>
+          </div>
           <p class="text-gray-400">#{profileView.converterAmountFriends(profileView.amountFriends)}</p>
           <p:avatarGroup>
             <p:avatar id="avatar_friend_1" size="large" shape="circle" label="Fatima Perez" dynamicColor="true" />
@@ -66,7 +77,8 @@
 
         <p:commandButton value="#{msg['button_edit_profile']}" icon="bi bi-pencil"
                          action="#{editProfile.editProfile('Juan Bladimir', 'Romero', 'Collazos', profileView.bio,
-                         profileView.email, profileView.phone , profileView.birthday, profileView.city)}"
+                         profileView.email, profileView.phone , profileView.birthday, profileView.city,
+                         profileView.profession, profileView.website)}"
                          styleClass="absolute button-edit-profile-ui" />
       </div>
     </h:form>
@@ -110,6 +122,12 @@
                   <div class="flex gap-2">
                     <i class="bi bi-telephone text-gray-600"/>
                     <p class="text-primary">#{profileView.phone}</p>
+                  </div>
+                </ui:fragment>
+                <ui:fragment rendered="#{not empty profileView.profession}">
+                  <div class="flex gap-2">
+                    <i class="bi bi-mortarboard text-gray-600"/>
+                    <p class="text-primary">#{profileView.profession}</p>
                   </div>
                 </ui:fragment>
                 <ui:fragment rendered="#{not empty profileView.website}">
@@ -174,6 +192,8 @@
         </p:row>
       </p:panelGrid>
     </div>
+    <h:outputScript library="js" name="toggle-show-more.js" />
+    <h:outputScript library="js" name="chat-float.js" />
   </h:body>
 </f:view>
 </html>

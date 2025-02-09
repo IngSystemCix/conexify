@@ -48,6 +48,8 @@ public class EditProfile implements Serializable {
     private String email;
     private String phone;
     private Date birthDay;
+    private String profession;
+    private String website;
     private List<Date> validDates;
     private String location;
     private MapModel<Long> simpleModel;
@@ -55,7 +57,7 @@ public class EditProfile implements Serializable {
     private String GCP_GMap = "https://maps.googleapis.com/maps/api/js?key=" + TOKEN_GCP_API_MAPS + "&libraries=places";
 
     public void editProfile(String name, String paternalSurname, String maternalSurname,
-                            String bio, String email, String phone, String birthDay, String city) throws ParseException {
+                            String bio, String email, String phone, String birthDay, String city, String profession, String website) throws ParseException {
 
         // Asignar los valores a las propiedades del bean
         this.name = name;
@@ -64,6 +66,8 @@ public class EditProfile implements Serializable {
         this.bio = bio;
         this.email = email;
         this.phone = phone;
+        this.profession = profession;
+        this.website = website;
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         this.birthDay = dateFormat.parse(birthDay);  // Asignar la fecha formateada
         this.location = city;

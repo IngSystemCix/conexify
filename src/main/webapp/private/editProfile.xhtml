@@ -46,13 +46,36 @@
   <h:body styleClass="w-full h-screen">
     <h:form styleClass="px-6 pb-6 flex flex flex-column gap-4 w-full" prependId="false">
       <div class="flex flex-column gap-2 w-full">
-        <p:outputLabel for="name" value="#{msg['label_bio']}" styleClass="w-full font-bold text-primary"/>
+        <p:outputLabel for="bio" value="#{msg['label_bio']}" styleClass="w-full font-bold text-primary"/>
         <p:inputTextarea id="bio" value="#{editProfile.bio}" rows="3" cols="33"
-                         validatorMessage="#{msg['message_length_bio']}"
-                         styleClass="w-full" maxlength="200">
-          <f:validateLength maximum="200"/>
-        </p:inputTextarea>
-        <p:message for="bio" styleClass="text-red-500"/>
+                         styleClass="w-full" maxlength="200" counter="bioCounter" counterTemplate="{1}/{2}" />
+        <p:outputLabel id="bioCounter" for="bio" styleClass="w-full text-right text-primary font-bold"/>
+      </div>
+      <div class="flex flex-column gap-2 w-full">
+        <p:outputLabel for="proffesion" value="#{msg['label_profession']}"
+                       styleClass="w-full font-bold text-primary"/>
+        <div class="ui-inputgroup w-full">
+          <span class="ui-input-icon-left w-full">
+            <i class="bi bi-mortarboard text-primary font-bold"/>
+            <p:inputText id="proffesion"
+                         value="#{editProfile.profession}"
+                         placeholder="#{msg['placeholder_profession']}" autocomplete="off"
+                         styleClass="w-full" />
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-column gap-2 w-full">
+        <p:outputLabel for="website" value="#{msg['label_website']}"
+                       styleClass="w-full font-bold text-primary"/>
+        <div class="ui-inputgroup w-full">
+          <span class="ui-input-icon-left w-full">
+            <i class="bi bi-browser-edge text-primary font-bold"/>
+            <p:inputText id="website"
+                         value="#{editProfile.website}"
+                         placeholder="#{msg['placeholder_website']}" autocomplete="off"
+                         styleClass="w-full" />
+          </span>
+        </div>
       </div>
       <div class="flex flex-column gap-2 w-full">
         <p:outputLabel for="name" value="#{msg['label_name']}" styleClass="w-full font-bold text-primary"/>
@@ -132,16 +155,10 @@
             <i class="bi bi-phone text-primary font-bold"/>
             <p:inputText id="numberPhone"
                          value="#{editProfile.phone}"
-                         placeholder="+51915339493" required="true" autocomplete="off"
-                         requiredMessage="#{msg['message_required_number_phone']}"
-                         validatorMessage="#{msg['message_pattern_number_phone']}"
-                         styleClass="w-full">
-              <f:validateRequired/>
-              <f:validateRegex pattern="(\+\d{1,3})?[0-9]{9,12}"/>
-            </p:inputText>
+                         placeholder="+51915339493" autocomplete="off"
+                         styleClass="w-full" />
           </span>
         </div>
-        <h:message for="numberPhone" styleClass="text-red-500"/>
       </div>
       <div class="flex flex-column gap-2 w-full">
         <p:outputLabel for="birthday" value="#{msg['label_birthday']}" styleClass="w-full font-bold text-primary" />
@@ -170,14 +187,10 @@
             <p:autoComplete id="location"
                             value="#{editProfile.location}"
                             placeholder="#{msg['placeholder_location']}"
-                            required="true"
                             styleClass="w-full"
                             scrollHeight="200"
                             completeMethod="#{editProfile.completeLocation}"
-                            requiredMessage="#{msg['message_required_location']}"
-                            minQueryLength="3">
-                <f:validateRequired />
-            </p:autoComplete>
+                            minQueryLength="3" />
           </span>
           <p:commandButton icon="bi bi-search"
                            styleClass="bg-primary text-white font-bold"
