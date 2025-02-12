@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:faces="jakarta.faces"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:pt="jakarta.faces.passthrough"
+      xmlns:cc="jakarta.faces.composite"
+      xmlns:c="jakarta.tags.core"
+      xmlns:fn="jakarta.tags.functions"
+      xmlns:p="http://primefaces.org/ui">
+<h:form styleClass="w-full bg-white border-round-lg flex flex-column gap-2 p-4 shadow-2 mb-4">
+  <div class="w-full flex justify-content-between align-items-center">
+    <div class="flex justify-content-center align-items-center gap-2">
+      <p:skeleton width="14px" height="14px" style="border-radius: 50%;" />
+      <div class="flex flex-column">
+        <p:skeleton width="200px" height="14px" />
+        <div class="flex justify-content-center align-items-center gap-1">
+          <p:skeleton width="200px" height="14px" />
+        </div>
+      </div>
+    </div>
+
+    <p:skeleton width="10px" height="14px" />
+  </div>
+
+  <div class="w-full">
+    <p:skeleton width="200px" height="14px" />
+  </div>
+
+  <div class="w-full flex flex-column">
+    <div class="w-full flex justify-content-between align-items-center">
+      <div class="flex justify-content-center align-items-center gap-2 mt-2">
+        <i class="bi bi-hand-thumbs-up text-blue-500 text-lg" />
+        <p:skeleton width="10px" height="14px" />
+      </div>
+      <div class="flex justify-content-center align-items-center gap-2 mt-2">
+        <i class="bi bi-chat-left-text text-blue-500 text-lg" />
+        <p:skeleton width="10px" height="14px" />
+      </div>
+    </div>
+
+    <p:divider />
+
+    <div class="w-full flex justify-content-between align-items-center gap-2">
+      <p:commandButton value="#{msg['label_like']}" icon="bi bi-hand-thumbs-up"
+                       styleClass="w-full ui-button-outlined border-round-lg font-bold" />
+      <p:commandButton value="#{msg['label_comment']}" icon="bi bi-chat-left-text"
+                       styleClass="w-full ui-button-outlined border-round-lg font-bold" />
+    </div>
+  </div>
+</h:form>
+</html>

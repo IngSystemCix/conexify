@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:faces="jakarta.faces"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:pt="jakarta.faces.passthrough"
+      xmlns:cc="jakarta.faces.composite"
+      xmlns:c="jakarta.tags.core"
+      xmlns:fn="jakarta.tags.functions"
+      xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html" locale="#{region.locale}">
+  <h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <h:outputStylesheet id="theme-css" library="css" name="style.css" />
+    <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css"/>
+    <h:outputStylesheet library="css" name="font.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+    <link rel="shortcut icon" href="#{resource['img/favicon.png']}" type="image/png"/>
+    <title>conexify :: <h:outputText value="#{msg['title_page_comments_post']}"/></title>
+  </h:head>
+  <h:body styleClass="w-full h-screen p-4">
+    <p:scrollPanel mode="native" styleClass="w-full" style="height: 100%">
+      <p:outputPanel id="commentsPanel" styleClass="w-full">
+        <h:panelGroup rendered="#{not empty commentsPostView.comments}">
+          <!-- Mostrar comentarios -->
+          <ui:repeat value="#{commentsPostView.comments}" var="comment">
+            <div class="ml-4 mt-3 p-3 border-round-md bg-gray-100 flex flex-column">
+              <div class="flex align-items-center gap-2">
+                <p:avatar label="#{comment.username}" dynamicColor="true" size="small" shape="circle" />
+                <div class="flex flex-column">
+                  <h:outputText value="#{comment.username}" styleClass="font-bold text-sm" />
+                  <span class="text-xs text-gray-500">#{comment.date.toString().replace('T', ' ')}</span>
+                </div>
+              </div>
+              <h:outputText value="#{comment.text}" styleClass="mt-2 text-sm"/>
+              <div class="flex justify-content-start align-items-center gap-2 mt-1">
+                <p:commandButton icon="bi bi-hand-thumbs-up" styleClass="ui-button-flat" />
+                <span class="text-xs">#{comment.likes} Likes</span>
+              </div>
+
+              <!-- Subcomentarios recursivos -->
+              <ui:repeat value="#{comment.comments}" var="reply">
+                <div class="ml-6 mt-3 p-3 border-round-md bg-gray-200 flex flex-column">
+                  <div class="flex align-items-center gap-2">
+                    <p:avatar label="#{reply.username}" dynamicColor="true" size="small" shape="circle" />
+                    <div class="flex flex-column">
+                      <h:outputText value="#{reply.username}" styleClass="font-bold text-xs" />
+                      <span class="text-xs text-gray-500">#{reply.date}</span>
+                    </div>
+                  </div>
+                  <h:outputText value="#{reply.text}" styleClass="mt-2 text-xs"/>
+                  <div class="flex justify-content-start align-items-center gap-2 mt-1">
+                    <p:commandButton icon="bi bi-hand-thumbs-up" styleClass="ui-button-flat" />
+                    <span class="text-xs">#{reply.likes} Likes</span>
+                  </div>
+
+                  <!-- Llamar recursivamente si hay más subcomentarios -->
+                  <ui:repeat value="#{reply.comments}" var="subReply">
+                    <div class="ml-6 mt-3 p-3 border-round-md bg-gray-300 flex flex-column">
+                      <div class="flex align-items-center gap-2">
+                        <p:avatar label="#{subReply.username}" dynamicColor="true" size="small" shape="circle" />
+                        <div class="flex flex-column">
+                          <h:outputText value="#{subReply.username}" styleClass="font-bold text-xs" />
+                          <span class="text-xs text-gray-500">#{subReply.date}</span>
+                        </div>
+                      </div>
+                      <h:outputText value="#{subReply.text}" styleClass="mt-2 text-xs"/>
+                      <div class="flex justify-content-start align-items-center gap-2 mt-1">
+                        <p:commandButton icon="bi bi-hand-thumbs-up" styleClass="ui-button-flat" />
+                        <span class="text-xs">#{subReply.likes} Likes</span>
+                      </div>
+
+                      <!-- Nueva llamada recursiva si hay más niveles -->
+                      <ui:repeat value="#{subReply.comments}" var="deepReply">
+                        <div class="ml-6 mt-3 p-3 border-round-md bg-gray-400 flex flex-column">
+                          <div class="flex align-items-center gap-2">
+                            <p:avatar label="#{deepReply.username}" dynamicColor="true" size="small" shape="circle" />
+                            <div class="flex flex-column">
+                              <h:outputText value="#{deepReply.username}" styleClass="font-bold text-xs" />
+                              <span class="text-xs text-gray-500">#{deepReply.date}</span>
+                            </div>
+                          </div>
+                          <h:outputText value="#{deepReply.text}" styleClass="mt-2 text-xs"/>
+                          <div class="flex justify-content-start align-items-center gap-2 mt-1">
+                            <p:commandButton icon="bi bi-hand-thumbs-up" styleClass="ui-button-flat" />
+                            <span class="text-xs">#{deepReply.likes} Likes</span>
+                          </div>
+
+                          <!-- Seguir con más niveles si existen -->
+                          <ui:repeat value="#{deepReply.comments}" var="moreDeepReply">
+                            <div class="ml-6 mt-3 p-3 border-round-md bg-gray-500 flex flex-column">
+                              <div class="flex align-items-center gap-2">
+                                <p:avatar label="#{moreDeepReply.username}" dynamicColor="true" size="small" shape="circle" />
+                                <div class="flex flex-column">
+                                  <h:outputText value="#{moreDeepReply.username}" styleClass="font-bold text-xs" />
+                                  <span class="text-xs text-gray-500">#{moreDeepReply.date}</span>
+                                </div>
+                              </div>
+                              <h:outputText value="#{moreDeepReply.text}" styleClass="mt-2 text-xs"/>
+                              <div class="flex justify-content-start align-items-center gap-2 mt-1">
+                                <p:commandButton icon="bi bi-hand-thumbs-up" styleClass="ui-button-flat" />
+                                <span class="text-xs">#{moreDeepReply.likes} Likes</span>
+                              </div>
+                            </div>
+                          </ui:repeat>
+
+                        </div>
+                      </ui:repeat>
+
+                    </div>
+                  </ui:repeat>
+
+                </div>
+              </ui:repeat>
+            </div>
+          </ui:repeat>
+        </h:panelGroup>
+      </p:outputPanel>
+    </p:scrollPanel>
+  </h:body>
+</f:view>
+</html>

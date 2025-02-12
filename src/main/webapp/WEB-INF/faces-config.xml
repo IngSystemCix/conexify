@@ -33,6 +33,10 @@
       <from-outcome>/login</from-outcome>
       <to-view-id>/public/index.xhtml</to-view-id>
     </navigation-case>
+    <navigation-case>
+      <from-outcome>/comments-post</from-outcome>
+      <to-view-id>/private/comments-post.xhtml</to-view-id>
+    </navigation-case>
   </navigation-rule>
 
   <application>
@@ -46,4 +50,5 @@
       org.primefaces.application.DialogViewHandler
     </view-handler>
   </application>
+
 </faces-config>

@@ -2267,6 +2267,10 @@ p {
     margin-top: 10rem;
 }
 
+.data-scroller-post {
+    padding: 1rem 30rem;
+}
+
 @media (max-width: 640px) { /* sm: */
     .avatar_profile {
         width: 6rem !important;
@@ -2291,6 +2295,9 @@ p {
     .panel-grid-content {
         margin-top: 14rem;
     }
+    .data-scroller-post {
+        padding: 1rem 1rem;
+    }
 }
 
 @media (min-width: 640px) and (max-width: 768px) { /* md: */
@@ -2312,6 +2319,9 @@ p {
     .button-edit-profile-ui {
         right: 0;
         bottom: -12rem;
+    }
+    .data-scroller-post {
+        padding: 1rem 1rem;
     }
 }
 
@@ -2335,6 +2345,9 @@ p {
         right: 1rem;
         bottom: -5rem;
     }
+    .data-scroller-post {
+        padding: 1rem 30rem;
+    }
 }
 
 @media (min-width: 1024px) { /* xl: */
@@ -2356,6 +2369,9 @@ p {
     .button-edit-profile-ui {
         right: 1rem;
         bottom: -5rem;
+    }
+    .data-scroller-post {
+        padding: 1rem 30rem;
     }
 }
 
@@ -2383,4 +2399,38 @@ ul.ui-menu-list.ui-helper-reset {
     border-radius: 0.5rem;
     transition: all 0.3s ease-in-out;
     overflow: hidden;
+}
+
+body .ui-datascroller .ui-datascroller-content {
+    border: none;
+    background: #fff;
+    color: #495057;
+    padding: 1rem;
+    margin-top: 4rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-container {
+    position: relative;
+    max-width: 600px; /* Ajusta el ancho según tu diseño */
+}
+
+.post-content {
+    display: -webkit-box;
+    -webkit-line-clamp: 5; /* Limita a 5 líneas */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.5em;
+    max-height: 7.5em; /* Aproximado a 5 líneas */
+}
+
+.post-content.expanded {
+    -webkit-line-clamp: unset;
+    max-height: none;
+}
+
+.show-more-link-post {
+    display: none; /* Ocultar el botón por defecto */
 }
