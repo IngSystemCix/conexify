@@ -77,7 +77,8 @@
                          autoResize="false"
                          styleClass="w-full"
                          style="overflow: auto;" />
-        <p:commandButton icon="bi bi-send" />
+        <p:commandButton icon="bi bi-send" action="#{chat.send}"
+                         update="inputWriteMessage chatWithMessage" />
       </div>
       <p:overlayPanel style="width: calc(100vh - 16rem);" blockScroll="false" for="buttonEmojin"
                       widgetVar="emojin"

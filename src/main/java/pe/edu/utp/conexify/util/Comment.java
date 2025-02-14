@@ -18,4 +18,8 @@ public class Comment {
     private String text;
     private Long likes;
     private List<Comment> comments;
+    private boolean likedCommentsByUser;
+    private boolean replyByUser;
+    private String textReply;
+    private boolean editingByUser;
 }
