@@ -37,7 +37,7 @@
         </div>
         <p:tag severity="#{chat.onlineStatus ? 'success' : 'danger'}" value="#{chat.onlineStatus ? msg['online'] : msg['offline']}" />
       </div>
-      <p:scrollPanel mode="native" styleClass="w-full" style="height: calc(100vh - 33.5rem);">
+      <p:scrollPanel id="chatScrollPanel" mode="native" styleClass="w-full" style="height: calc(100vh - 33.5rem);">
         <ui:repeat var="message" value="#{chat.allMessagesSorted}">
           <!-- Mostrar divider solo si la fecha es diferente -->
           <h:panelGroup rendered="#{chat.shouldShowDivider(message.timeSendMessage)}">

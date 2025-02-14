@@ -87,7 +87,7 @@ public class Chat implements Serializable {
                                         "Que onda hermano que tal a sido de tu vida ya no te veo por aquí que es de tu esposa la Sandra.", LocalTime.now().minusMinutes(1)
                                 ))
                         ).build(),
-                Message.builder().username("Susy Arjona").lastMessage("Te extraño 😔").timeSendMessage(LocalDateTime.now().minusMinutes(2)).isOnline(true)
+                Message.builder().username("Susy Arjona").lastMessage("yo tmb 😔").timeSendMessage(LocalDateTime.now().minusMinutes(2)).isOnline(true)
                         .transmittedMessages(
                                 new LinkedHashMap<>(Map.of("Hola, ¿cómo estás?", LocalTime.now().minusMinutes(2),
                                         "Te extraño 😔", LocalTime.now()
@@ -95,9 +95,9 @@ public class Chat implements Serializable {
                         ).receivedMessages(
                                 new LinkedHashMap<>(Map.of("Hola Susy", LocalTime.now().minusMinutes(2),
                                         "¿Cuándo nos vemos?", LocalTime.now().minusMinutes(1),
-                                        "Te extraño 😔", LocalTime.now()
+                                        "yo tmb 😔", LocalTime.now()
                                 ))).build(),
-                Message.builder().username("Luisa Mendoza").lastMessage("Te extraño 😔").timeSendMessage(LocalDateTime.now().minusMinutes(1)).isOnline(true).
+                Message.builder().username("Luisa Mendoza").lastMessage("😔").timeSendMessage(LocalDateTime.now().minusMinutes(1)).isOnline(true).
                         transmittedMessages(
                                 new LinkedHashMap<>(Map.of("Hola, ¿cómo estás?", LocalTime.now().minusMinutes(1),
                                         "¿En qué puedo ayudarte?", LocalTime.now(),
@@ -106,7 +106,7 @@ public class Chat implements Serializable {
                         ).receivedMessages(
                                 new LinkedHashMap<>(Map.of("Hola Luisa", LocalTime.now().minusMinutes(1),
                                         "¿Cuándo nos vemos?", LocalTime.now(),
-                                        "Te extraño 😔", LocalTime.now().plusMinutes(1)
+                                        "😔", LocalTime.now().plusMinutes(1)
                                 ))
                         ).build()
         ));
@@ -257,23 +257,31 @@ public class Chat implements Serializable {
             if (currentMessage != null) {
                 LocalTime currentTime = LocalTime.now();
 
-                // Agregamos el mensaje transmitido al mapa de mensajes transmitidos
-                currentMessage.getTransmittedMessages().put(valueInputMessage, currentTime);
+                // Crear un nuevo mensaje con el nuevo texto y hora
+                Message newMessage = Message.builder()
+                        .username(username)
+                        .lastMessage(valueInputMessage)
+                        .timeSendMessage(LocalDateTime.now())
+                        .isOnline(true) // Ajusta según sea necesario
+                        .transmittedMessages(new HashMap<>(currentMessage.getTransmittedMessages())) // Copia el mapa de mensajes transmitidos
+                        .receivedMessages(new HashMap<>(currentMessage.getReceivedMessages())) // Copia el mapa de mensajes recibidos
+                        .build();
 
-                // Actualizamos el último mensaje y el tiempo de envío
-                currentMessage.setLastMessage(valueInputMessage);
-                currentMessage.setTimeSendMessage(LocalDateTime.now());
+                // Agregamos el nuevo mensaje transmitido al mapa de mensajes recibidos
+                currentMessage.getReceivedMessages().put(valueInputMessage, currentTime);
 
                 // Agregamos el mensaje a la lista de mensajes transmitidos
-                messagesChatTransmitted.add(currentMessage);
+                messagesChatReceived.add(newMessage);
 
                 // Limpiamos el input del mensaje
                 valueInputMessage = "";
 
                 // Actualizamos la interfaz con PrimeFaces
                 PrimeFaces.current().ajax().update("chatWithMessage:inputWriteMessage", "chatWithMessage");
+                PrimeFaces.current().executeScript("scrollToBottom()");
             }
         }
     }
+
 
 }
