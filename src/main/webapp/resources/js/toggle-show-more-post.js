@@ -41,3 +41,15 @@ function togglePost(link) {
         link.textContent = link.getAttribute("data-view-more-post");
     }
 }
+
+function toggleShowMorePost() {
+    document.querySelectorAll(".post-content").forEach(function(content) {
+        if (isTextTruncatedPost(content)) {
+            content.classList.add("truncated");
+            let showMoreLink = content.closest(".post-container").querySelector(".show-more-link-post");
+            if (showMoreLink) {
+                showMoreLink.style.display = "inline";
+            }
+        }
+    });
+}

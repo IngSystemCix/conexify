@@ -31,7 +31,7 @@
         <p:inputTextarea value="#{currentComment.text}" rows="1" autoResize="true" scrollHeight="100"
                          styleClass="w-full"
                          style="overflow: auto;" />
-        <div class="flex gap-2">
+        <div class="w-full flex gap-2">
           <p:commandButton value="#{msg['label_save']}" icon="bi bi-check"
                            actionListener="#{commentsPostView.updateComment(currentComment.text)}"
                            update="@form" />

@@ -55,7 +55,6 @@
         <ui:param name="likes" value="#{dataScrollerPostView.converterAmountLikes(post.likes)}" />
         <ui:param name="amountComments"
                   value="#{dataScrollerPostView.converterAmountComments(dataScrollerPostView.countTotalComments(post.comments))}" />
-        <ui:param name="isPublic" value="#{post.isPublic}" />
         <ui:param name="tooltipComments" value="#{dataScrollerPostView.convertNumberToWords(dataScrollerPostView.countTotalComments(post.comments))}" />
         <ui:param name="tooltipLikes" value="#{dataScrollerPostView.convertNumberToWords(post.likes)}" />
       </ui:include>

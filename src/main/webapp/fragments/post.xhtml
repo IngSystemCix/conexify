@@ -20,7 +20,27 @@
         <h:outputText value="#{username}" styleClass="font-bold text-lg" />
         <div class="flex justify-content-center align-items-center gap-1">
           <h:outputText value="#{date}" styleClass="text-sm text-gray-400" />
-          <p:commandButton icon="bi bi-globe-americas" styleClass="ui-button-flat" />
+          <p:outputLabel rendered="#{username ne dataScrollerPostView.currentUser}" styleClass="bi #{post.getVisibility()} text-primary" />
+          <ui:fragment rendered="#{username eq dataScrollerPostView.currentUser}">
+            <p:commandButton id="button_show_post" icon="bi #{post.getVisibility()}"
+                             styleClass="ui-button-flat"
+                             actionListener="#{dataScrollerPostView.setSelectedPost(post)}"/>
+            <p:overlayPanel for="button_show_post" showEffect="fade" hideEffect="fade" dynamic="true">
+              <div class="flex flex-column">
+                <p:commandButton value="#{msg['label_public']}" icon="bi bi-globe-americas"
+                                 styleClass="ui-button-flat"
+                                 actionListener="#{dataScrollerPostView.changePostVisibility('PUBLIC')}"
+                                 update="@form" ajax="true"
+                                 oncomplete="toggleShowMorePost();" />
+                <p:commandButton value="#{msg['label_friends']}" icon="bi bi-people" styleClass="ui-button-flat"
+                                 actionListener="#{dataScrollerPostView.changePostVisibility('FRIENDS')}" update="@form" ajax="true"
+                                 oncomplete="toggleShowMorePost();"/>
+                <p:commandButton value="#{msg['label_only_me']}" icon="bi bi-lock" styleClass="ui-button-flat"
+                                 actionListener="#{dataScrollerPostView.changePostVisibility('PRIVATE')}" update="@form" ajax="true"
+                                 oncomplete="toggleShowMorePost();"/>
+              </div>
+            </p:overlayPanel>
+          </ui:fragment>
         </div>
       </div>
     </div>
@@ -30,14 +50,14 @@
     <p:overlayPanel for="postOptions" showEffect="fade" hideEffect="fade" dynamic="true">
       <div class="flex flex-column">
         <p:commandButton value="#{msg['label_edit']}" icon="bi bi-pencil" rendered="#{username eq
-          dataScrollerPostView.currentUser}" styleClass="ui-button-flat"  />
+          dataScrollerPostView.currentUser}" styleClass="ui-button-flat" actionListener="#{dataScrollerPostView.startEditing()}" update="@form"/>
         <p:commandButton value="#{msg['label_delete']}" icon="bi bi-trash" rendered="#{username eq
           dataScrollerPostView.currentUser}" update="@form" styleClass="ui-button-flat" >
           <p:confirm header="#{msg['label_delete']}" message="#{msg['label_confirm_delete_post']}"
                      icon="bi bi-exclamation-triangle" />
         </p:commandButton>
         <p:divider  rendered="#{username eq dataScrollerPostView.currentUser}" />
-        <p:commandButton value="#{msg['label_hide']}" icon="bi bi-eye-slash" styleClass="ui-button-flat" />
+        <p:commandButton value="#{msg['label_hide']}" icon="bi bi-eye-slash" styleClass="ui-button-flat" rendered="#{username ne dataScrollerPostView.currentUser}" />
         <p:commandButton value="#{msg['label_save']}" icon="bi bi-bookmark" styleClass="ui-button-flat" />
         <p:commandButton value="#{msg['label_report']}" icon="bi bi-flag" styleClass="ui-button-flat" />
         <p:commandButton value="#{msg['label_share']}" icon="bi bi-share" styleClass="ui-button-flat" />
@@ -71,6 +91,25 @@
 
     <p:linkButton icon="bi bi-link-45deg" value="#{content}" styleClass="text-lg ui-button-flat" target="_blank"
                   rendered="#{isLinkPost}" onclick="window.open('#{content}', '_blank'); return false;" />
+
+    <h:panelGroup rendered="#{dataScrollerPostView.editingPost}">
+      <p:inputTextarea value="#{dataScrollerPostView.selectedPost.content}" rows="1" cols="33" autoResize="true" styleClass="w-full" scrollHeight="100" style="overflow: auto;"/>
+      <div class="w-full flex gap-2 mt-2">
+        <p:commandButton value="#{msg['label_save']}" icon="bi bi-check"
+                         actionListener="#{dataScrollerPostView.saveEditedPost(dataScrollerPostView.selectedPost.content)}"
+                         update="@form"
+                         ajax="true"
+                         oncomplete="toggleShowMorePost();"
+                         />
+        <p:commandButton value="#{msg['label_cancel']}" icon="bi bi-x"
+                         actionListener="#{dataScrollerPostView.cancelEditing}"
+                         update="@form"
+                         styleClass="ui-button-danger"
+                         ajax="true"
+                         oncomplete="toggleShowMorePost();"
+        />
+      </div>
+    </h:panelGroup>
 
     <h:graphicImage library="img" name="#{content}" styleClass="w-full border-round-lg" rendered="#{isImagePost}" />
 

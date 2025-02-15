@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.DialogFrameworkOptions;
 import pe.edu.utp.conexify.adapters.LocalDateTimeAdapter;
+import pe.edu.utp.conexify.config.Visibility;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ public class DataScrollerPostView implements Serializable {
     private List<Post> posts;
     private String currentUser;
     private Post selectedPost;
+    private boolean editingPost = false;
 
     @PostConstruct
     public void init() {
@@ -45,7 +47,7 @@ public class DataScrollerPostView implements Serializable {
                         .content("Hello, how are you? I hope you're doing well. Today is a beautiful day, and the sun is shining brightly in the sky. The birds are chirping, and there's a gentle breeze that makes everything feel fresh. Sometimes, taking a deep breath and enjoying the little things in life can bring so much happiness. Have you ever stopped to appreciate how wonderful the world around us is? It's easy to get caught up in daily routines and forget to pause for a moment. Maybe today is a good day to take a short walk and clear your mind. A cup of coffee, a good book, or a nice conversation can make a big difference. Life is full of small joys, and each day is an opportunity to experience something new. What’s something that made you smile today?")
                         .username("Juan Romero")
                         .date(LocalDateTime.parse("2021-09-01T10:00:00"))
-                        .isPublic(true)
+                        .visibility(Visibility.PUBLIC)
                         .likes(1000L)
                         .comments(List.of(
                                 Comment.builder()
@@ -91,7 +93,7 @@ public class DataScrollerPostView implements Serializable {
                         .content("https://www.youtube.com/watch?v=SdxThJQc3kU&t=10s")
                         .username("Maria Perez")
                         .date(LocalDateTime.parse("2021-09-01T10:15:00"))
-                        .isPublic(true)
+                        .visibility(Visibility.PUBLIC)
                         .likes(500L)
                         .comments(List.of(
                                 Comment.builder()
@@ -112,7 +114,7 @@ public class DataScrollerPostView implements Serializable {
                         .content("Good morning!")
                         .username("Carlos Sanchez")
                         .date(LocalDateTime.parse("2021-09-01T10:25:00"))
-                        .isPublic(true)
+                        .visibility(Visibility.PUBLIC)
                         .likes(200L)
                         .comments(List.of())
                         .build())
@@ -213,4 +215,60 @@ public class DataScrollerPostView implements Serializable {
                 .sum();
     }
 
+    public void saveEditedPost(String newText) {
+        if (selectedPost != null) {
+            // Verifica si el contenido está en formato texto o enlace
+            detectionPostType(newText);
+
+            editingPost = false;
+            selectedPost = null; // Limpiar después de editar
+            // Se asume que ahora el post está editado correctamente
+            LOGGER.info("Post edited.");
+        }
+    }
+
+    public void cancelEditing() {
+        editingPost = false;
+        detectionPostType(selectedPost);
+    }
+
+    private void detectionPostType(Post post) {
+        if (post.getContent().startsWith("http") || post.getContent().startsWith("www") || post.getContent().startsWith("https")) {
+            post.setLinkPost(true);
+        } else {
+            post.setTextPost(true);
+        }
+    }
+
+    private void detectionPostType(String content) {
+        if (content.startsWith("http") || content.startsWith("www") || content.startsWith("https")) {
+            selectedPost.setContent(content);
+            selectedPost.setLinkPost(true);
+        } else {
+            selectedPost.setContent(content);
+            selectedPost.setTextPost(true);
+        }
+    }
+
+    public void startEditing() {
+        editingPost = true;
+        if (selectedPost.isLinkPost()) {
+            selectedPost.setLinkPost(false);
+        } else if (selectedPost.isTextPost()) {
+            selectedPost.setTextPost(false);
+        }
+    }
+
+    public void changePostVisibility(String visibility) {
+        if (selectedPost != null) {
+            LOGGER.info("Changing post visibility to: " + visibility);
+            selectedPost.setVisibility(Visibility.valueOf(visibility));
+        }
+    }
+
+    public Long amountPostOfTheUser(String username) {
+        return posts.stream()
+                .filter(post -> post.getUsername().equals(username))
+                .count();
+    }
 }

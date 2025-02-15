@@ -188,16 +188,50 @@
               </div>
             </h:form>
             <h5 class="font-bold">#{msg['label_publications']}</h5>
-            <div class="w-full flex flex-column justify-content-center align-items-center gap-2">
+            <h:panelGroup styleClass="w-full flex flex-column justify-content-center align-items-center gap-2" rendered="#{dataScrollerPostView.amountPostOfTheUser('Juan Romero') eq 0}">
               <h:graphicImage library="img" name="cat_cry.png" alt="not exist publications"
                               styleClass="w-16rem h-16rem"
                               style="cursor: pointer;"/>
               <h:outputText value="#{msg['label_not_exist_publications']}" styleClass="text-center"/>
-            </div>
+            </h:panelGroup>
+            <h:panelGroup styleClass="w-full flex flex-column justify-content-center align-items-center gap-2" rendered="#{dataScrollerPostView.amountPostOfTheUser('Juan Romero') gt 0}">
+              <p:dataScroller id="ds_posts" widgetVar="ds_posts" value="#{dataScrollerPostView.posts}" var="post"
+                              chunkSize="5">
+                <f:facet name="loading">
+                  <ui:include src="/fragments/post-skeleton.xhtml" />
+                </f:facet>
+
+                <ui:fragment rendered="${post.username eq 'Juan Romero'}">
+                  <ui:include src="/fragments/post.xhtml" >
+                    <ui:param name="post" value="#{post}" />
+                    <ui:param name="id" value="#{post.id}" />
+                    <ui:param name="username" value="#{post.username}" />
+                    <ui:param name="date" value="#{post.date.toString().replace('T', ' ')}" />
+                    <ui:param name="isTextPost" value="#{post.textPost}" />
+                    <ui:param name="isLinkPost" value="#{post.linkPost}" />
+                    <ui:param name="isVideoPost" value="#{post.videoPost}" />
+                    <ui:param name="isImagePost" value="#{post.imagePost}" />
+                    <ui:param name="content" value="#{post.content}" />
+                    <ui:param name="likes" value="#{dataScrollerPostView.converterAmountLikes(post.likes)}" />
+                    <ui:param name="amountComments"
+                              value="#{dataScrollerPostView.converterAmountComments(dataScrollerPostView.countTotalComments(post.comments))}" />
+                    <ui:param name="tooltipComments" value="#{dataScrollerPostView.convertNumberToWords(dataScrollerPostView.countTotalComments(post.comments))}" />
+                    <ui:param name="tooltipLikes" value="#{dataScrollerPostView.convertNumberToWords(post.likes)}" />
+                  </ui:include>
+                </ui:fragment>
+
+                <f:facet name="loader">
+                  <div class="text-center">
+                    <p:commandButton type="button" value="#{msg['label_more']}" icon="pi pi-refresh"/>
+                  </div>
+                </f:facet>
+              </p:dataScroller>
+            </h:panelGroup>
           </p:column>
         </p:row>
       </p:panelGrid>
     </div>
+    <h:outputScript library="js" name="toggle-show-more-post.js" />
     <h:outputScript library="js" name="toggle-show-more.js" />
     <h:outputScript library="js" name="chat-float.js" />
   </h:body>
