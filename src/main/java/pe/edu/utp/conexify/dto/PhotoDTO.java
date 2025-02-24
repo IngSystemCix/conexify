@@ -1,4 +1,4 @@
-package pe.edu.utp.conexify.util;
+package pe.edu.utp.conexify.dto;
 
 import lombok.*;
 
@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Photo {
+public class PhotoDTO {
     private String itemImageSrc;
     private String thumbnailImageSrc;
     private String alt;

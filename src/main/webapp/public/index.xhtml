@@ -11,7 +11,7 @@
       xmlns:c="jakarta.tags.core"
       xmlns:fn="jakarta.tags.functions"
       xmlns:p="http://primefaces.org/ui">
-<f:view contentType="text/html" locale="#{region.locale}">
+<f:view contentType="text/html" locale="#{regionBean.locale}">
   <h:head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <h:outputStylesheet library="css" name="style.css"/>
@@ -97,7 +97,7 @@
 
         <h:form styleClass="w-full px-6">
           <div class="mt-3">
-            <p:selectOneMenu id="locate" value="#{region.locale}" styleClass="w-full" onchange="submit()"
+            <p:selectOneMenu id="locate" value="#{regionBean.locale}" styleClass="w-full" onchange="submit()"
                              placeholder="#{msg['placeholder_select_country']}">
               <f:selectItem itemValue="es" itemLabel="#{msg['item_language_es']}" />
               <f:selectItem itemValue="en" itemLabel="#{msg['item_language_en']}" />
@@ -105,13 +105,13 @@
           </div>
         </h:form>
 
-        <ui:fragment rendered="#{region.showMessage}">
+        <ui:fragment rendered="#{regionBean.showMessage}">
           <div class="col-12 md:col-4 absolute bottom-0" style="right: 1rem;">
             <p:staticMessage severity="info" summary="INFO"
                              detail="#{msg.message_change_language}"
                              closable="true"
-                             style="width: 100%" rendered="#{not region.closed}">
-              <p:ajax event="close" listener="#{region.onClose()}"/>
+                             style="width: 100%" rendered="#{not regionBean.closed}">
+              <p:ajax event="close" listener="#{regionBean.onClose()}"/>
             </p:staticMessage>
           </div>
         </ui:fragment>

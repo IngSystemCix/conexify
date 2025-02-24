@@ -11,7 +11,7 @@
       xmlns:c="jakarta.tags.core"
       xmlns:fn="jakarta.tags.functions"
       xmlns:p="http://primefaces.org/ui">
-<f:view contentType="text/html" locale="#{region.locale}">
+<f:view contentType="text/html" locale="#{regionBean.locale}">
   <h:head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <h:outputStylesheet library="css" name="style.css"/>
@@ -24,12 +24,12 @@
   <h:body styleClass="w-full h-screen">
     <ui:include src="/fragments/menubar.xhtml" />
     <div class="text-lg font-bold mb-2 p-2 text-primary" style="margin-top: 4rem">
-      #{msg['label_amount_request_people']}: #{requestsPeople.requests.size()}
+      #{msg['label_amount_request_people']}: #{requestsPeopleBean.requests.size()}
     </div>
     <h:panelGroup id="requestPeoplePanel">
       <!-- Aquí van los contenidos que deseas actualizar -->
       <ul class="list-none p-2" style="width: 300px;">
-        <ui:repeat value="#{requestsPeople.requests}" var="requestPeople">
+        <ui:repeat value="#{requestsPeopleBean.requests}" var="requestPeople">
           <li class="border-b pb-2 mb-2">
             <div class="font-bold text-lg">
               #{requestPeople.fullName}
@@ -43,14 +43,14 @@
               <p:commandButton
                 value="#{msg['button_accept']}"
                 icon="pi pi-check"
-                action="#{requestsPeople.acceptRequest(requestPeople)}"
+                action="#{requestsPeopleBean.acceptRequest(requestPeople)}"
                 update=":requestPeoplePanel" />
 
               <p:commandButton
                 value="#{msg['button_reject']}"
                 icon="pi pi-times"
                 styleClass="ui-button-danger"
-                action="#{requestsPeople.rejectRequest(requestPeople)}"
+                action="#{requestsPeopleBean.rejectRequest(requestPeople)}"
                 update=":requestPeoplePanel" />
             </div>
           </li>

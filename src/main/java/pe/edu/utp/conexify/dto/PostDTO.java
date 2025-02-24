@@ -1,6 +1,7 @@
-package pe.edu.utp.conexify.util;
+package pe.edu.utp.conexify.dto;
 
 import lombok.*;
+import pe.edu.utp.conexify.config.PostType;
 import pe.edu.utp.conexify.config.Visibility;
 
 import java.time.LocalDateTime;
@@ -12,18 +13,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Post {
+public class PostDTO {
     private Long id;
-    private boolean textPost;
-    private boolean linkPost;
-    private boolean imagePost;
-    private boolean videoPost;
+    private PostType type;
     private String content;
     private String username;
     private LocalDateTime date;
     private Visibility visibility;
     private Long likes;
-    private List<Comment> comments;
+    private List<CommentDTO> comments;
     private boolean likedByUser;
 
     public String getVisibility() {

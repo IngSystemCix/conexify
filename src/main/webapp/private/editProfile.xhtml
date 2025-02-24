@@ -11,13 +11,13 @@
       xmlns:c="jakarta.tags.core"
       xmlns:fn="jakarta.tags.functions"
       xmlns:p="http://primefaces.org/ui">
-<f:view contentType="text/html" locale="#{region.locale}">
+<f:view contentType="text/html" locale="#{regionBean.locale}">
   <h:head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <h:outputStylesheet library="css" name="style.css"/>
     <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
-    <script type="text/javascript" src="#{editProfile.GCP_GMap}">
+    <script type="text/javascript" src="#{editProfileBean.GCP_GMap}">
     </script>
     <script type="text/javascript">
       function geocode() {
@@ -53,7 +53,7 @@
     <h:form styleClass="px-6 pb-6 flex flex flex-column gap-4 w-full" prependId="false">
       <div class="flex flex-column gap-2 w-full">
         <p:outputLabel for="bio" value="#{msg['label_bio']}" styleClass="w-full font-bold text-primary"/>
-        <p:inputTextarea id="bio" value="#{editProfile.bio}" rows="3" cols="33"
+        <p:inputTextarea id="bio" value="#{editProfileBean.bio}" rows="3" cols="33"
                          styleClass="w-full" maxlength="200" counter="bioCounter" counterTemplate="{1}/{2}" />
         <p:outputLabel id="bioCounter" for="bio" styleClass="w-full text-right text-primary font-bold"/>
       </div>
@@ -64,7 +64,7 @@
           <span class="ui-input-icon-left w-full">
             <i class="bi bi-mortarboard text-primary font-bold"/>
             <p:inputText id="proffesion"
-                         value="#{editProfile.profession}"
+                         value="#{editProfileBean.profession}"
                          placeholder="#{msg['placeholder_profession']}" autocomplete="off"
                          styleClass="w-full" />
           </span>
@@ -77,7 +77,7 @@
           <span class="ui-input-icon-left w-full">
             <i class="bi bi-browser-edge text-primary font-bold"/>
             <p:inputText id="website"
-                         value="#{editProfile.website}"
+                         value="#{editProfileBean.website}"
                          placeholder="#{msg['placeholder_website']}" autocomplete="off"
                          styleClass="w-full" />
           </span>
@@ -88,7 +88,7 @@
         <div class="ui-inputgroup w-full">
                     <span class="ui-input-icon-left w-full">
                       <i class="bi bi-person-bounding-box text-primary font-bold"/>
-                      <p:inputText id="name" value="#{editProfile.name}"
+                      <p:inputText id="name" value="#{editProfileBean.name}"
                                    placeholder="Jhon Doe" required="true" autocomplete="off"
                                    requiredMessage="#{msg['message_required_name']}"
                                    validatorMessage="#{msg['message_length_name']}"
@@ -107,7 +107,7 @@
                     <span class="ui-input-icon-left w-full">
                       <i class="bi bi-person-bounding-box text-primary font-bold"/>
                       <p:inputText id="paternalSurname"
-                                   value="#{editProfile.paternalSurname}"
+                                   value="#{editProfileBean.paternalSurname}"
                                    placeholder="Radit" required="true" autocomplete="off"
                                    requiredMessage="#{msg['message_required_paternal_surname']}"
                                    validatorMessage="#{msg['message_length_paternal_surname']}"
@@ -126,7 +126,7 @@
           <span class="ui-input-icon-left w-full">
             <i class="bi bi-person-bounding-box text-primary font-bold"/>
             <p:inputText id="maternalSurname"
-                         value="#{editProfile.maternalSurname}"
+                         value="#{editProfileBean.maternalSurname}"
                          placeholder="Smith" required="true" autocomplete="off"
                          requiredMessage="#{msg['message_required_maternal_surname']}"
                          validatorMessage="#{msg['message_length_maternal_surname']}"
@@ -142,7 +142,7 @@
         <p:outputLabel for="email" value="#{msg['label_email']}" styleClass="w-full font-bold text-primary"/>
         <span class="ui-input-icon-left w-full">
               <i class="bi bi-envelope text-primary font-bold"/>
-              <p:inputText value="#{editProfile.email}" type="text" id="email" required="true" autocomplete="off"
+              <p:inputText value="#{editProfileBean.email}" type="text" id="email" required="true" autocomplete="off"
                            styleClass="w-full"
                            placeholder="example@gmail.com"
                            requiredMessage="#{msg['error_email_required']}"
@@ -160,7 +160,7 @@
           <span class="ui-input-icon-left w-full">
             <i class="bi bi-phone text-primary font-bold"/>
             <p:inputText id="numberPhone"
-                         value="#{editProfile.phone}"
+                         value="#{editProfileBean.phone}"
                          placeholder="+51915339493" autocomplete="off"
                          styleClass="w-full" />
           </span>
@@ -174,8 +174,8 @@
           required="true"
           autocomplete="off"
           style="width: 100%; display: flex; align-items: center;"
-          value="#{editProfile.birthDay}"
-          enabledDates="#{editProfile.validDates}"
+          value="#{editProfileBean.birthDay}"
+          enabledDates="#{editProfileBean.validDates}"
           showIcon="true"
           showOnFocus="false"
           pattern="dd/MM/yyyy"
@@ -191,11 +191,11 @@
           <span class="ui-input-icon-left w-full">
             <i class="bi bi-geo-alt text-primary font-bold"/>
             <p:autoComplete id="location"
-                            value="#{editProfile.location}"
+                            value="#{editProfileBean.location}"
                             placeholder="#{msg['placeholder_location']}"
                             styleClass="w-full"
                             scrollHeight="200"
-                            completeMethod="#{editProfile.completeLocation}"
+                            completeMethod="#{editProfileBean.completeLocation}"
                             minQueryLength="3" />
           </span>
           <p:commandButton icon="bi bi-search"
@@ -206,15 +206,15 @@
         <h:message for="location" styleClass="text-red-500" />
         <p:gmap id="gcode" widgetVar="gcode"
                 type="roadmap"
-                center="#{editProfile.centerMap}"
+                center="#{editProfileBean.centerMap}"
                 zoom="15"
                 style="width:100%;height:400px"
-                model="#{editProfile.simpleModel}" >
-          <p:ajax event="geocode" listener="#{editProfile.onGeocode}" update="@this"/>
+                model="#{editProfileBean.simpleModel}" >
+          <p:ajax event="geocode" listener="#{editProfileBean.onGeocode}" update="@this"/>
         </p:gmap>
       </div>
       <p:commandButton value="#{msg['button_save']}" icon="bi bi-save"
-                       action="#{editProfile.saveProfile}"
+                       action="#{editProfileBean.saveProfile}"
                        styleClass="w-full bg-primary text-white font-bold py-2"/>
     </h:form>
   </h:body>

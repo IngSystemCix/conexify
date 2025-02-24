@@ -1,4 +1,4 @@
-package pe.edu.utp.conexify.util;
+package pe.edu.utp.conexify.bean;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
@@ -37,9 +37,9 @@ import static pe.edu.utp.conexify.config.EnvironmentVariables.TOKEN_GCP_API_MAPS
 @EqualsAndHashCode
 @Named
 @SessionScoped
-public class EditProfile implements Serializable {
+public class EditProfileBean implements Serializable {
 
-    private static final Logger LOGGER = Logger.getLogger(EditProfile.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(EditProfileBean.class.getName());
 
     private String name;
     private String paternalSurname;

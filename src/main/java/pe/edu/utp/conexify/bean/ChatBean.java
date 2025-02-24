@@ -1,4 +1,4 @@
-package pe.edu.utp.conexify.util;
+package pe.edu.utp.conexify.bean;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
@@ -9,6 +9,9 @@ import lombok.Setter;
 import org.primefaces.PrimeFaces;
 import pe.edu.utp.conexify.service.EmojinService;
 import pe.edu.utp.conexify.service.EmojinServiceImpl;
+import pe.edu.utp.conexify.dto.FriendDTO;
+import pe.edu.utp.conexify.dto.MessageDTO;
+import pe.edu.utp.conexify.dto.UserPlatformDTO;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -24,15 +27,15 @@ import java.util.stream.Collectors;
 @Setter
 @Named
 @ViewScoped
-public class Chat implements Serializable {
-    private static final Logger LOGGER = Logger.getLogger(Chat.class.getName());
+public class ChatBean implements Serializable {
+    private static final Logger LOGGER = Logger.getLogger(ChatBean.class.getName());
     private String username;
     private boolean onlineStatus;
-    private List<Message> messages;
-    private List<Message> messagesChatTransmitted;
-    private List<Message> messagesChatReceived;
-    private List<Friend> friends;
-    private List<UserPlatform> userPlatforms;
+    private List<MessageDTO> messages;
+    private List<MessageDTO> messagesChatTransmitted;
+    private List<MessageDTO> messagesChatReceived;
+    private List<FriendDTO> friends;
+    private List<UserPlatformDTO> userPlatforms;
     private String searchUsername;
     private String searchUsernamePlatform;
     private boolean selectedChat;
@@ -55,7 +58,7 @@ public class Chat implements Serializable {
     private String category;
 
     @Inject
-    public Chat() {
+    public ChatBean() {
         this.category = "smileys-emotion";
         this.emojinService = new EmojinServiceImpl();
         this.username = null;
@@ -64,7 +67,7 @@ public class Chat implements Serializable {
         this.messagesChatTransmitted = new ArrayList<>();
         this.messagesChatReceived = new ArrayList<>();
         this.messages = new ArrayList<>(Arrays.asList(
-                Message.builder().username("Fatima Perez").lastMessage("Te extraño 😔").timeSendMessage(LocalDateTime.now().minusMinutes(4)).isOnline(false).transmittedMessages(
+                MessageDTO.builder().username("Fatima Perez").lastMessage("Te extraño 😔").timeSendMessage(LocalDateTime.now().minusMinutes(4)).isOnline(false).transmittedMessages(
                                 new LinkedHashMap<>(Map.of("Hola, ¿cómo estás guapo?", LocalTime.now().minusMinutes(4),
                                         "¿En qué puedo ayudarte?", LocalTime.now().minusMinutes(3),
                                         "Quiero verte pronto", LocalTime.now().minusMinutes(2)
@@ -75,7 +78,7 @@ public class Chat implements Serializable {
                                         "Te extraño 😔", LocalTime.now().minusMinutes(2)
                                 ))
                         ).build(),
-                Message.builder().username("Xavi Ugarte").lastMessage("Que onda hermano que tal a sido de tu vida ya no te veo por aquí que es de tu esposa la Sandra.").timeSendMessage(LocalDateTime.now().minusMinutes(3)).isOnline(false).
+                MessageDTO.builder().username("Xavi Ugarte").lastMessage("Que onda hermano que tal a sido de tu vida ya no te veo por aquí que es de tu esposa la Sandra.").timeSendMessage(LocalDateTime.now().minusMinutes(3)).isOnline(false).
                         transmittedMessages(
                                 new LinkedHashMap<>(Map.of("Hola, ¿cómo estás?", LocalTime.now().minusMinutes(3),
                                         "¿En qué puedo ayudarte?", LocalTime.now().minusMinutes(2),
@@ -87,7 +90,7 @@ public class Chat implements Serializable {
                                         "Que onda hermano que tal a sido de tu vida ya no te veo por aquí que es de tu esposa la Sandra.", LocalTime.now().minusMinutes(1)
                                 ))
                         ).build(),
-                Message.builder().username("Susy Arjona").lastMessage("yo tmb 😔").timeSendMessage(LocalDateTime.now().minusMinutes(2)).isOnline(true)
+                MessageDTO.builder().username("Susy Arjona").lastMessage("yo tmb 😔").timeSendMessage(LocalDateTime.now().minusMinutes(2)).isOnline(true)
                         .transmittedMessages(
                                 new LinkedHashMap<>(Map.of("Hola, ¿cómo estás?", LocalTime.now().minusMinutes(2),
                                         "Te extraño 😔", LocalTime.now()
@@ -97,7 +100,7 @@ public class Chat implements Serializable {
                                         "¿Cuándo nos vemos?", LocalTime.now().minusMinutes(1),
                                         "yo tmb 😔", LocalTime.now()
                                 ))).build(),
-                Message.builder().username("Luisa Mendoza").lastMessage("😔").timeSendMessage(LocalDateTime.now().minusMinutes(1)).isOnline(true).
+                MessageDTO.builder().username("Luisa Mendoza").lastMessage("😔").timeSendMessage(LocalDateTime.now().minusMinutes(1)).isOnline(true).
                         transmittedMessages(
                                 new LinkedHashMap<>(Map.of("Hola, ¿cómo estás?", LocalTime.now().minusMinutes(1),
                                         "¿En qué puedo ayudarte?", LocalTime.now(),
@@ -111,16 +114,16 @@ public class Chat implements Serializable {
                         ).build()
         ));
         this.friends = new ArrayList<>(Arrays.asList(
-                new Friend("Fatima Perez", false),
-                new Friend("Xavi Ugarte", false),
-                new Friend("Susy Arjona", true),
-                new Friend("Luisa Mendoza", false)
+                new FriendDTO("Fatima Perez", false),
+                new FriendDTO("Xavi Ugarte", false),
+                new FriendDTO("Susy Arjona", true),
+                new FriendDTO("Luisa Mendoza", false)
         ));
         this.userPlatforms = new ArrayList<>(Arrays.asList(
-                new UserPlatform("Moon Monteza", 3),
-                new UserPlatform("Mary Mendoza", 2),
-                new UserPlatform("Giovanna Perez", 1),
-                new UserPlatform("Fernando Zapata", 0)
+                new UserPlatformDTO("Moon Monteza", 3),
+                new UserPlatformDTO("Mary Mendoza", 2),
+                new UserPlatformDTO("Giovanna Perez", 1),
+                new UserPlatformDTO("Fernando Zapata", 0)
         ));
     }
 
@@ -145,7 +148,7 @@ public class Chat implements Serializable {
 
     public List<String> completeUsername(String query) {
         return friends.stream()
-                .map(Friend::getUsername)
+                .map(FriendDTO::getUsername)
                 .filter(name -> name.toLowerCase().contains(query.toLowerCase()))
                 .filter(name -> !name.equals(username))
                 .collect(Collectors.toList());
@@ -153,17 +156,17 @@ public class Chat implements Serializable {
 
     public List<String> completePlatform(String query) {
         return userPlatforms.stream()
-                .map(UserPlatform::getName)
+                .map(UserPlatformDTO::getName)
                 .filter(name -> name.toLowerCase().contains(query.toLowerCase()))
                 .filter(name -> !name.equals(username))
                 .collect(Collectors.toList());
     }
 
-    public void selectChat(Message message, String username, boolean onlineStatus) {
+    public void selectChat(MessageDTO message, String username, boolean onlineStatus) {
         // Verificar que los mapas no sean nulos antes de procesarlos
         if (message.getTransmittedMessages() != null) {
             this.messagesChatTransmitted = message.getTransmittedMessages().entrySet().stream()
-                    .map(entry -> Message.builder()
+                    .map(entry -> MessageDTO.builder()
                             .username(message.getUsername())
                             .lastMessage(entry.getKey()) // Guardar el contenido del mensaje
                             .timeSendMessage(LocalDateTime.of(message.getTimeSendMessage().toLocalDate(), entry.getValue()))
@@ -177,7 +180,7 @@ public class Chat implements Serializable {
 
         if (message.getReceivedMessages() != null) {
             this.messagesChatReceived = message.getReceivedMessages().entrySet().stream()
-                    .map(entry -> Message.builder()
+                    .map(entry -> MessageDTO.builder()
                             .username(message.getUsername())
                             .lastMessage(entry.getKey()) // Guardar el contenido del mensaje
                             .timeSendMessage(LocalDateTime.of(message.getTimeSendMessage().toLocalDate(), entry.getValue()))
@@ -207,15 +210,15 @@ public class Chat implements Serializable {
         LOGGER.info("Emoji agregado: " + emoji);
     }
 
-    public List<Message> getAllMessagesSorted() {
-        List<Message> allMessages = new ArrayList<>();
+    public List<MessageDTO> getAllMessagesSorted() {
+        List<MessageDTO> allMessages = new ArrayList<>();
         if (messagesChatTransmitted != null) {
             allMessages.addAll(messagesChatTransmitted);
         }
         if (messagesChatReceived != null) {
             allMessages.addAll(messagesChatReceived);
         }
-        allMessages.sort(Comparator.comparing(Message::getTimeSendMessage)); // Orden por fecha y hora
+        allMessages.sort(Comparator.comparing(MessageDTO::getTimeSendMessage)); // Orden por fecha y hora
         return allMessages;
     }
 
@@ -249,7 +252,7 @@ public class Chat implements Serializable {
 
     public void send() {
         if (valueInputMessage != null && !valueInputMessage.trim().isEmpty()) {
-            Message currentMessage = messages.stream()
+            MessageDTO currentMessage = messages.stream()
                     .filter(m -> m.getUsername().equals(username))
                     .findFirst()
                     .orElse(null);
@@ -258,7 +261,7 @@ public class Chat implements Serializable {
                 LocalTime currentTime = LocalTime.now();
 
                 // Crear un nuevo mensaje con el nuevo texto y hora
-                Message newMessage = Message.builder()
+                MessageDTO newMessage = MessageDTO.builder()
                         .username(username)
                         .lastMessage(valueInputMessage)
                         .timeSendMessage(LocalDateTime.now())

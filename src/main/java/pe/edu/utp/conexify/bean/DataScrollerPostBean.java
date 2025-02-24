@@ -1,4 +1,4 @@
-package pe.edu.utp.conexify.util;
+package pe.edu.utp.conexify.bean;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,10 +11,15 @@ import lombok.Setter;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.DialogFrameworkOptions;
 import pe.edu.utp.conexify.adapters.LocalDateTimeAdapter;
+import pe.edu.utp.conexify.config.PostType;
 import pe.edu.utp.conexify.config.Visibility;
+import pe.edu.utp.conexify.util.Bundle;
+import pe.edu.utp.conexify.dto.CommentDTO;
+import pe.edu.utp.conexify.dto.PostDTO;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -22,47 +27,49 @@ import java.util.logging.Logger;
 @Setter
 @Named
 @ViewScoped
-public class DataScrollerPostView implements Serializable {
-    private static final Logger LOGGER = Logger.getLogger(DataScrollerPostView.class.getName());
+public class DataScrollerPostBean implements Serializable {
+    private static final Logger LOGGER = Logger.getLogger(DataScrollerPostBean.class.getName());
     private static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .create();
-    private List<Post> posts;
+    private List<PostDTO> posts;
     private String currentUser;
-    private Post selectedPost;
+    private PostDTO selectedPost;
     private boolean editingPost = false;
+    private Visibility visibility;
+    private String defaultSelectedVisibility = "bi-globe-americas";
+    private String inputPost;
+    private boolean showPreview = true;
 
     @PostConstruct
     public void init() {
 
+        visibility = Visibility.PUBLIC;
         currentUser = "Juan Romero";
 
         posts = new ArrayList<>(List.of(
-                Post.builder()
+                PostDTO.builder()
                         .id(1L)
-                        .textPost(true)
-                        .linkPost(false)
-                        .imagePost(false)
-                        .videoPost(false)
+                        .type(PostType.TEXT)
                         .content("Hello, how are you? I hope you're doing well. Today is a beautiful day, and the sun is shining brightly in the sky. The birds are chirping, and there's a gentle breeze that makes everything feel fresh. Sometimes, taking a deep breath and enjoying the little things in life can bring so much happiness. Have you ever stopped to appreciate how wonderful the world around us is? It's easy to get caught up in daily routines and forget to pause for a moment. Maybe today is a good day to take a short walk and clear your mind. A cup of coffee, a good book, or a nice conversation can make a big difference. Life is full of small joys, and each day is an opportunity to experience something new. What’s something that made you smile today?")
                         .username("Juan Romero")
                         .date(LocalDateTime.parse("2021-09-01T10:00:00"))
                         .visibility(Visibility.PUBLIC)
                         .likes(1000L)
                         .comments(List.of(
-                                Comment.builder()
+                                CommentDTO.builder()
                                         .id(1L)
                                         .username("Maria Perez")
                                         .date(LocalDateTime.parse("2021-09-01T10:05:00"))
                                         .text("I'm fine, thank you!")
                                         .comments(List.of(
-                                                Comment.builder()
+                                                CommentDTO.builder()
                                                         .id(4L)
                                                         .username("Juan Romero")
                                                         .date(LocalDateTime.parse("2021-09-01T10:10:00"))
                                                         .text("That's great to hear!")
                                                         .comments(List.of(
-                                                                Comment.builder()
+                                                                CommentDTO.builder()
                                                                         .id(5L)
                                                                         .username("Maria Perez")
                                                                         .date(LocalDateTime.parse("2021-09-01T10:15:00"))
@@ -75,7 +82,7 @@ public class DataScrollerPostView implements Serializable {
                                         ))
                                         .likes(100L)
                                         .build(),
-                                Comment.builder()
+                                CommentDTO.builder()
                                         .id(2L)
                                         .username("Carlos Sanchez")
                                         .date(LocalDateTime.parse("2021-09-01T10:10:00"))
@@ -84,19 +91,16 @@ public class DataScrollerPostView implements Serializable {
                                         .build()
                         ))
                         .build(),
-                Post.builder()
+                PostDTO.builder()
                         .id(2L)
-                        .textPost(false)
-                        .linkPost(true)
-                        .imagePost(false)
-                        .videoPost(false)
+                        .type(PostType.LINK)
                         .content("https://www.youtube.com/watch?v=SdxThJQc3kU&t=10s")
                         .username("Maria Perez")
                         .date(LocalDateTime.parse("2021-09-01T10:15:00"))
                         .visibility(Visibility.PUBLIC)
                         .likes(500L)
                         .comments(List.of(
-                                Comment.builder()
+                                CommentDTO.builder()
                                         .id(3L)
                                         .username("Juan Romero")
                                         .date(LocalDateTime.parse("2021-09-01T10:20:00"))
@@ -105,12 +109,9 @@ public class DataScrollerPostView implements Serializable {
                                         .build()
                         ))
                         .build(),
-                Post.builder()
+                PostDTO.builder()
                         .id(3L)
-                        .textPost(true)
-                        .linkPost(false)
-                        .imagePost(false)
-                        .videoPost(false)
+                        .type(PostType.TEXT)
                         .content("Good morning!")
                         .username("Carlos Sanchez")
                         .date(LocalDateTime.parse("2021-09-01T10:25:00"))
@@ -153,7 +154,7 @@ public class DataScrollerPostView implements Serializable {
         }
     }
 
-    public void toggleLike(Post post) {
+    public void toggleLike(PostDTO post) {
         LOGGER.info("Toggling like for post ID: " + post.getId());
         if (post.isLikedByUser()) {
             post.setLikes(post.getLikes() - 1);
@@ -180,7 +181,7 @@ public class DataScrollerPostView implements Serializable {
         return ruleBasedNumberFormat.format(number);
     }
 
-    public void showComments(Post post) {
+    public void showComments(PostDTO post) {
         if (post != null) {
             LOGGER.info("Showing comments for post ID: " + post.getId());
 
@@ -205,7 +206,7 @@ public class DataScrollerPostView implements Serializable {
         }
     }
 
-    public int countTotalComments(List<Comment> comments) {
+    public int countTotalComments(List<CommentDTO> comments) {
         if (comments == null || comments.isEmpty()) {
             return 0;
         }
@@ -222,6 +223,7 @@ public class DataScrollerPostView implements Serializable {
 
             editingPost = false;
             selectedPost = null; // Limpiar después de editar
+            showPreview = true;
             // Se asume que ahora el post está editado correctamente
             LOGGER.info("Post edited.");
         }
@@ -232,30 +234,32 @@ public class DataScrollerPostView implements Serializable {
         detectionPostType(selectedPost);
     }
 
-    private void detectionPostType(Post post) {
-        if (post.getContent().startsWith("http") || post.getContent().startsWith("www") || post.getContent().startsWith("https")) {
-            post.setLinkPost(true);
+    private void detectionPostType(PostDTO post) {
+        boolean isLink = post.getContent().trim().matches("(?i)^(https?://|www\\.).+");
+        if (isLink) {
+            post.setType(PostType.LINK);
         } else {
-            post.setTextPost(true);
+            post.setType(PostType.TEXT);
         }
     }
 
     private void detectionPostType(String content) {
-        if (content.startsWith("http") || content.startsWith("www") || content.startsWith("https")) {
-            selectedPost.setContent(content);
-            selectedPost.setLinkPost(true);
+        boolean isLink = content.trim().matches("(?i)^(https?://|www\\.).+");
+        selectedPost.setContent(content);
+        if (isLink) {
+            selectedPost.setType(PostType.LINK);
         } else {
-            selectedPost.setContent(content);
-            selectedPost.setTextPost(true);
+            selectedPost.setType(PostType.TEXT);
         }
     }
 
     public void startEditing() {
         editingPost = true;
-        if (selectedPost.isLinkPost()) {
-            selectedPost.setLinkPost(false);
-        } else if (selectedPost.isTextPost()) {
-            selectedPost.setTextPost(false);
+        showPreview = false;
+        if (selectedPost.getType() == PostType.LINK) {
+            selectedPost.setType(PostType.LINK);
+        } else if (selectedPost.getType() == PostType.TEXT) {
+            selectedPost.setType(PostType.TEXT);
         }
     }
 
@@ -266,9 +270,64 @@ public class DataScrollerPostView implements Serializable {
         }
     }
 
+    public void changePublicationPostVisibility(String visibility) {
+        switch (visibility) {
+            case "FRIENDS":
+                this.visibility = Visibility.FRIENDS;
+                defaultSelectedVisibility = "bi-people-fill";
+                break;
+            case "PRIVATE":
+                this.visibility = Visibility.PRIVATE;
+                defaultSelectedVisibility = "bi-lock-fill";
+                break;
+            default:
+                this.visibility = Visibility.PUBLIC;
+                defaultSelectedVisibility = "bi-globe-americas";
+                break;
+        }
+    }
+
     public Long amountPostOfTheUser(String username) {
         return posts.stream()
                 .filter(post -> post.getUsername().equals(username))
                 .count();
     }
+
+    public void createPost(String content) {
+
+        PostDTO newPost = PostDTO.builder()
+                .id(posts.size() + 1L)
+                .type(determinePostType(content))
+                .content(content)
+                .username(currentUser)
+                .date(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))
+                .visibility(visibility)
+                .likes(0L)
+                .comments(List.of())
+                .build();
+
+        posts.add(0, newPost);
+
+        inputPost = ""; // Limpiar después de publicar
+        LOGGER.info("Post created.");
+    }
+
+    private PostType determinePostType(String content) {
+        boolean isLink = content.trim().matches("(?i)^(https?://|www\\.).+");
+        if (isLink) {
+            return PostType.LINK;
+        }
+        // Aquí podrías agregar más lógica si en el futuro agregas imágenes o videos
+        return PostType.TEXT;
+    }
+
+    public String determinePostType(PostType type) {
+        return switch (type) {
+            case TEXT -> "text";
+            case IMAGE -> "image";
+            case VIDEO -> "video";
+            case LINK -> "link";
+        };
+    }
+
 }

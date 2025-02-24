@@ -41,4 +41,39 @@
     <pattern value="/chat" />
     <view-id value="/private/chat.xhtml" />
   </url-mapping>
+
+  <url-mapping id="settings_user">
+    <pattern value="/u/settings" />
+    <view-id value="/private/user/settings.xhtml" />
+  </url-mapping>
+
+  <url-mapping id="help_user">
+    <pattern value="/u/help" />
+    <view-id value="/private/user/help.xhtml" />
+  </url-mapping>
+
+  <url-mapping id="dashboard">
+    <pattern value="/a/dashboard" />
+    <view-id value="/private/admin/dashboard.xhtml" />
+  </url-mapping>
+
+  <url-mapping id="error401">
+    <pattern value="/error-401" />
+    <view-id value="/public/error/error401.xhtml" />
+  </url-mapping>
+
+  <url-mapping id="error403">
+    <pattern value="/error-403" />
+    <view-id value="/public/error/error403.xhtml" />
+  </url-mapping>
+
+  <url-mapping id="error404">
+    <pattern value="/error-404" />
+    <view-id value="/public/error/error404.xhtml" />
+  </url-mapping>
+
+  <url-mapping id="error500">
+    <pattern value="/error-500" />
+    <view-id value="/public/error/error500.xhtml" />
+  </url-mapping>
 </pretty-config>

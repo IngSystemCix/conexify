@@ -20,13 +20,13 @@
     <p:tab>
       <f:facet name="title">
         <h:outputText value="#{msg['chat']}" />
-        <p:badge value="#{chat.messages.size() gt 99 ? '99+' : chat.messages.size()}" severity="danger" class="ml-1" />
+        <p:badge value="#{chatBean.messages.size() gt 99 ? '99+' : chatBean.messages.size()}" severity="danger" class="ml-1" />
       </f:facet>
       <p:scrollPanel mode="native" styleClass="w-full flex flex-column gap-4" style="min-height: calc(100vh - 13rem);">
-        <p:autoComplete placeholder="#{msg['search']}" styleClass="w-full" value="#{chat.searchUsername}"
-                        completeMethod="#{chat.completeUsername}" scrollHeight="250" />
+        <p:autoComplete placeholder="#{msg['search']}" styleClass="w-full" value="#{chatBean.searchUsername}"
+                        completeMethod="#{chatBean.completeUsername}" scrollHeight="250" />
         <div class="w-full flex flex-column gap-3">
-          <ui:repeat value="#{chat.messages}" var="message">
+          <ui:repeat value="#{chatBean.messages}" var="message">
             <h:form class="w-full flex justify-start items-center gap-2 cursor-pointer select-none">
               <!-- Avatar -->
               <p:badge styleClass="#{message.online ? 'bg-green-400' : 'bg-red-400'} border-2 border-white">
@@ -44,7 +44,7 @@
                 <h:outputText value="#{message.lastMessage}"
                               styleClass="truncate-text" />
                 <p:ajax event="click" update="chatWithMessage"
-                        listener="#{chat.selectChat(message, message.username, message.online)}"
+                        listener="#{chatBean.selectChat(message, message.username, message.online)}"
                         oncomplete="evaluarMensajes(); openChatFloat();"
                 />
               </div>
@@ -55,10 +55,10 @@
     </p:tab>
     <p:tab title="#{msg['friends']}">
       <p:scrollPanel mode="native" styleClass="w-full flex flex-column gap-4" >
-        <p:autoComplete placeholder="#{msg['search']}" styleClass="w-full" value="#{chat.searchUsernamePlatform}"
-                        completeMethod="#{chat.completePlatform}" scrollHeight="250" />
+        <p:autoComplete placeholder="#{msg['search']}" styleClass="w-full" value="#{chatBean.searchUsernamePlatform}"
+                        completeMethod="#{chatBean.completePlatform}" scrollHeight="250" />
         <div class="w-full flex flex-column gap-3">
-          <ui:repeat value="#{chat.friends}" var="friend">
+          <ui:repeat value="#{chatBean.friends}" var="friend">
             <div class="w-full flex justify-start items-center gap-2 cursor-pointer select-none">
               <!-- Avatar -->
               <p:badge

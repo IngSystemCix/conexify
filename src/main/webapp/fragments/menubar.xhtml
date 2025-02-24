@@ -36,10 +36,10 @@
 
       <p:overlayPanel blockScroll="true" for="requestPeoplePanel" widgetVar="requestPanel" dynamic="true">
         <div class="text-lg font-bold mb-3 text-primary">
-          #{msg['label_amount_request_people']}: #{requestsPeople.requests.size() gt 99? '99+': requestsPeople.requests.size()}
+          #{msg['label_amount_request_people']}: #{requestsPeopleBean.requests.size() gt 99? '99+': requestsPeopleBean.requests.size()}
         </div>
         <ul class="list-none p-2" style="width: 300px;">
-          <ui:repeat value="#{requestsPeople.requests}" var="requestPeople">
+          <ui:repeat value="#{requestsPeopleBean.requests}" var="requestPeople">
             <li class="border-bottom-1 border-gray-400 pb-2 mb-2">
               <!-- Nombre de la persona que hizo la solicitud -->
               <div class="font-bold text-lg">
@@ -56,14 +56,14 @@
                 <p:commandButton
                   value="#{msg['button_accept']}"
                   icon="pi pi-check"
-                  action="#{requestsPeople.acceptRequest(requestPeople)}"
+                  action="#{requestsPeopleBean.acceptRequest(requestPeople)}"
                   update=":requestPeoplePanel" />
 
                 <p:commandButton
                   value="#{msg['button_reject']}"
                   icon="pi pi-times"
                   styleClass="ui-button-danger"
-                  action="#{requestsPeople.rejectRequest(requestPeople)}"
+                  action="#{requestsPeopleBean.rejectRequest(requestPeople)}"
                   update=":requestPeoplePanel" />
               </div>
             </li>
@@ -80,10 +80,10 @@
 
       <p:overlayPanel for="notificationPanel" blockScroll="true" widgetVar="notifyPanel" dynamic="true">
         <div class="text-lg font-bold mb-3 text-primary">
-          #{msg['label_amount_notifications']}: #{notification.notifications.size() gt 99? '99+': notification.notifications.size()}
+          #{msg['label_amount_notifications']}: #{notificationBean.notifications.size() gt 99? '99+': notificationBean.notifications.size()}
         </div>
         <ul class="list-none p-2" style="width: 300px;">
-          <ui:repeat value="#{notification.notifications}" var="notif">
+          <ui:repeat value="#{notificationBean.notifications}" var="notif">
             <li class="border-bottom-1 border-gray-400 pb-2 mb-2">
               <h:outputLink value="#{notif.link}" styleClass="flex justify-content-start align-items-center gap-2">
                 <i class="bi bi-#{notif.icon} text-2xl text-#{notif.color}" />
@@ -104,7 +104,7 @@
       <p:overlayPanel for="userAvatar" blockScroll="true" widgetVar="userPanel" dynamic="true">
         <ul class="list-none p-2" style="width: 300px;">
           <li class="border-bottom-1 border-gray-400 pb-2 mb-2">
-            <h:outputLink value="/conexify/profile" styleClass="flex justify-content-start align-items-center gap-2">
+            <h:outputLink value="/conexify/profile?p=#{profileBean.generatorCodeUnique()}" styleClass="flex justify-content-start align-items-center gap-2">
               <i class="bi bi-person-circle text-2xl text-primary" />
               <div>
                 <small class="block text-gray-500">#{msg['label_profile']}</small>
@@ -113,7 +113,7 @@
             </h:outputLink>
           </li>
           <li class="border-bottom-1 border-gray-400 pb-2 mb-2">
-            <h:outputLink value="/u/settings" styleClass="flex justify-content-start align-items-center gap-2">
+            <h:outputLink value="/conexify/u/settings" styleClass="flex justify-content-start align-items-center gap-2">
               <i class="bi bi-gear text-2xl text-primary" />
               <div>
                 <small class="block text-gray-500">#{msg['label_settings']}</small>
@@ -122,7 +122,7 @@
             </h:outputLink>
           </li>
           <li class="border-bottom-1 border-gray-400 pb-2 mb-2">
-            <h:outputLink value="/u/help" styleClass="flex justify-content-start align-items-center gap-2">
+            <h:outputLink value="/conexify/u/help" styleClass="flex justify-content-start align-items-center gap-2">
               <i class="bi bi-question-circle text-2xl text-primary" />
               <div>
                 <small class="block text-gray-500">#{msg['label_help']}</small>
@@ -131,7 +131,7 @@
             </h:outputLink>
           </li>
           <li class="border-b pb-2 mb-2">
-            <h:outputLink value="/logout" styleClass="flex justify-content-start align-items-center gap-2">
+            <h:outputLink value="/conexify/logout" styleClass="flex justify-content-start align-items-center gap-2">
               <i class="bi bi-box-arrow-right text-2xl text-primary" />
               <div>
                 <small class="block text-gray-500">#{msg['label_logout']}</small>

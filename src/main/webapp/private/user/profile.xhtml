@@ -11,13 +11,13 @@
       xmlns:c="jakarta.tags.core"
       xmlns:fn="jakarta.tags.functions"
       xmlns:p="http://primefaces.org/ui">
-<f:view contentType="text/html" locale="#{region.locale}">
+<f:view contentType="text/html" locale="#{regionBean.locale}">
   <h:head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <h:outputStylesheet library="css" name="style.css"/>
     <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css"/>
     <h:outputStylesheet library="css" name="font.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <script type="text/javascript">
         function scrollToBottom() {
             let chatPanel = document.getElementById('chatScrollPanel');
@@ -40,7 +40,7 @@
             style="background:
     linear-gradient(to bottom, #808080, #ffffff); margin-top: 4rem;" enctype="multipart/form-data">
       <div class="relative w-full h-full">
-        <p:galleria id="banner_profile_user" widgetVar="bannerGalleria" value="#{bannerView.photos}"
+        <p:galleria id="banner_profile_user" widgetVar="bannerGalleria" value="#{bannerBean.photos}"
                     var="photo" circular="true" fullScreen="true" showItemNavigators="true" showThumbnails="false"
                     style="max-width: 100%;">
           <p:graphicImage library="img" name="#{photo.itemImageSrc}" alt="#{photo.alt}"
@@ -48,12 +48,12 @@
         </p:galleria>
 
         <!-- Imagen estática que al hacer clic abrirá la galería -->
-        <h:graphicImage library="img" name="#{bannerView.photos[0].itemImageSrc}"
-                        alt="#{bannerView.photos[0].alt}"
+        <h:graphicImage library="img" name="#{bannerBean.photos[0].itemImageSrc}"
+                        alt="#{bannerBean.photos[0].alt}"
                         style="width: 100%; height: 100%; object-fit: cover; cursor: pointer; box-shadow: inset 0px -10px 15px rgba(0, 0, 0, 0.5);"
                         onclick="PF('bannerGalleria').show(0)" />
         <p:fileUpload id="fileUpload" displayFilename="false" chooseIcon="bi bi-camera" skinSimple="true"
-                      fileUploadListener="#{bannerView.upload}"
+                      fileUploadListener="#{bannerBean.upload}"
                       mode="simple" update="banner_profile_user" auto="true" styleClass="absolute"
                       style="right: .5rem; bottom: 1rem;" virusScan="true" sizeLimit="1000000" label="#{msg['upload_image']}">
           <p:validateFile allowTypes="/(\.|\/)(jpe?g|png)$/" />
@@ -68,11 +68,11 @@
                class="font-bold text-2xl" >
               Juan Bladimir Romero Collazos
             </p>
-            <ui:fragment rendered="#{profileView.verified}">
+            <ui:fragment rendered="#{profileBean.verified}">
               <i class="bi bi-patch-check text-primary font-bold text-lg" />
             </ui:fragment>
           </div>
-          <p class="text-gray-400">#{profileView.converterAmountFriends(profileView.amountFriends)}</p>
+          <p class="text-gray-400">#{profileBean.converterAmountFriends(profileBean.amountFriends)}</p>
           <p:avatarGroup>
             <p:avatar id="avatar_friend_1" size="large" shape="circle" label="Fatima Perez" dynamicColor="true" />
             <p:avatar id="avatar_friend_2" size="large" shape="circle" label="Xavi Ugarte" dynamicColor="true" />
@@ -82,64 +82,64 @@
         </div>
 
         <p:commandButton value="#{msg['button_edit_profile']}" icon="bi bi-pencil"
-                         action="#{editProfile.editProfile('Juan Bladimir', 'Romero', 'Collazos', profileView.bio,
-                         profileView.email, profileView.phone , profileView.birthday, profileView.city,
-                         profileView.profession, profileView.website)}"
+                         action="#{editProfileBean.editProfile('Juan Bladimir', 'Romero', 'Collazos', profileBean.bio,
+                         profileBean.email, profileBean.phone , profileBean.birthday, profileBean.city,
+                         profileBean.profession, profileBean.website)}"
                          styleClass="absolute button-edit-profile-ui" />
       </div>
     </h:form>
     <div class="panel-grid-content">
-      <p:panelGrid columns="2" layout="flex"
+      <p:panelGrid id="panel_group_grid" columns="2" layout="flex"
                    columnClasses="col-12 sm:col-12 md:col-6 lg:col-6 xl:col-6, col-12 sm:col-12 md:col-6 lg:col-6 xl:col-6"
                    styleClass="w-full px-2 sm:px-2 md:px-2 lg:px-8 xl:px-8">
         <p:row>
           <p:column>
             <div class="card mb-4">
               <h5 class="font-bold">#{msg['label_bio']}</h5>
-              <ui:fragment rendered="#{empty profileView.bio or profileView.bio eq ''}">
+              <ui:fragment rendered="#{empty profileBean.bio or profileBean.bio eq ''}">
                 <p class="text-gray-600">#{msg['label_not_exist_bio']}</p>
               </ui:fragment>
-              <ui:fragment rendered="#{not empty profileView.bio}">
-                <p class="text-gray-600">#{profileView.bio}</p>
+              <ui:fragment rendered="#{not empty profileBean.bio}">
+                <p class="text-gray-600">#{profileBean.bio}</p>
               </ui:fragment>
             </div>
             <div class="card mb-4">
               <h5 class="font-bold">#{msg['label_details']}</h5>
               <div class="flex flex-column gap-2">
-                <ui:fragment rendered="#{not empty profileView.city}">
+                <ui:fragment rendered="#{not empty profileBean.city}">
                   <div class="flex gap-2">
                     <i class="bi bi-geo-alt text-gray-600" />
-                    <p class="text-primary">#{profileView.city}</p>
+                    <p class="text-primary">#{profileBean.city}</p>
                   </div>
                 </ui:fragment>
-                <ui:fragment rendered="#{not empty profileView.email}">
+                <ui:fragment rendered="#{not empty profileBean.email}">
                   <div class="flex gap-2">
                     <i class="bi bi-envelope text-gray-600"/>
-                    <p class="text-primary">#{profileView.email}</p>
+                    <p class="text-primary">#{profileBean.email}</p>
                   </div>
                 </ui:fragment>
-                <ui:fragment rendered="#{not empty profileView.birthday}">
+                <ui:fragment rendered="#{not empty profileBean.birthday}">
                   <div class="flex gap-2">
                     <i class="bi bi-calendar text-gray-600"/>
-                    <p class="text-primary">#{profileView.birthday}</p>
+                    <p class="text-primary">#{profileBean.birthday}</p>
                   </div>
                 </ui:fragment>
-                <ui:fragment rendered="#{not empty profileView.phone}">
+                <ui:fragment rendered="#{not empty profileBean.phone}">
                   <div class="flex gap-2">
                     <i class="bi bi-telephone text-gray-600"/>
-                    <p class="text-primary">#{profileView.phone}</p>
+                    <p class="text-primary">#{profileBean.phone}</p>
                   </div>
                 </ui:fragment>
-                <ui:fragment rendered="#{not empty profileView.profession}">
+                <ui:fragment rendered="#{not empty profileBean.profession}">
                   <div class="flex gap-2">
                     <i class="bi bi-mortarboard text-gray-600"/>
-                    <p class="text-primary">#{profileView.profession}</p>
+                    <p class="text-primary">#{profileBean.profession}</p>
                   </div>
                 </ui:fragment>
-                <ui:fragment rendered="#{not empty profileView.website}">
+                <ui:fragment rendered="#{not empty profileBean.website}">
                   <div class="flex gap-2">
                     <i class="bi bi-globe text-gray-600"/>
-                    <p class="text-primary">#{profileView.website}</p>
+                    <p class="text-primary">#{profileBean.website}</p>
                   </div>
                 </ui:fragment>
               </div>
@@ -147,16 +147,16 @@
             <h:form>
               <div class="card">
                 <h5 class="font-bold">#{msg['label_gallery']}</h5>
-                <ui:fragment rendered="#{not empty galleryView.photos}">
-                  <p:galleria id="gallery_user" widgetVar="gallery_user" value="#{galleryView.photos}" var="photo"
-                              activeIndex="#{galleryView.activeIndex}" numVisible="7"
+                <ui:fragment rendered="#{not empty galleryViewBean.photos}">
+                  <p:galleria id="gallery_user" widgetVar="gallery_user" value="#{galleryViewBean.photos}" var="photo"
+                              activeIndex="#{galleryViewBean.activeIndex}" numVisible="7"
                               circular="true" fullScreen="true" showItemNavigators="true" showThumbnails="false" style="max-width: 850px">
                     <p:graphicImage library="img" name="#{photo.itemImageSrc}" alt="#{photo.alt}"
                                     style="width: 100%; display: block" />
                   </p:galleria>
 
                   <div class="grid" style="max-width: 800px">
-                    <ui:repeat value="#{galleryView.photos}" var="photo" varStatus="status">
+                    <ui:repeat value="#{galleryViewBean.photos}" var="photo" varStatus="status">
                       <div class="col-3">
                         <p:graphicImage library="img" name="#{photo.thumbnailImageSrc}" alt="#{photo.alt}"
                                         style="cursor: pointer; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);"
@@ -166,7 +166,7 @@
                     </ui:repeat>
                   </div>
                 </ui:fragment>
-                <ui:fragment rendered="#{empty galleryView.photos}">
+                <ui:fragment rendered="#{empty galleryViewBean.photos}">
                   <div class="w-full flex flex-column justify-content-center align-items-center gap-2">
                     <h:graphicImage library="img" name="cat_cryed.png" alt="not exist gallery"
                                     styleClass="w-16rem h-16rem"
@@ -182,51 +182,94 @@
         <p:row>
           <p:column>
             <h:form styleClass="flex flex-column gap-2">
-              <p:textEditor widgetVar="editor-post" value="#{editorView.text}" height="150px" secure="true"/>
-              <div class="w-full flex justify-content-end">
-                <p:commandButton value="#{msg['button_post']}" update="@form" icon="bi bi-sticky"/>
+              <p:textEditor id="editorPost" widgetVar="editor-post" value="#{dataScrollerPostBean.inputPost}" height="150px"
+                            secure="true"
+                            required="true"
+                            placeholder="#{msg['placeholder_post']}" requiredMessage="#{msg['required_post']}"
+              >
+                <f:facet name="toolbar">
+                  <div class="flex">
+                    <span class="ql-formats">
+                      <button class="ql-bold"/>
+                      <button class="ql-italic"/>
+                      <button class="ql-underline"/>
+                      <button class="ql-strike"/>
+                    </span>
+                    <p:divider layout="vertical" />
+                    <span class="ql-formats">
+                      <select class="ql-color" />
+                      <select class="ql-background" />
+                    </span>
+                    <p:divider layout="vertical" />
+                    <span class="ql-formats">
+                      <button class="ql-script" value="sub" />
+                      <button class="ql-script" value="super" />
+                    </span>
+                  </div>
+                </f:facet>
+                <f:validateRequired />
+              </p:textEditor>
+              <h:message for="editorPost" styleClass="text-red-500" />
+              <div class="w-full flex justify-content-end align-items-center gap-2">
+                <p:commandButton id="button_show_public_post"
+                                 icon="bi #{dataScrollerPostBean.defaultSelectedVisibility}"/>
+                <p:overlayPanel for="button_show_public_post" showEffect="fade" hideEffect="fade" dynamic="true">
+                  <div class="flex flex-column">
+                    <p:commandButton value="#{msg['label_public']}" icon="bi bi-globe-americas"
+                                     styleClass="ui-button-flat"
+                                     actionListener="#{dataScrollerPostBean.changePublicationPostVisibility('PUBLIC')}"
+                                     update="@form" ajax="true"
+                                     oncomplete="toggleShowMorePost();" />
+                    <p:commandButton value="#{msg['label_friends']}" icon="bi bi-people" styleClass="ui-button-flat"
+                                     actionListener="#{dataScrollerPostBean.changePublicationPostVisibility('FRIENDS')}" update="@form" ajax="true"
+                                     oncomplete="toggleShowMorePost();"/>
+                    <p:commandButton value="#{msg['label_only_me']}" icon="bi bi-lock" styleClass="ui-button-flat"
+                                     actionListener="#{dataScrollerPostBean.changePublicationPostVisibility('PRIVATE')}" update="@form" ajax="true"
+                                     oncomplete="toggleShowMorePost();"/>
+                  </div>
+                </p:overlayPanel>
+                <p:commandButton value="#{msg['button_post']}" update="@form :editorPost panel_group_grid :ds_posts"
+                                 ajax="true"
+                                 oncomplete="toggleShowMorePost();"
+                                 actionListener="#{dataScrollerPostBean.createPost(dataScrollerPostBean.inputPost)}"
+                                 icon="bi bi-sticky"/>
               </div>
             </h:form>
             <h5 class="font-bold">#{msg['label_publications']}</h5>
-            <h:panelGroup styleClass="w-full flex flex-column justify-content-center align-items-center gap-2" rendered="#{dataScrollerPostView.amountPostOfTheUser('Juan Romero') eq 0}">
+            <h:panelGroup styleClass="w-full flex flex-column justify-content-center align-items-center gap-2" rendered="#{dataScrollerPostBean.amountPostOfTheUser('Juan Romero') eq 0}">
               <h:graphicImage library="img" name="cat_cry.png" alt="not exist publications"
                               styleClass="w-16rem h-16rem"
                               style="cursor: pointer;"/>
               <h:outputText value="#{msg['label_not_exist_publications']}" styleClass="text-center"/>
             </h:panelGroup>
-            <h:panelGroup styleClass="w-full flex flex-column justify-content-center align-items-center gap-2" rendered="#{dataScrollerPostView.amountPostOfTheUser('Juan Romero') gt 0}">
-              <p:dataScroller id="ds_posts" widgetVar="ds_posts" value="#{dataScrollerPostView.posts}" var="post"
-                              chunkSize="5">
-                <f:facet name="loading">
-                  <ui:include src="/fragments/post-skeleton.xhtml" />
-                </f:facet>
+            <p:dataScroller id="ds_posts" widgetVar="ds_posts" value="#{dataScrollerPostBean.posts.stream().filter(p
+            -> p.username eq 'Juan Romero').toList()}"
+                            var="post"
+                            chunkSize="5" style="width: -webkit-fill-available;" rendered="#{dataScrollerPostBean.amountPostOfTheUser('Juan Romero') gt 0}">
+              <f:facet name="loading">
+                <ui:include src="/fragments/post-skeleton.xhtml" />
+              </f:facet>
 
-                <ui:fragment rendered="${post.username eq 'Juan Romero'}">
-                  <ui:include src="/fragments/post.xhtml" >
-                    <ui:param name="post" value="#{post}" />
-                    <ui:param name="id" value="#{post.id}" />
-                    <ui:param name="username" value="#{post.username}" />
-                    <ui:param name="date" value="#{post.date.toString().replace('T', ' ')}" />
-                    <ui:param name="isTextPost" value="#{post.textPost}" />
-                    <ui:param name="isLinkPost" value="#{post.linkPost}" />
-                    <ui:param name="isVideoPost" value="#{post.videoPost}" />
-                    <ui:param name="isImagePost" value="#{post.imagePost}" />
-                    <ui:param name="content" value="#{post.content}" />
-                    <ui:param name="likes" value="#{dataScrollerPostView.converterAmountLikes(post.likes)}" />
-                    <ui:param name="amountComments"
-                              value="#{dataScrollerPostView.converterAmountComments(dataScrollerPostView.countTotalComments(post.comments))}" />
-                    <ui:param name="tooltipComments" value="#{dataScrollerPostView.convertNumberToWords(dataScrollerPostView.countTotalComments(post.comments))}" />
-                    <ui:param name="tooltipLikes" value="#{dataScrollerPostView.convertNumberToWords(post.likes)}" />
-                  </ui:include>
-                </ui:fragment>
+              <ui:include src="/fragments/post-profile-user.xhtml" >
+                <ui:param name="post" value="#{post}" />
+                <ui:param name="id" value="#{post.id}" />
+                <ui:param name="username" value="#{post.username}" />
+                <ui:param name="date" value="#{post.date.toString().replace('T', ' ')}" />
+                <ui:param name="typePost" value="#{post.type}" />
+                <ui:param name="content" value="#{post.content}" />
+                <ui:param name="likes" value="#{dataScrollerPostBean.converterAmountLikes(post.likes)}" />
+                <ui:param name="amountComments"
+                          value="#{dataScrollerPostBean.converterAmountComments(dataScrollerPostBean.countTotalComments(post.comments))}" />
+                <ui:param name="tooltipComments" value="#{dataScrollerPostBean.convertNumberToWords(dataScrollerPostBean.countTotalComments(post.comments))}" />
+                <ui:param name="tooltipLikes" value="#{dataScrollerPostBean.convertNumberToWords(post.likes)}" />
+              </ui:include>
 
-                <f:facet name="loader">
-                  <div class="text-center">
-                    <p:commandButton type="button" value="#{msg['label_more']}" icon="pi pi-refresh"/>
-                  </div>
-                </f:facet>
-              </p:dataScroller>
-            </h:panelGroup>
+              <f:facet name="loader">
+                <div class="text-center">
+                  <p:commandButton type="button" value="#{msg['label_more']}" icon="pi pi-refresh"/>
+                </div>
+              </f:facet>
+            </p:dataScroller>
           </p:column>
         </p:row>
       </p:panelGrid>

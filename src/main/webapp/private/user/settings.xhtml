@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:faces="jakarta.faces"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:pt="jakarta.faces.passthrough"
+      xmlns:cc="jakarta.faces.composite"
+      xmlns:c="jakarta.tags.core"
+      xmlns:fn="jakarta.tags.functions"
+      xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html" locale="#{regionBean.locale}">
+  <h:head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <h:outputStylesheet library="css" name="style.css"/>
+    <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css"/>
+    <h:outputStylesheet library="css" name="font.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="shortcut icon" href="#{resource['img/favicon.png']}" type="image/png"/>
+    <title>conexify :: <h:outputText value="#{msg['title_page_settings']}"/></title>
+  </h:head>
+  <h:body styleClass="w-full h-screen">
+    <ui:include src="/fragments/menubar.xhtml" />
+    <ui:include src="/fragments/sidebar-chats-float.xhtml" />
+    <div id="chat_float" class="chat-float">
+      <i id="close_float_chat" class="bi bi-x-circle absolute font-bold text-lg hover:text-red-400 cursor-pointer"
+         style="top: .5rem; right: .5rem;" />
+      <ui:include src="/fragments/chat-float.xhtml" />
+    </div>
+    <div class="w-full p-6 flex flex-column gap-2" style="margin-top: 4rem;">
+      <p:card styleClass="w-full">
+        <f:facet name="title">
+          <h:outputText value="#{msg['subtitle_center_account']}" styleClass="text-primary font-bold" />
+        </f:facet>
+        <f:facet name="subtitle">
+          <h:outputText value="#{msg['subtitle_center_account_description']}" styleClass="text-sm text-gray-500" />
+        </f:facet>
+        <h:form>
+          <p:dialog id="centerAccountDialog" widgetVar="centerAccountDialog" modal="true" resizable="false" width="80vw"
+                    draggable="false"
+                    showEffect="fade"
+                    hideEffect="fade" closable="true" closeOnEscape="true">
+            <p:tabView scrollable="true" styleClass="w-full">
+              <p:tab title="#{msg['subtitle_change_password']}" >
+                <h:outputText value="#{msg['subtitle_change_password_description']}" styleClass="text-sm text-gray-500" />
+                <h:form styleClass="w-full flex flex-column gap-2">
+                  <div class="flex flex-column gap-2 w-full mt-4">
+                    <p:outputLabel for="password1" value="#{msg['label_password']}"
+                                   styleClass="w-full font-bold text-primary" />
+                    <div class="ui-inputgroup w-full">
+                      <span class="ui-input-icon-left w-full">
+                        <i class="bi bi-shield-lock text-primary font-bold" />
+                        <p:password id="password1" placeholder="•••••••••••••••••••" feedback="true" match="password2"
+                                    value="#{centerAccountBean.password1}"
+                                    required="true"
+                                    autocomplete="off"
+                                    styleClass="w-full"
+                                    requiredMessage="#{msg['message_required_password']}"
+                                    validatorMessage="#{msg['message_length_password']}"
+                        >
+                          <f:validateRequired />
+                          <f:validateLength minimum="8" maximum="20" />
+                        </p:password>
+                      </span>
+                    </div>
+                    <h:message for="password1" styleClass="text-red-500" />
+                  </div>
+                  <div class="flex flex-column gap-2 w-full mt-4">
+                    <p:outputLabel for="password2" value="#{msg['label_repeat_password']}"
+                                   styleClass="w-full font-bold text-primary" />
+                    <div class="ui-inputgroup w-full">
+                      <span class="ui-input-icon-left w-full">
+                        <i class="bi bi-shield-lock text-primary font-bold" />
+                        <p:password id="password2" placeholder="•••••••••••••••••••" feedback="true" required="true"
+                                    value="#{centerAccountBean.password2}"
+                                    autocomplete="off"
+                                    styleClass="w-full"
+                                    requiredMessage="#{msg['message_required_repeat_password']}"
+                                    validatorMessage="#{msg['message_length_password']}"
+                        >
+                          <f:validateRequired />
+                          <f:validateLength minimum="8" maximum="20" />
+                        </p:password>
+                      </span>
+                    </div>
+                    <h:message for="password2" styleClass="text-red-500" />
+                  </div>
+                  <p:commandButton value="#{msg['button_change_password']}" icon="bi bi-lock" iconPos="right"
+                                   styleClass="w-full ui-button-raised ui-button-flat mt-4"
+                                   action="#{centerAccountBean.changePassword()}" update="password1 password2" />
+                </h:form>
+              </p:tab>
+              <p:tab title="#{msg['subtitle_2AF']}">
+                <h:outputText value="#{msg['subtitle_2AF_description']}" styleClass="text-sm text-gray-500" />
+                <div class="w-full flex justify-content-between align-items-center mt-4">
+                  <div class="flex gap-2 justify-content-center align-items-center">
+                    <i class="bi bi-shield-lock text-primary font-bold text-lg" />
+                    <h:outputText value="#{msg['subtitle_2AF']}" styleClass="text-primary font-bold text-lg" />
+                  </div>
+                  <p:toggleSwitch value="#{centerAccountBean.switch2FA}" onIcon="bi bi-shield-lock-fill"
+                                  offIcon="bi bi-shield-lock" />
+                </div>
+              </p:tab>
+            </p:tabView>
+          </p:dialog>
+          <p:commandButton type="button" value="#{msg['button_password_and_security']}" icon="bi bi-lock" iconPos="right"
+                           styleClass="w-full ui-button-raised ui-button-flat" onclick="PF('centerAccountDialog').show()" update="centerAccountDialog" />
+        </h:form>
+      </p:card>
+      <p:divider/>
+      <p:card styleClass="w-full">
+        <f:facet name="title">
+          <h:outputText value="#{msg['subtitle_preferences']}" styleClass="text-primary font-bold" />
+        </f:facet>
+        <f:facet name="subtitle">
+          <h:outputText value="#{msg['subtitle_preferences_description']}" styleClass="text-sm text-gray-500" />
+        </f:facet>
+        <h:form styleClass="w-full">
+          <p:dialog id="preferenceDialog" widgetVar="preferenceDialog" modal="true" resizable="false" width="80vw"
+                    draggable="false"
+                    showEffect="fade"
+                    hideEffect="fade" closable="true" closeOnEscape="true">
+            <f:facet name="header">
+              <h:outputText value="#{msg['subtitle_preferences']}" />
+            </f:facet>
+            <div class="flex flex-column gap-4">
+              <div class="w-full flex justify-content-between align-items-center">
+                <div class="flex gap-2 justify-content-center align-items-center">
+                  <i class="bi bi-chat-left text-primary font-bold text-lg" />
+                  <div class="flex flex-column gap-2">
+                    <h:outputText value="#{msg['subtitle_comments_notifications']}"
+                                  styleClass="text-primary font-bold text-lg" />
+                    <h:outputText value="Push"
+                                  styleClass="text-sm text-gray-500" />
+                  </div>
+                </div>
+                <p:toggleSwitch value="#{preferencesBean.switchComments}" onIcon="bi bi-bell-fill"
+                                offIcon="bi bi-bell-slash-fill" />
+              </div>
+              <div class="w-full flex justify-content-between align-items-center">
+                <div class="flex gap-2 justify-content-center align-items-center">
+                  <i class="bi bi-person-add text-primary font-bold text-lg" />
+                  <div class="flex flex-column gap-2">
+                    <h:outputText value="#{msg['subtitle_friend_request_notifications']}"
+                                  styleClass="text-primary font-bold text-lg" />
+                    <h:outputText value="Push"
+                                  styleClass="text-sm text-gray-500" />
+                  </div>
+                </div>
+                <p:toggleSwitch value="#{preferencesBean.switchFriendRequests}" onIcon="bi bi-bell-fill"
+                                offIcon="bi bi-bell-slash-fill" />
+              </div>
+              <div class="w-full flex justify-content-between align-items-center">
+                <div class="flex gap-2 justify-content-center align-items-center">
+                  <i class="bi bi-cake2 text-primary font-bold text-lg" />
+                  <div class="flex flex-column gap-2">
+                    <h:outputText value="#{msg['subtitle_birthday_notifications']}"
+                                  styleClass="text-primary font-bold text-lg" />
+                    <h:outputText value="Push"
+                                  styleClass="text-sm text-gray-500" />
+                  </div>
+                </div>
+                <p:toggleSwitch value="#{preferencesBean.switchBirthdayNotifications}" onIcon="bi bi-bell-fill"
+                                offIcon="bi bi-bell-slash-fill" />
+              </div>
+            </div>
+          </p:dialog>
+          <div class="w-full flex flex-column gap-4">
+            <p:commandButton type="button" value="#{msg['button_notifications']}" iconPos="right" icon="bi bi-bell"
+                             styleClass="w-full ui-button-raised ui-button-flat"
+                             onclick="PF('preferenceDialog').show()" update="preferenceDialog" />
+            <div class="w-full">
+              <p:selectOneMenu id="locate" value="#{regionBean.locale}" styleClass="w-full" onchange="submit()"
+                               placeholder="#{msg['placeholder_select_country']}">
+                <f:selectItem itemValue="es" itemLabel="#{msg['item_language_es']}" />
+                <f:selectItem itemValue="en" itemLabel="#{msg['item_language_en']}" />
+              </p:selectOneMenu>
+            </div>
+          </div>
+        </h:form>
+      </p:card>
+      <p:divider/>
+      <p:card styleClass="w-full">
+        <f:facet name="title">
+          <h:outputText value="#{msg['subtitle_rules_and_policies']}" styleClass="text-primary font-bold" />
+        </f:facet>
+        <f:facet name="subtitle">
+          <h:outputText value="#{msg['subtitle_rules_and_policies_description']}" styleClass="text-sm text-gray-500" />
+        </f:facet>
+        <h:form>
+          <p:dialog id="policyDialog" widgetVar="policyDialog" modal="true" resizable="false" width="80vw" draggable="false"
+                     showEffect="fade"
+                    hideEffect="fade" closable="true" closeOnEscape="true">
+            <f:facet name="header">
+              <h:outputText value="#{policyBean.dialogTitle}" />
+            </f:facet>
+            <div class="flex flex-column gap-4">
+              <ui:repeat value="#{policyBean.policies}" var="policy">
+                <div class="flex flex-column gap-2">
+                  <div>
+                    <h:outputText value="#{policy.title}" styleClass="text-primary font-bold text-lg" />
+                  </div>
+                  <div>
+                    <h:outputText value="#{policy.description}" escape="false" />
+                  </div>
+                </div>
+              </ui:repeat>
+            </div>
+          </p:dialog>
+          <div class="w-full flex flex-column gap-4">
+            <p:commandButton value="#{msg['button_privacy_policy']}" icon="bi bi-shield-lock"
+                             styleClass="w-full ui-button-raised ui-button-flat"
+                             actionListener="#{policyBean.loadPolicies('PRIVACY')}"
+                             iconPos="right"
+                             oncomplete="PF('policyDialog').show()" update="policyDialog" />
+
+            <p:commandButton value="#{msg['button_terms_of_service']}" icon="bi bi-file-earmark-text"
+                             styleClass="w-full ui-button-raised ui-button-flat"
+                             actionListener="#{policyBean.loadPolicies('TERMS')}"
+                             iconPos="right"
+                             oncomplete="PF('policyDialog').show()" update="policyDialog" />
+
+            <p:commandButton value="#{msg['button_cookies_policy']}" icon="bi bi-cookie"
+                             styleClass="w-full ui-button-raised ui-button-flat"
+                             actionListener="#{policyBean.loadPolicies('COOKIES')}"
+                             iconPos="right"
+                             oncomplete="PF('policyDialog').show()" update="policyDialog" />
+
+            <p:commandButton value="#{msg['button_community_guidelines']}" icon="bi bi-people"
+                             styleClass="w-full ui-button-raised ui-button-flat"
+                             actionListener="#{policyBean.loadPolicies('COMMUNITY')}"
+                             iconPos="right"
+                             oncomplete="PF('policyDialog').show()" update="policyDialog" />
+          </div>
+        </h:form>
+      </p:card>
+    </div>
+    <h:outputScript library="js" name="toggle-show-more.js" />
+    <h:outputScript library="js" name="chat-float.js" />
+  </h:body>
+</f:view>
+</html>

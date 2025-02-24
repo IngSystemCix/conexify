@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:faces="jakarta.faces"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:pt="jakarta.faces.passthrough"
+      xmlns:cc="jakarta.faces.composite"
+      xmlns:c="jakarta.tags.core"
+      xmlns:fn="jakarta.tags.functions"
+      xmlns:p="http://primefaces.org/ui">
+<f:view>
+  <p:menu styleClass="h-screen hidden sm:hidden md:block lg:block xl:block">
+    <p:menuitem value="#{msg['menu_dashboard']}" icon="bi bi-house-door" url="/conexify/a/dashboard"/>
+    <p:menuitem value="#{msg['menu_users']}" icon="bi bi-people" url="/conexify/a/users"/>
+    <p:menuitem value="#{msg['menu_roles']}" icon="bi bi-person-lines-fill" url="/conexify/a/roles"/>
+    <p:menuitem value="#{msg['menu_permissions']}" icon="bi bi-key" url="/conexify/a/permissions"/>
+    <p:menuitem value="#{msg['menu_settings']}" icon="bi bi-gear" url="/conexify/a/settings"/>
+    <p:menuitem value="#{msg['menu_logout']}" icon="bi bi-box-arrow-right" url="/conexify/logout"/>
+  </p:menu>
+  <p:commandButton icon="bi bi-list" type="button" onclick="PF('sidebar_menu').show()"
+                   styleClass="block sm:block md:hidden lg:hidden xl:hidden"
+                   style="position: fixed; top: .5rem; right: .5rem; z-index: 1000;"/>
+  <p:sidebar widgetVar="sidebar_menu">
+    <div class="w-full h-full mt-6 flex flex-column gap-2">
+      <p:linkButton value="#{msg['menu_dashboard']}" icon="bi bi-house-door" url="/conexify/a/dashboard"
+                    styleClass="ui-button-flat" style="text-align: left;"/>
+      <p:linkButton value="#{msg['menu_users']}" icon="bi bi-people" url="/conexify/a/users"
+                    styleClass="ui-button-flat" style="text-align: left;"/>
+      <p:linkButton value="#{msg['menu_roles']}" icon="bi bi-person-lines-fill" url="/conexify/a/roles"
+                    styleClass="ui-button-flat" style="text-align: left;"/>
+      <p:linkButton value="#{msg['menu_permissions']}" icon="bi bi-key" url="/conexify/a/permissions"
+                    styleClass="ui-button-flat" style="text-align: left;"/>
+      <p:linkButton value="#{msg['menu_settings']}" icon="bi bi-gear" url="/conexify/a/settings"
+                    styleClass="ui-button-flat" style="text-align: left;"/>
+      <p:linkButton value="#{msg['menu_logout']}" icon="bi bi-box-arrow-right" url="/conexify/logout"
+                    styleClass="ui-button-flat" style="text-align: left;"/>
+    </div>
+  </p:sidebar>
+</f:view>
+</html>

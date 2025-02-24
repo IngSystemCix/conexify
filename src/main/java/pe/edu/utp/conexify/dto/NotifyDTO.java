@@ -1,17 +1,17 @@
-package pe.edu.utp.conexify.util;
+package pe.edu.utp.conexify.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class Notify {
+public class NotifyDTO {
     private String message;
     private String type;
     private String sender;
     private String link;
 
-    public Notify(String message, String type, String sender, String link) {
+    public NotifyDTO(String message, String type, String sender, String link) {
         this.message = message;
         this.type = type;
         this.sender = sender;

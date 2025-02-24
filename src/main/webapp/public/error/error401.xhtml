@@ -13,29 +13,17 @@
       xmlns:p="http://primefaces.org/ui">
 <f:view contentType="text/html" locale="#{regionBean.locale}">
   <h:head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <h:outputStylesheet id="theme-css" library="css" name="style.css" />
+    <h:outputStylesheet library="css" name="style.css"/>
     <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css"/>
     <h:outputStylesheet library="css" name="font.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
-    <script type="text/javascript">
-        function scrollToBottom() {
-            let chatPanel = document.getElementById('chatScrollPanel');
-            chatPanel.scrollTop = chatPanel.scrollHeight;
-        }
-    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <link rel="shortcut icon" href="#{resource['img/favicon.png']}" type="image/png"/>
-    <title>conexify :: <h:outputText value="#{msg['title_page_chat']}"/></title>
+    <title>conexify :: <h:outputText value="#{msg['title_page_error_401']}"/></title>
   </h:head>
-  <h:body styleClass="w-full h-screen">
-    <ui:include src="/fragments/menubar-page-chat.xhtml" />
-    <div class="w-full">
-      <ui:include src="/fragments/sidebar-chats.xhtml" />
-      <ui:include src="/fragments/chat.xhtml" />
-    </div>
-    <h:outputScript library="js" name="toggle-show-more.js" />
-    <h:outputScript library="js" name="chat-float.js" />
+  <h:body styleClass="w-full h-screen flex flex-column justify-content-center align-items-center gap-2 p-4">
+    <h:graphicImage library="img" name="error-401.png" styleClass="w-1/2 h-auto" />
+    <p class="text-gray-500 font-bold"><h:outputText value="#{msg['error_401_message']}"/></p>
   </h:body>
 </f:view>
 </html>

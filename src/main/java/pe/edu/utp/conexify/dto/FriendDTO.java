@@ -1,4 +1,4 @@
-package pe.edu.utp.conexify.util;
+package pe.edu.utp.conexify.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 @AllArgsConstructor
-public class Friend {
+public class FriendDTO {
     private String username;
     private boolean onlineStatus;
 }

@@ -37,6 +37,22 @@
       <from-outcome>/comments-post</from-outcome>
       <to-view-id>/private/comments-post.xhtml</to-view-id>
     </navigation-case>
+    <navigation-case>
+      <from-outcome>/error-401</from-outcome>
+      <to-view-id>/public/error/error401.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>/error-403</from-outcome>
+      <to-view-id>/public/error/error403.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>/error-404</from-outcome>
+      <to-view-id>/public/error/error404.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>/error-500</from-outcome>
+      <to-view-id>/public/error/error500.xhtml</to-view-id>
+    </navigation-case>
   </navigation-rule>
 
   <application>

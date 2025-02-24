@@ -1,10 +1,9 @@
-package pe.edu.utp.conexify.util;
+package pe.edu.utp.conexify.dto;
 
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -13,7 +12,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Message {
+public class MessageDTO {
     private String username;
     private String lastMessage;
     private LocalDateTime timeSendMessage;

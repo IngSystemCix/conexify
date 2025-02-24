@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:faces="jakarta.faces"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html"
+      xmlns:pt="jakarta.faces.passthrough"
+      xmlns:cc="jakarta.faces.composite"
+      xmlns:c="jakarta.tags.core"
+      xmlns:fn="jakarta.tags.functions"
+      xmlns:p="http://primefaces.org/ui">
+<h:form id="post-user" styleClass="w-full bg-white border-round-lg flex flex-column gap-2 p-4 shadow-2 mb-4" >
+   <div class="w-full flex justify-content-between align-items-center">
+      <div class="flex justify-content-center align-items-center gap-2">
+         <p:avatar id="id_#{username.replace(' ', '_')}" label="#{username}" dynamicColor="true" size="large"
+                   shape="circle" />
+         <div class="flex flex-column">
+            <h:outputText value="#{username}" styleClass="font-bold text-lg" />
+            <div class="flex justify-content-center align-items-center gap-1">
+               <h:outputText value="#{date}" styleClass="text-sm text-gray-400" />
+               <p:outputLabel rendered="#{username ne dataScrollerPostBean.currentUser}" styleClass="bi #{post.getVisibility()} text-primary" />
+               <ui:fragment rendered="#{username eq dataScrollerPostBean.currentUser}">
+                  <p:commandButton id="button_show_post" icon="bi #{post.getVisibility()}"
+                                   styleClass="ui-button-flat"
+                                   actionListener="#{dataScrollerPostBean.setSelectedPost(post)}"/>
+                  <p:overlayPanel for="button_show_post" showEffect="fade" hideEffect="fade" dynamic="true">
+                     <div class="flex flex-column">
+                        <p:commandButton value="#{msg['label_public']}" icon="bi bi-globe-americas"
+                                         styleClass="ui-button-flat"
+                                         actionListener="#{dataScrollerPostBean.changePostVisibility('PUBLIC')}"
+                                         update="@form" ajax="true"
+                                         oncomplete="toggleShowMorePost();" />
+                        <p:commandButton value="#{msg['label_friends']}" icon="bi bi-people" styleClass="ui-button-flat"
+                                         actionListener="#{dataScrollerPostBean.changePostVisibility('FRIENDS')}" update="@form" ajax="true"
+                                         oncomplete="toggleShowMorePost();"/>
+                        <p:commandButton value="#{msg['label_only_me']}" icon="bi bi-lock" styleClass="ui-button-flat"
+                                         actionListener="#{dataScrollerPostBean.changePostVisibility('PRIVATE')}" update="@form" ajax="true"
+                                         oncomplete="toggleShowMorePost();"/>
+                     </div>
+                  </p:overlayPanel>
+               </ui:fragment>
+            </div>
+         </div>
+      </div>
+      <p:commandButton id="postOptions" icon="bi bi-three-dots" styleClass="ui-button-flat"
+                       actionListener="#{dataScrollerPostBean.setSelectedPost(post)}" />
+
+      <p:overlayPanel for="postOptions" showEffect="fade" hideEffect="fade" dynamic="true">
+         <div class="flex flex-column">
+            <p:commandButton value="#{msg['label_edit']}" icon="bi bi-pencil" rendered="#{username eq
+          dataScrollerPostBean.currentUser}" styleClass="ui-button-flat" actionListener="#{dataScrollerPostBean.startEditing()}" update="@form"/>
+            <p:commandButton value="#{msg['label_delete']}" icon="bi bi-trash" rendered="#{username eq
+          dataScrollerPostBean.currentUser}" update="@form" styleClass="ui-button-flat" >
+               <p:confirm header="#{msg['label_delete']}" message="#{msg['label_confirm_delete_post']}"
+                          icon="bi bi-exclamation-triangle" />
+            </p:commandButton>
+            <p:divider  rendered="#{username eq dataScrollerPostBean.currentUser}" />
+            <p:commandButton value="#{msg['label_hide']}" icon="bi bi-eye-slash" styleClass="ui-button-flat" rendered="#{username ne dataScrollerPostBean.currentUser}" />
+            <p:commandButton value="#{msg['label_save']}" icon="bi bi-bookmark" styleClass="ui-button-flat" />
+            <p:commandButton value="#{msg['label_report']}" icon="bi bi-flag" styleClass="ui-button-flat" />
+            <p:commandButton value="#{msg['label_share']}" icon="bi bi-share" styleClass="ui-button-flat" />
+         </div>
+      </p:overlayPanel>
+   </div>
+
+   <p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+                    message="#{msg['label_confirm_delete_post']}" header="#{msg['label_delete']}"
+                    severity="alert" widgetVar="confirmDeletePost">
+      <p:commandButton value="#{msg['label_yes']}" styleClass="p-button-danger"
+                       icon="bi bi-check"
+                       actionListener="#{dataScrollerPostBean.deletePost}"
+                       update="ds_posts :panel_group_grid"
+                       onclick="PF('confirmDeletePost').hide();"/>
+      <p:commandButton value="#{msg['label_no']}" styleClass="p-button-secondary"
+                       icon="bi bi-x"
+                       onclick="PF('confirmDeletePost').hide();" />
+   </p:confirmDialog>
+
+   <div class="w-full">
+      <ui:fragment rendered="#{dataScrollerPostBean.showPreview}">
+         <h:panelGroup layout="block" styleClass="post-container"
+                       rendered="#{dataScrollerPostBean.determinePostType(typePost) eq 'text'}">
+            <h:outputText value="#{content}" styleClass="post-content" escape="false"/>
+            <h:outputLink id="showMoreLink" styleClass="show-more-link-post text-primary font-bold"
+                          onclick="togglePost(this); return false;">
+               #{msg['view_more']}
+               <f:passThroughAttribute name="data-view-more-post" value="#{msg['view_more']}" />
+               <f:passThroughAttribute name="data-view-less-post" value="#{msg['view_less']}" />
+            </h:outputLink>
+         </h:panelGroup>
+
+         <p:linkButton icon="bi bi-link-45deg" value="#{content}" styleClass="text-lg ui-button-flat" target="_blank"
+                       rendered="#{dataScrollerPostBean.determinePostType(typePost) eq 'link'}"
+                       onclick="window.open('#{content}', '_blank'); return false;" />
+      </ui:fragment>
+
+      <h:panelGroup rendered="#{dataScrollerPostBean.editingPost}">
+         <p:textEditor id="editorPost" widgetVar="editor-post" value="#{dataScrollerPostBean.selectedPost.content}" height="150px"
+                       secure="true"
+                       required="true"
+                       placeholder="#{msg['placeholder_post']}" requiredMessage="#{msg['required_post']}"
+         >
+            <f:facet name="toolbar">
+               <div class="flex">
+                    <span class="ql-formats">
+                      <button class="ql-bold"/>
+                      <button class="ql-italic"/>
+                      <button class="ql-underline"/>
+                      <button class="ql-strike"/>
+                    </span>
+                  <p:divider layout="vertical" />
+                  <span class="ql-formats">
+                      <select class="ql-color" />
+                      <select class="ql-background" />
+                    </span>
+                  <p:divider layout="vertical" />
+                  <span class="ql-formats">
+                      <button class="ql-script" value="sub" />
+                      <button class="ql-script" value="super" />
+                    </span>
+               </div>
+            </f:facet>
+            <f:validateRequired />
+         </p:textEditor>
+         <h:message for="editorPost" styleClass="text-red-500"/>
+         <div class="w-full flex gap-2 mt-2">
+            <p:commandButton value="#{msg['label_save']}" icon="bi bi-check"
+                             actionListener="#{dataScrollerPostBean.saveEditedPost(dataScrollerPostBean.selectedPost.content)}"
+                             update="@form"
+                             ajax="true"
+                             oncomplete="toggleShowMorePost();"
+            />
+            <p:commandButton value="#{msg['label_cancel']}" icon="bi bi-x"
+                             actionListener="#{dataScrollerPostBean.cancelEditing}"
+                             update="@form"
+                             styleClass="ui-button-danger"
+                             ajax="true"
+                             oncomplete="toggleShowMorePost();"
+            />
+         </div>
+      </h:panelGroup>
+
+      <ui:fragment rendered="#{dataScrollerPostBean.showPreview}">
+         <h:graphicImage library="img" name="#{content}" styleClass="w-full border-round-lg"
+                         rendered="#{dataScrollerPostBean.determinePostType(typePost) eq 'image'}" />
+
+         <p:video controls="controls" class="w-full border-round-lg" value="#{content}"
+                  rendered="#{dataScrollerPostBean.determinePostType(typePost) eq 'video'}">
+            <p:outputLabel for="id_#{username.replace(' ', '_')}" value="#{msg['label_video_not_supported']}" />
+         </p:video>
+      </ui:fragment>
+   </div>
+
+   <h:panelGroup id="postActions" layout="block" class="w-full flex flex-column">
+      <div class="w-full flex justify-content-between align-items-center">
+         <div class="flex justify-content-center align-items-center gap-2 mt-2 cursor-pointer">
+            <i class="bi bi-hand-thumbs-up text-blue-500 text-lg" />
+            <p:tooltip for="likes_post" value="#{tooltipLikes} #{msg['label_like']}" position="top" />
+            <h:outputText id="likes_post" value="#{likes}" styleClass="text-primary font-bold" />
+         </div>
+         <div class="flex justify-content-center align-items-center gap-2 mt-2 cursor-pointer">
+            <i class="bi bi-chat-left-text text-blue-500 text-lg" />
+            <p:tooltip for="comments_post" value="#{tooltipComments} #{msg['label_comment']}" position="top" />
+            <h:outputText id="comments_post" value="#{amountComments}" styleClass="text-primary font-bold" />
+         </div>
+      </div>
+
+      <p:divider />
+
+      <div class="w-full flex justify-content-between align-items-center gap-2">
+         <p:commandButton id="likeButton"
+                          value="#{msg['label_like']}"
+                          icon="#{post.likedByUser ? 'bi bi-hand-thumbs-up-fill' : 'bi bi-hand-thumbs-up'}"
+                          actionListener="#{dataScrollerPostBean.toggleLike(post)}"
+                          update="postActions"
+                          styleClass="w-full ui-button-outlined border-round-lg font-bold" />
+         <p:commandButton value="#{msg['label_comment']}" icon="bi bi-chat-left-text"
+                          actionListener="#{dataScrollerPostBean.setSelectedPost(post)}"
+                          action="#{dataScrollerPostBean.showComments(post)}"
+                          styleClass="w-full ui-button-outlined border-round-lg font-bold" />
+      </div>
+   </h:panelGroup>
+</h:form>
+</html>

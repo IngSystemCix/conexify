@@ -1,18 +1,20 @@
-package pe.edu.utp.conexify.util;
+package pe.edu.utp.conexify.bean;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
+import pe.edu.utp.conexify.util.Bundle;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Getter
 @Setter
 @Named
 @ViewScoped
-public class ProfileView implements Serializable {
+public class ProfileBean implements Serializable {
     private String bio;
     private Long amountFriends;
     private String city;
@@ -49,5 +51,9 @@ public class ProfileView implements Serializable {
         } else {
             return amountFriends + " " + Bundle.getAttributeI18N("label_of_friends");
         }
+    }
+
+    public String generatorCodeUnique() {
+        return UUID.randomUUID().toString();
     }
 }

@@ -1,4 +1,4 @@
-package pe.edu.utp.conexify.util;
+package pe.edu.utp.conexify.dto;
 
 import lombok.*;
 
@@ -11,13 +11,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Comment {
+public class CommentDTO {
     private Long id;
     private String username;
     private LocalDateTime date;
     private String text;
     private Long likes;
-    private List<Comment> comments;
+    private List<CommentDTO> comments;
     private boolean likedCommentsByUser;
     private boolean replyByUser;
     private String textReply;

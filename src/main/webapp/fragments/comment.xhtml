@@ -9,7 +9,7 @@
   <div class="mt-1 p-3 border-round-md flex flex-column" style="margin-left: #{(depth
    * 0.25) + 0.25}rem;">
     <div class="relative flex flex-column bg-gray-100" style="border-left: 2px solid
-    ${commentsPostView.getColorBorder(currentComment.username)}; padding-left: 1rem; border-radius: 0 0 0 0.5rem;">
+    ${commentsPostBean.getColorBorder(currentComment.username)}; padding-left: 1rem; border-radius: 0 0 0 0.5rem;">
       <div class="flex align-items-center gap-2 mt-2">
         <p:avatar label="#{currentComment.username}" dynamicColor="true" size="small" shape="circle" />
         <div class="flex flex-column">
@@ -33,10 +33,10 @@
                          style="overflow: auto;" />
         <div class="w-full flex gap-2">
           <p:commandButton value="#{msg['label_save']}" icon="bi bi-check"
-                           actionListener="#{commentsPostView.updateComment(currentComment.text)}"
+                           actionListener="#{commentsPostBean.updateComment(currentComment.text)}"
                            update="@form" />
           <p:commandButton value="#{msg['label_cancel']}" icon="bi bi-x"
-                           actionListener="#{commentsPostView.cancelEdit()}"
+                           actionListener="#{commentsPostBean.cancelEdit()}"
                            update="@form" styleClass="ui-button-danger" />
         </div>
       </h:panelGroup>
@@ -45,20 +45,20 @@
       <div class="flex justify-content-start align-items-center gap-2 mt-1">
         <div>
           <p:tooltip for="like_comment_#{currentComment.id}"
-                     value="#{dataScrollerPostView.convertNumberToWords(currentComment.likes)} #{msg['label_like']}"
+                     value="#{dataScrollerPostBean.convertNumberToWords(currentComment.likes)} #{msg['label_like']}"
                      position="top" />
           <p:commandButton id="like_comment_#{currentComment.id}"
                            icon="#{currentComment.likedCommentsByUser ? 'bi bi-hand-thumbs-up-fill' : 'bi bi-hand-thumbs-up'}"
                            styleClass="ui-button-flat"
-                           value="#{dataScrollerPostView.converterAmountLikes(currentComment.likes)}"
-                           action="#{commentsPostView.likeComment(currentComment.id)}"
+                           value="#{dataScrollerPostBean.converterAmountLikes(currentComment.likes)}"
+                           action="#{commentsPostBean.likeComment(currentComment.id)}"
                            update="@form" />
         </div>
         <div>
           <p:tooltip for="comment_#{currentComment.id}"
                      value="#{currentComment.comments.size() eq 0 or currentComment.comments.size() eq null ?
                      msg['label_no_comments'] :
-                     dataScrollerPostView.convertNumberToWords(currentComment.comments.size()).concat(' ').concat(msg['label_comment'])}"
+                     dataScrollerPostBean.convertNumberToWords(currentComment.comments.size()).concat(' ').concat(msg['label_comment'])}"
                      position="top" />
           <p:commandButton id="comment_#{currentComment.id}" icon="bi bi-chat-left" styleClass="ui-button-flat"
                             value="#{currentComment.comments.size()} #{msg['label_comment']}"
@@ -66,14 +66,14 @@
         </div>
         <div>
           <p:commandButton icon="bi bi-reply" styleClass="ui-button-flat" value="#{msg['label_reply']}"
-                           action="#{commentsPostView.showInputComment(currentComment.id)}" update="@form" />
+                           action="#{commentsPostBean.showInputComment(currentComment.id)}" update="@form" />
         </div>
       </div>
 
       <p:commandButton id="actionOptionComment#{currentComment.id}" icon="bi bi-three-dots"
                        styleClass="ui-button-flat absolute" style="top: .5rem; right: .5rem;"
                        rendered="#{'Juan Romero' eq currentComment.username}"
-                       actionListener="#{commentsPostView.setCommentIdByUser(currentComment)}"
+                       actionListener="#{commentsPostBean.setCommentIdByUser(currentComment)}"
       />
 
       <p:overlayPanel for="actionOptionComment#{currentComment.id}" showEffect="fade" hideEffect="fade" dynamic="true">
@@ -84,7 +84,7 @@
                        icon="bi bi-exclamation-triangle" />
           </p:commandButton>
           <p:commandButton value="#{msg['label_edit']}" icon="bi bi-pencil" styleClass="ui-button-flat"
-                           actionListener="#{commentsPostView.showEditInputComment()}"
+                           actionListener="#{commentsPostBean.showEditInputComment()}"
                             update="@form"
           />
         </div>
@@ -95,7 +95,7 @@
                        severity="alert" widgetVar="confirmDeleteComment_#{currentComment.id}">
         <p:commandButton value="#{msg['label_yes']}" styleClass="p-button-danger"
                          icon="bi bi-check"
-                         actionListener="#{commentsPostView.deleteComment}"
+                         actionListener="#{commentsPostBean.deleteComment}"
                          update="@form"
                          onclick="PF('confirmDeleteComment_#{currentComment.id}').hide();"/>
         <p:commandButton value="#{msg['label_no']}" styleClass="p-button-secondary"
@@ -107,14 +107,14 @@
     <!-- Mostrar el textarea si replyByUser es true -->
     <h:panelGroup rendered="#{currentComment.replyByUser}" styleClass="mt-2 w-full flex px-3">
       <p:inputTextarea value="#{currentComment.textReply}" rows="1" cols="33" autoResize="true" styleClass="w-full"
-                       style="overflow: auto; border-left: 2px solid ${commentsPostView.getColorBorder(currentComment.username)};" scrollHeight="100" placeholder="#{msg['label_reply_comment']}" />
-      <p:commandButton icon="bi bi-send" action="#{commentsPostView.replyComment(currentComment.id,
+                       style="overflow: auto; border-left: 2px solid ${commentsPostBean.getColorBorder(currentComment.username)};" scrollHeight="100" placeholder="#{msg['label_reply_comment']}" />
+      <p:commandButton icon="bi bi-send" action="#{commentsPostBean.replyComment(currentComment.id,
       currentComment.getTextReply())}" update="@form" />
     </h:panelGroup>
 
       <!-- Itera sobre los subcomentarios (respuestas) y muestra cada uno de manera anidada -->
       <c:forEach var="reply" items="#{currentComment.comments}" varStatus="status"
-                 begin="0" end="#{dataScrollerPostView.countTotalComments(currentComment.comments)}">
+                 begin="0" end="#{dataScrollerPostBean.countTotalComments(currentComment.comments)}">
         <ui:include src="/fragments/comment.xhtml">
           <!-- Pasa el subcomentario actual y aumenta la profundidad -->
           <ui:param name="currentComment" value="#{reply}" />

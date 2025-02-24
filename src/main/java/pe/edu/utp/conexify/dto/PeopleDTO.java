@@ -1,12 +1,12 @@
-package pe.edu.utp.conexify.util;
+package pe.edu.utp.conexify.dto;
 
 import java.util.List;
 
-public class People {
+public class PeopleDTO {
     private String fullName;
-    private List<People> mutualFriends;
+    private List<PeopleDTO> mutualFriends;
 
-    public People(String fullName, List<People> mutualFriends) {
+    public PeopleDTO(String fullName, List<PeopleDTO> mutualFriends) {
         this.fullName = fullName;
         this.mutualFriends = mutualFriends;
     }
@@ -19,11 +19,11 @@ public class People {
         this.fullName = fullName;
     }
 
-    public List<People> getMutualFriends() {
+    public List<PeopleDTO> getMutualFriends() {
         return mutualFriends;
     }
 
-    public void setMutualFriends(List<People> mutualFriends) {
+    public void setMutualFriends(List<PeopleDTO> mutualFriends) {
         this.mutualFriends = mutualFriends;
     }
 }

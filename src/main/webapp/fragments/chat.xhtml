@@ -12,7 +12,7 @@
       xmlns:fn="jakarta.tags.functions"
       xmlns:p="http://primefaces.org/ui">
 <h:form id="chatWithMessage" class="flex flex-column" prependId="false" >
-  <p:fragment rendered="#{not chat.selectedChat}">
+  <p:fragment rendered="#{not chatBean.selectedChat}">
     <div class="w-full flex flex-column justify-content-center align-items-center gap-2 select-none" style="min-height:
           calc(100vh - 4.3rem); margin-top: 4rem;" >
       <h:graphicImage library="img" name="icon_chat_not_selected_chat.png" styleClass="w-5" />
@@ -24,25 +24,25 @@
       </div>
     </div>
   </p:fragment>
-  <p:fragment rendered="#{chat.selectedChat}">
+  <p:fragment rendered="#{chatBean.selectedChat}">
     <!--   CHAT     -->
     <div class="w-full flex flex-column justify-content-between align-items-center" style="margin-top: 4rem;">
       <div class="w-full flex flex-column justify-content-start items-center gap-1 pt-2 bg-gray-200">
         <div class="flex justify-content-start align-items-center gap-2 ml-3 mb-1">
-          <p:avatar id="#{'username-friends-'.concat(chat.username.replace(' ', '_'))}"
-                    label="#{chat.username}"
+          <p:avatar id="#{'username-friends-'.concat(chatBean.username.replace(' ', '_'))}"
+                    label="#{chatBean.username}"
                     dynamicColor="true"
                     styleClass="select-none cursor-pointer" size="large"/>
-          <h:outputText value="#{chat.username}" styleClass="text-2xl font-bold" />
+          <h:outputText value="#{chatBean.username}" styleClass="text-2xl font-bold" />
         </div>
-        <p:tag severity="#{chat.onlineStatus ? 'success' : 'danger'}" value="#{chat.onlineStatus ? msg['online'] : msg['offline']}" />
+        <p:tag severity="#{chatBean.onlineStatus ? 'success' : 'danger'}" value="#{chatBean.onlineStatus ? msg['online'] : msg['offline']}" />
       </div>
       <p:scrollPanel id="chatScrollPanel" mode="native" styleClass="w-full" style="height: calc(100vh - 13.5rem);" >
-        <ui:repeat var="message" value="#{chat.allMessagesSorted}">
+        <ui:repeat var="message" value="#{chatBean.allMessagesSorted}">
           <!-- Mostrar divider solo si la fecha es diferente -->
-          <h:panelGroup rendered="#{chat.shouldShowDivider(message.timeSendMessage)}">
+          <h:panelGroup rendered="#{chatBean.shouldShowDivider(message.timeSendMessage)}">
             <p:divider>
-              <h:outputText value="#{chat.convertTime(message.timeSendMessage)}" />
+              <h:outputText value="#{chatBean.convertTime(message.timeSendMessage)}" />
             </p:divider>
           </h:panelGroup>
 
@@ -61,7 +61,7 @@
                   <f:passThroughAttribute name="data-view-more" value="#{msg['view_more']}" />
                   <f:passThroughAttribute name="data-view-less" value="#{msg['view_less']}" />
                 </h:outputLink>
-                <small>#{chat.convertTime(message.timeSendMessage)}</small>
+                <small>#{chatBean.convertTime(message.timeSendMessage)}</small>
               </div>
             </div>
           </div>
@@ -72,12 +72,12 @@
       <div class="ui-inputgroup w-full">
         <p:inputTextarea rows="1" cols="33" id="inputWriteMessage"
                          placeholder="#{msg['write_message']}"
-                         value="#{chat.valueInputMessage}"
+                         value="#{chatBean.valueInputMessage}"
                          scrollHeight="100"
                          autoResize="false"
                          styleClass="w-full"
                          style="overflow: auto;" />
-        <p:commandButton icon="bi bi-send" action="#{chat.send}"
+        <p:commandButton icon="bi bi-send" action="#{chatBean.send}"
                          update="inputWriteMessage chatWithMessage" />
       </div>
       <p:overlayPanel style="width: calc(100vh - 16rem);" blockScroll="false" for="buttonEmojin"
@@ -85,8 +85,8 @@
                       dynamic="true">
         <p:tabView scrollable="true" dynamic="true">
           <!-- Recorremos las categorías -->
-          <c:forEach items="#{chat.emojisByCategory}" var="category">
-            <p:tab title="#{chat.getEmoticonTab(category.key)}">
+          <c:forEach items="#{chatBean.emojisByCategory}" var="category">
+            <p:tab title="#{chatBean.getEmoticonTab(category.key)}">
               <!-- Panel de scroll para los emojis -->
               <p:panelGrid columns="6" layout="flex"
                            columnClasses="col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2, col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2, col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2, col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2, col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2, col-2 sm:col-2 md:col-2 lg:col-2 xl:col-2"
@@ -99,7 +99,7 @@
                                      styleClass="ui-button-flat"
                                      style="text-decoration: none;"
                                      type="button"
-                                     action="#{chat.addEmojin(emoji)}"
+                                     action="#{chatBean.addEmojin(emoji)}"
                                      update="inputWriteMessage" />
                     </p:column>
                   </p:row>
@@ -111,7 +111,7 @@
       </p:overlayPanel>
       <p:commandButton id="buttonEmojin" icon="bi bi-emoji-smile" type="button" />
     </div>
-    <p:hotkey bind="esc" update="@all" action="#{chat.closeChat()}"/>
+    <p:hotkey bind="esc" update="@all" action="#{chatBean.closeChat()}"/>
   </p:fragment>
 </h:form>
 </html>

@@ -1,4 +1,4 @@
-package pe.edu.utp.conexify.util;
+package pe.edu.utp.conexify.bean;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,6 +10,7 @@ import jakarta.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import pe.edu.utp.conexify.adapters.LocalDateTimeAdapter;
+import pe.edu.utp.conexify.dto.CommentDTO;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -23,14 +24,15 @@ import java.util.logging.Logger;
 @Setter
 @Named
 @ViewScoped
-public class CommentsPostView implements Serializable {
-    private static final Logger LOGGER = Logger.getLogger(CommentsPostView.class.getName());
+public class CommentsPostBean implements Serializable {
+    private static final Logger LOGGER = Logger.getLogger(CommentsPostBean.class.getName());
     private Long postId;
-    private List<Comment> comments;
+    private List<CommentDTO> comments;
     private static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .create(); // Instancia de GSON para convertir JSON
-    private Comment commentIdByUser;
+    private CommentDTO commentIdByUser;
+    private String inputComment;
 
     @PostConstruct
     public void init() {
@@ -49,7 +51,7 @@ public class CommentsPostView implements Serializable {
             if (params.containsKey("comments")) {
                 String commentsJson = params.get("comments");
                 if (commentsJson != null && !commentsJson.isEmpty()) {
-                    this.comments = gson.fromJson(commentsJson, new TypeToken<List<Comment>>() {}.getType());
+                    this.comments = gson.fromJson(commentsJson, new TypeToken<List<CommentDTO>>() {}.getType());
                 } else {
                     this.comments = new ArrayList<>();
                 }
@@ -75,7 +77,7 @@ public class CommentsPostView implements Serializable {
             return;
         }
 
-        Comment comment = findCommentById(comments, commentId);
+        CommentDTO comment = findCommentById(comments, commentId);
         if (comment != null) {
             if (comment.isLikedCommentsByUser()) {
                 comment.setLikes(comment.getLikes() - 1);
@@ -96,7 +98,7 @@ public class CommentsPostView implements Serializable {
             return;
         }
 
-        Comment comment = findCommentById(comments, commentId);
+        CommentDTO comment = findCommentById(comments, commentId);
         if (comment != null) {
             comment.setReplyByUser(!comment.isReplyByUser());
         } else {
@@ -110,13 +112,13 @@ public class CommentsPostView implements Serializable {
             return;
         }
 
-        Comment comment = findCommentById(comments, commentId);
+        CommentDTO comment = findCommentById(comments, commentId);
         if (comment != null) {
             if (comment.getComments() == null) {
                 comment.setComments(new ArrayList<>()); // Inicializa la lista si es nula
             }
 
-            Comment newComment = Comment.builder()
+            CommentDTO newComment = CommentDTO.builder()
                     .id(System.currentTimeMillis())
                     .username("Juan Romero") // Nombre de usuario fijo
                     .date(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES)) // Fecha sin segundos
@@ -145,7 +147,7 @@ public class CommentsPostView implements Serializable {
         }
 
         if (commentIdByUser != null) {
-            Comment parentComment = findParentComment(comments, commentIdByUser.getId());
+            CommentDTO parentComment = findParentComment(comments, commentIdByUser.getId());
             if (parentComment != null) {
                 parentComment.getComments().removeIf(c -> c.getId().equals(commentIdByUser.getId()));
                 LOGGER.info("Subcomentario eliminado con ID " + commentIdByUser.getId());
@@ -159,16 +161,16 @@ public class CommentsPostView implements Serializable {
         }
     }
 
-    private Comment findParentComment(List<Comment> comments, Long commentId) {
-        for (Comment comment : comments) {
+    private CommentDTO findParentComment(List<CommentDTO> comments, Long commentId) {
+        for (CommentDTO comment : comments) {
             if (comment.getComments() != null) {
-                for (Comment reply : comment.getComments()) {
+                for (CommentDTO reply : comment.getComments()) {
                     if (reply.getId().equals(commentId)) {
                         return comment;
                     }
                 }
                 // Búsqueda recursiva en subniveles
-                Comment found = findParentComment(comment.getComments(), commentId);
+                CommentDTO found = findParentComment(comment.getComments(), commentId);
                 if (found != null) {
                     return found;
                 }
@@ -178,21 +180,21 @@ public class CommentsPostView implements Serializable {
     }
 
     public void showEditInputComment() {
-        Comment comment = findCommentById(comments, commentIdByUser.getId());
+        CommentDTO comment = findCommentById(comments, commentIdByUser.getId());
         if (comment != null) {
             comment.setEditingByUser(true);
         }
     }
 
     public void cancelEdit() {
-        Comment comment = findCommentById(comments, commentIdByUser.getId());
+        CommentDTO comment = findCommentById(comments, commentIdByUser.getId());
         if (comment != null) {
             comment.setEditingByUser(false);
         }
     }
 
     public void updateComment(String newText) {
-        Comment comment = findCommentById(comments, commentIdByUser.getId());
+        CommentDTO comment = findCommentById(comments, commentIdByUser.getId());
         if (comment != null) {
             comment.setText(newText);
             comment.setEditingByUser(false);
@@ -201,13 +203,13 @@ public class CommentsPostView implements Serializable {
         }
     }
 
-    private Comment findCommentById(List<Comment> comments, Long commentId) {
-        for (Comment comment : comments) {
+    private CommentDTO findCommentById(List<CommentDTO> comments, Long commentId) {
+        for (CommentDTO comment : comments) {
             if (comment.getId().equals(commentId)) {
                 return comment;
             }
             if (comment.getComments() != null && !comment.getComments().isEmpty()) {
-                Comment found = findCommentById(comment.getComments(), commentId);
+                CommentDTO found = findCommentById(comment.getComments(), commentId);
                 if (found != null) {
                     return found;
                 }
@@ -216,5 +218,26 @@ public class CommentsPostView implements Serializable {
         return null;
     }
 
+    public void addComment(String text) {
+        if (comments == null) {
+            LOGGER.severe("La lista de comentarios es nula");
+            return;
+        }
 
+        CommentDTO newComment = CommentDTO.builder()
+                .id(System.currentTimeMillis())
+                .username("Juan Romero") // Nombre de usuario fijo
+                .date(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES)) // Fecha sin segundos
+                .text(text)
+                .likes(0L)
+                .comments(new ArrayList<>())
+                .likedCommentsByUser(false)
+                .replyByUser(false)
+                .textReply("")
+                .build();
+
+        comments.add(newComment);
+        inputComment = ""; // Limpia el campo de texto
+        LOGGER.info("Comentario agregado: " + newComment.getId());
+    }
 }

@@ -1,4 +1,4 @@
-package pe.edu.utp.conexify.util;
+package pe.edu.utp.conexify.bean;
 
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Named;
@@ -11,12 +11,12 @@ import java.io.Serializable;
 @Setter
 @Named
 @SessionScoped
-public class Region implements Serializable {
+public class RegionBean implements Serializable {
     private String locale;
     private boolean showMessage;
     private boolean closed;
 
-    public Region() {
+    public RegionBean() {
         locale = "es";
         showMessage = false;
         closed = false;

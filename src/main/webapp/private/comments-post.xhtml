@@ -12,7 +12,7 @@
       xmlns:fn="jakarta.tags.functions"
       xmlns:p="http://primefaces.org/ui">
 
-<f:view contentType="text/html" locale="#{region.locale}">
+<f:view contentType="text/html" locale="#{regionBean.locale}">
   <h:head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,24 +25,44 @@
   </h:head>
 
   <h:body styleClass="w-full h-screen p-4">
-    <p:scrollPanel mode="native" styleClass="w-full" style="height: 100%">
-      <p:outputPanel id="commentsPanel" styleClass="w-full" rendered="#{not empty commentsPostView.comments}">
+    <p:scrollPanel id="commentsForm" mode="native" styleClass="w-full" style="height: 90%">
+      <p:outputPanel id="commentsPanel" styleClass="w-full" rendered="#{not empty commentsPostBean.comments}">
         <!-- Itera sobre los comentarios utilizando c:forEach y limita el número de comentarios mostrados -->
         <h:form>
-          <c:forEach var="comment" items="#{commentsPostView.comments}" varStatus="status"
-                     begin="0" end="#{dataScrollerPostView.countTotalComments(commentsPostView.comments)}">
+          <c:forEach var="comment" items="#{commentsPostBean.comments}" varStatus="status"
+                     begin="0" end="#{dataScrollerPostBean.countTotalComments(commentsPostBean.comments)}">
             <!-- Incluye el fragmento de comentario y pasa el comentario actual como parámetro -->
             <ui:include src="/fragments/comment.xhtml">
               <ui:param name="currentComment" value="#{comment}" />
               <ui:param name="depth" value="0" />
             </ui:include>
           </c:forEach>
+
+          <div class="w-full fixed bg-white shadow-2 flex justify-content-center px-3 py-2" style="left: 0; bottom: 0;">
+            <p:inputTextarea id="inputComment" value="#{commentsPostBean.inputComment}"
+                             rows="1" cols="33" autoResize="true" scrollHeight="100" styleClass="w-full"
+                             style="overflow: auto;" placeholder="#{msg['label_write_comment']}" />
+            <p:commandButton icon="bi bi-send"
+                             actionListener="#{commentsPostBean.addComment(commentsPostBean.inputComment)}"
+                             update="@form inputComment" />
+          </div>
         </h:form>
       </p:outputPanel>
       <p:outputPanel id="noCommentsPanel" styleClass="w-full flex flex-column justify-content-center align-items-center"
-                     rendered="#{empty commentsPostView.comments}" style="height: 100%">
+                     rendered="#{empty commentsPostBean.comments}" style="height: 100%">
         <h:graphicImage library="img" name="cat_cry_1.png" styleClass="w-10rem" />
         <h:outputText value="#{msg['label_no_comments']}" styleClass="text-lg text-gray-400" />
+        <h:form>
+          <div class="w-full fixed bg-white shadow-2 flex justify-content-center px-3 py-2" style="left: 0; bottom: 0;">
+            <p:inputTextarea id="firstInputComment" value="#{commentsPostBean.inputComment}"
+                             rows="1" cols="33" autoResize="true" scrollHeight="100" styleClass="w-full"
+                             style="overflow: auto;" placeholder="#{msg['label_write_comment']}" />
+            <p:commandButton icon="bi bi-send"
+                             actionListener="#{commentsPostBean.addComment(commentsPostBean.inputComment)}"
+                             ajax="true"
+                             update=":commentsForm firstInputComment" />
+          </div>
+        </h:form>
       </p:outputPanel>
     </p:scrollPanel>
   </h:body>
